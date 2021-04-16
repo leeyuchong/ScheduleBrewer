@@ -1,0 +1,95 @@
+html {
+  overflow-y: scroll;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.badgeRect {
+  display: inline-block;
+  padding: .35em .65em;
+  font-size: .75em;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius:.25rem;
+  margin: 0px 3px 0px 0px;
+}
+
+.badgeRed {
+  color: #212529;
+  background-color:#ffadad;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badgeOrange {
+  color: #212529;
+  background-color:#ffd6a5
+}
+
+.badgeYellow {
+  color: #212529;
+  background-color:#fdffb6
+}
+
+.badgeGreen {
+  color: #212529;
+  background-color:#caffbf;
+  /* display: inline-flex;
+  align-items: center; */
+}
+
+.badgeLightBlue {
+  color: #212529;
+  background-color:#9bf6ff
+}
+
+.badgeBlue{
+  color: #212529;
+  background-color:#a0c4ff
+}
+
+.badgePurple{
+  color: #212529;
+  background-color:#bdb2ff
+}
+
+.badgePink{
+  color: #212529;
+  background-color:#ffc6ff
+}
+
+.badgeGrey {
+  color: #fff;
+  background-color:#6c757d
+}
+
+.badgeWhite {
+  color: #212529;
+  background-color:#fffffc
+}
+
+.badgeBrown {
+  color: #212529;
+  background-color:#e2cfc4
+}
+
+.badgeBlack {
+  color: #fff;
+  background-color:#212529
+}
