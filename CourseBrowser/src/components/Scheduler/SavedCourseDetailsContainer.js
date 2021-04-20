@@ -6,7 +6,7 @@ import SavedCourseDetail from './SavedCourseDetail'
 function SavedCourseDetailsContainer() {
     const [savedCourses, setSavedCourses] = useContext(SavedCourseContext)
     const deleteCourse = (courseID)=> {
-        const url=`http://127.0.0.1:8000/api/delete-course/${courseID}/`
+        const url=`https://schedulebrewer.ml/api/delete-course/${courseID}/`
         fetch(url, {
           credentials: 'include',
           method: 'DELETE',

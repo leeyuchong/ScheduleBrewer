@@ -4,7 +4,7 @@ import SearchResults from './SearchResults/SearchResultsContainer'
 import Box from '@material-ui/core/Box';
 
 function SearchSection(props) {
-    const [searchURL, setSearchURL] = useState("http://127.0.0.1:8000/api/search/?")
+    const [searchURL, setSearchURL] = useState("https://schedulebrewer.ml/api/search/?")
     return (
         <Box >
             <SearchInputsContainer setSearchURL={setSearchURL}/>

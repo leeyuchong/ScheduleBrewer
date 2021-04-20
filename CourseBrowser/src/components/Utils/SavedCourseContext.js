@@ -7,11 +7,11 @@ const SavedCourseContext = React.createContext([{}, () => {}])
 const SavedCourseProvider = (props) => {
     const [savedCourses, setSavedCourses] = useState({})
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/getCSRF/", {
+        fetch("https://schedulebrewer.ml/getCSRF/", {
             method: 'GET',
             credentials: 'include'
         }).then(
-            fetch("http://127.0.0.1:8000/api/get-saved-courses", {
+            fetch("https://schedulebrewer.ml/api/get-saved-courses", {
                 credentials: 'include',
                 method: 'get',
                 // mode: 'cors',

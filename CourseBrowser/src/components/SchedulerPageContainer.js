@@ -2,22 +2,26 @@ import React from 'react'
 import SchedulerTable from './Scheduler/SchedulerTable'
 import SavedCourseDetailsContainer from './Scheduler/SavedCourseDetailsContainer'
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 function SchedulerPageContainer() {
     return (
-        <Grid
-            container
-            justify="center"
-        >
+        <div>
+            <Typography>Best viewed in landscape mode</Typography>
             <Grid
-                item
-                xs={12}
-                md={11}
+                container
+                justify="center"
             >
-                <SchedulerTable />
-                <SavedCourseDetailsContainer/>
+                <Grid
+                    item
+                    xs={12}
+                    md={11}
+                >
+                    <SchedulerTable />
+                    <SavedCourseDetailsContainer/>
+                </Grid>
             </Grid>
-        </Grid>
+        </div>
     )
 }
 

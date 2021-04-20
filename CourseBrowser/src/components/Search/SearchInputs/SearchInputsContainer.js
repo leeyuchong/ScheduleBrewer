@@ -19,7 +19,7 @@ function SearchInputsContainer(props) {
     const [formValues, setFormValues] = useState(defaultValues)
     
     useEffect(() => {
-        let url = "http://127.0.0.1:8000/api/search/?"
+        let url = "https://schedulebrewer.ml/api/search/?"
         let searchParams = new URLSearchParams()
         for(const [key, value] of Object.entries(formValues)){
             if(value){

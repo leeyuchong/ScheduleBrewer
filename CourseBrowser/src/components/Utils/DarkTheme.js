@@ -2,16 +2,16 @@ const DarkTheme = {
     palette: {
         type: 'dark',
         primary: {
-            light: '#ffffff',
-            main: '#383838',
-            dark: '#bcbcbc',
-            contrastText: '#ff5252',
+            light: '#954753',
+            main: '#641a2b',
+            dark: '#370000',
+            contrastText: '#ffffff',
         },
         secondary: {
-            light: '#ff5131',
-            main: '#ff5252',
-            dark: '#9b0000',
-            contrastText: '#ffffff',
+            light: '#ffffff',
+            main: '#fff8ef',
+            dark: '#ccc5bd',
+            contrastText: '#000000',
         },
         background: {
             default: '#121212'

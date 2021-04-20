@@ -7,10 +7,17 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import SearchIcon from '@material-ui/icons/Search';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 function Navbar(props) {
   const useStyles = makeStyles((theme) => ({
@@ -41,13 +48,22 @@ function Navbar(props) {
       props.handleChange("default")
     }
   }
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Grid container display="flex" justify="space-between">
-          <Box component={Grid} item display={{ sm: 'none', md: 'block' }}>
+      <Toolbar variant="dense">
+        <Grid container display="flex" justify="space-between" alignItems="center">
+          <Box component={Grid} item display={{ xs: 'none', md: 'block' }}>
             <Button
-              display={{ sm: 'none', md: 'block' }}
               color="inherit"
               onClick={togglePage}
               startIcon={props.currentPage === "default" ? <VisibilityOffIcon /> : <VisibilityIcon />}
@@ -57,21 +73,11 @@ function Navbar(props) {
           </Box>
           <Grid item>
             <Typography variant="h6" className={classes.title}>
-              Fall 2021
+              Schedule Brewer - Fall 2021
             </Typography>
           </Grid>
-          <Grid item>
+          <Box component={Grid} item display={{ xs: 'none', sm: 'block' }} >
             <Box display="flex">
-              <Box>
-                <Box
-                  component={Button}
-                  display={{ sm: 'block', md: 'none' }}
-                  color="inherit"
-                  onClick={togglePage}
-                >
-                  {props.currentPage === "default" ? "Scheduler" : "Search"}
-                </Box>
-              </Box>
               <Box>
                 <Tooltip title={`Toggle ${props.prefersDarkMode ? "Light" : "Dark"} Mode`} arrow>
                   <Button onClick={props.toggleTheme}
@@ -84,10 +90,99 @@ function Navbar(props) {
                 </Tooltip>
               </Box>
               <Box>
+                <Box
+                  component={Button}
+                  display={{ sm: 'block', md: 'none' }}
+                  color="inherit"
+                  onClick={togglePage}
+                >
+                  {props.currentPage === "default" ? "Scheduler" : "Search"}
+                </Box>
+              </Box>
+              <Box>
                 <Button color="inherit">Login</Button>
               </Box>
             </Box>
-          </Grid>
+          </Box>
+          <Box component={Grid} item display={{ xs: 'block', sm: 'none' }} color="secondary">
+            <IconButton
+              aria-label="more"
+              aria-controls="menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+              color="inherit"
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={() => {
+                handleClose()
+                togglePage()
+              }}>
+                {props.currentPage === "default" ? 
+                  <Box display='flex'>
+                      <Box pr={1}>
+                        <CalendarTodayIcon color="secondary"/>
+                      </Box>
+                    <Box>
+                      <Typography color="secondary">Scheduler</Typography>
+                    </Box>
+                  </Box>
+                  :
+                  <Box display='flex'>
+                    <Box pr={1}>
+                      <SearchIcon color="secondary"/>
+                    </Box>
+                  <Box>
+                    <Typography color="secondary">Search</Typography>
+                  </Box>
+                </Box>
+                }
+              </MenuItem>
+              <MenuItem onClick={() => {
+                handleClose()
+                props.toggleTheme()
+              }}>
+                {props.prefersDarkMode ? 
+                  <Box display='flex'>
+                      <Box pr={1}>
+                        <Brightness7Icon color="secondary"/> 
+                      </Box>
+                    <Box>
+                      <Typography color="secondary">Light Mode</Typography>
+                    </Box>
+                  </Box>
+                  : 
+                  <Box display='flex'>
+                      <Box pr={1}>
+                      <Brightness4Icon color="secondary"/>
+                      </Box>
+                    <Box>
+                      <Typography color="secondary">Dark Mode</Typography>
+                    </Box>
+                  </Box>
+                }
+              </MenuItem>
+              <MenuItem onClick={() => {
+                handleClose()
+              }}>
+                <Box display='flex'>
+                  <Box pr={1}>
+                    <ExitToAppIcon color="secondary"/>
+                  </Box>
+                  <Box>
+                    <Typography color="secondary">Log in</Typography>
+                  </Box>
+                </Box>
+              </MenuItem>
+            </Menu>
+          </Box>
         </Grid>
       </Toolbar>
     </AppBar>

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import SavedCourseDetailsContainer from './Scheduler/SavedCourseDetailsContainer'
 import SchedulerTable from './Scheduler/SchedulerTable'
 import SearchSection from './Search/SearchSection'
@@ -11,7 +11,7 @@ function DefaultPageContainer() {
 
   return (
       <Grid container spacing={1} className="wrapper">
-        <Grid item xs={12} sm={12} md={Object.keys(savedCourses).length !==0 ? 5 : 7} style={{minWidth: "42%"}}>
+        <Grid item xs={12} sm={12} md={Object.keys(savedCourses).length !==0 ? 5 : 7}>
           <SearchSection/>
         </Grid>
         <Box 

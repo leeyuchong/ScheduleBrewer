@@ -2,15 +2,15 @@ const LightTheme = {
     palette: {
         type: 'light',
         primary: {
-            light: '#ffffff',
-            main: '#fff',
-            dark: '#bcbcbc',
-            contrastText: '#d50000',
+            light: '#cb4d51',
+            main: '#951829',
+            dark: '#610000',
+            contrastText: '#fff',
         },
         secondary: {
-            light: '#ff5131',
-            main: '#d50000',
-            dark: '#9b0000',
+            light: '#cb4d51',
+            main: '#951829',
+            dark: '#610000',
             contrastText: '#ffffff',
         },
         background: {

@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core";
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-// const searchURL = "http://127.0.0.1:8000/api/search?searchTerm=CMPU"
+// const searchURL = "https://schedulebrewer.ml/api/search?searchTerm=CMPU"
 
 function SearchResultsContainer(props) {
     const useStyles = makeStyles((theme) => ({
@@ -38,7 +38,7 @@ function SearchResultsContainer(props) {
     }, [props.searchURL])
 
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/getCSRF/", {
+        fetch("https://schedulebrewer.ml/getCSRF/", {
             method: 'GET',
             credentials: 'include'
         }).then(response => {
