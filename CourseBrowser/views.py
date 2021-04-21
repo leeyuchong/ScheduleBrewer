@@ -188,7 +188,7 @@ def prepare_django_request(request):
     return result
 
 
-def index(request):
+def saml_index(request):
     req = prepare_django_request(request)
     auth = init_saml_auth(req)
     errors = []

@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/save-course', views.saveCourse),
     re_path(r'^api/delete-course/(?P<pk>[a-zA-Z]+-[0-9]+-[0-9]+)/$', views.delCourse),
     path('getCSRF/', views.getCSRFCookie),
-    url(r'^saml/$', views.saml_index, name='saml_index'),
-    url(r'^attrs/$', views.attrs, name='attrs'),
-    url(r'^metadata/$', views.metadata, name='metadata')
+    re_path(r'^saml/$', views.saml_index, name='saml_index'),
+    re_path(r'^attrs/$', views.attrs, name='attrs'),
+    re_path(r'^metadata/$', views.metadata, name='metadata')
 ]
