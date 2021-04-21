@@ -8,7 +8,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import CourseInfo, UserCourses
 from .serializers import *
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseServerError, JsonResponse)
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
@@ -181,15 +181,14 @@ def prepare_django_request(request):
         'script_name': request.META['PATH_INFO'],
         'server_port': request.META['SERVER_PORT'],
         'get_data': request.GET.copy(),
-        'post_data': request.POST.copy(),
         # Uncomment if using ADFS as IdP, https://github.com/onelogin/python-saml/pull/144
         # 'lowercase_urlencoding': True,
-        'query_string': request.META['QUERY_STRING']
+        'post_data': request.POST.copy()
     }
     return result
 
 
-def saml_index(request):
+def index(request):
     req = prepare_django_request(request)
     auth = init_saml_auth(req)
     errors = []
@@ -222,11 +221,10 @@ def saml_index(request):
             name_id_spnq = request.session['samlNameIdSPNameQualifier']
 
         return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq))
-
         # If LogoutRequest ID need to be stored in order to later validate it, do instead
         # slo_built_url = auth.logout(name_id=name_id, session_index=session_index)
         # request.session['LogoutRequestID'] = auth.get_last_request_id()
-        #return HttpResponseRedirect(slo_built_url)
+        # return HttpResponseRedirect(slo_built_url)
     elif 'acs' in req['get_data']:
         request_id = None
         if 'AuthNRequestID' in request.session:
@@ -248,7 +246,7 @@ def saml_index(request):
             if 'RelayState' in req['post_data'] and OneLogin_Saml2_Utils.get_self_url(req) != req['post_data']['RelayState']:
                 return HttpResponseRedirect(auth.redirect_to(req['post_data']['RelayState']))
         elif auth.get_settings().is_debug_active():
-                error_reason = auth.get_last_error_reason()
+            error_reason = auth.get_last_error_reason()
     elif 'sls' in req['get_data']:
         request_id = None
         if 'LogoutRequestID' in request.session:
@@ -269,7 +267,7 @@ def saml_index(request):
         if len(request.session['samlUserdata']) > 0:
             attributes = request.session['samlUserdata'].items()
 
-    return render(request, 'index.html', {'errors': errors, 'error_reason': error_reason, not_auth_warn: not_auth_warn, 'success_slo': success_slo,
+    return render(request, 'index.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo,
                                           'attributes': attributes, 'paint_logout': paint_logout})
 
 
@@ -281,7 +279,6 @@ def attrs(request):
         paint_logout = True
         if len(request.session['samlUserdata']) > 0:
             attributes = request.session['samlUserdata'].items()
-
     return render(request, 'attrs.html',
                   {'paint_logout': paint_logout,
                    'attributes': attributes})
