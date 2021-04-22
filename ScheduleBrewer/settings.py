@@ -49,8 +49,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
+ #   'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -129,11 +129,11 @@ WEBPACK_LOADER = {
   }
 }
 
-CORS_ALLOW_CREDENTIALS = True
+#CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_SECURE = False
+#CSRF_COOKIE_SECURE = False
 
-SESSION_COOKIE_SECURE = False 
+#SESSION_COOKIE_SECURE = False 
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -148,13 +148,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-CSRF_TRUSTED_ORIGINS = ['vassar.onelogin.com']
+#CSRF_TRUSTED_ORIGINS = ['vassar.onelogin.com']
 
-CORS_ORIGIN_WHITELIST = [
-    'https://vassar.onelogin.com',
-]
+#CORS_ORIGIN_WHITELIST = [
+#    'https://vassar.onelogin.com',
+#]
 
-CORS_REPLACE_HTTPS_REFERER = True
+#CORS_REPLACE_HTTPS_REFERER = True
 
 
 # Static files (CSS, JavaScript, Images)

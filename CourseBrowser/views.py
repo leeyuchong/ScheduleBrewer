@@ -181,9 +181,9 @@ def prepare_django_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     result = {
         'https': 'on' if request.is_secure() else 'off',
-        'http_host': request.META['HTTP_HOST'],
+        'http_host': 'https://schedulebrewer.ml',
         'script_name': request.META['PATH_INFO'],
-        'server_port': request.META['SERVER_PORT'],
+        'server_port': '443',
         'get_data': request.GET.copy(),
         # Uncomment if using ADFS as IdP, https://github.com/onelogin/python-saml/pull/144
         # 'lowercase_urlencoding': True,
