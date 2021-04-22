@@ -191,7 +191,7 @@ def prepare_django_request(request):
     }
     return result
 
-
+@csrf_exempt
 def saml_index(request):
     req = prepare_django_request(request)
     auth = init_saml_auth(req)
@@ -203,7 +203,7 @@ def saml_index(request):
     paint_logout = False
 
     if 'sso' in req['get_data']:
-        return HttpResponseRedirect(auth.login())
+        return HttpResponseRedirect(auth.login(return_to='https://schedulebrewer.ml'))
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
@@ -271,8 +271,8 @@ def saml_index(request):
         if len(request.session['samlUserdata']) > 0:
             attributes = request.session['samlUserdata'].items()
 
-    return render(request, 'index.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo,
-                                          'attributes': attributes, 'paint_logout': paint_logout})
+    return render(request, 'CourseBrowser/index.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo, 'attributes': attributes, 'paint_logout': paint_logout})
+
 
 
 def attrs(request):
