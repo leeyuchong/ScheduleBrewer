@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 import React from 'react'
 import DeleteIcon from '@material-ui/icons/Delete';
-import CSRFToken from '../Utils/CSRFToken';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -56,7 +55,6 @@ function SavedCourseDetail(props) {
                             align="right"
                             >
                             Delete
-                            <CSRFToken />
                         </Button>                    
                 </Box>
             </Grid>

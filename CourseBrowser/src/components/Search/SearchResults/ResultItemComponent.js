@@ -11,7 +11,6 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import Grid from '@material-ui/core/Grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { SavedCourseContext } from '../../Utils/SavedCourseContext';
-import CSRFToken from '../../Utils/CSRFToken';
 import randomColor from 'randomcolor'
 import createDOMPurify from 'dompurify'
 import Box from '@material-ui/core/Box';
@@ -144,7 +143,6 @@ function ResultItemComponent(props) {
                     align="right"
                   >
                     {isCourseSaved ? "Del" : "Save"}
-                    <CSRFToken />
                 </Button>
               </Grid>
             </Grid>

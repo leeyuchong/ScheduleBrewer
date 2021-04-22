@@ -149,10 +149,9 @@ USE_TZ = True
 
 CSRF_TRUSTED_ORIGINS = ['vassar.onelogin.com']
 
-CORS_ORIGIN_WHITELIST = (
-    'https://vassar.onelogin.com/',
-    'vassar.onelogin.com'
-)
+CORS_ORIGIN_WHITELIST = [
+    'https://vassar.onelogin.com',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
