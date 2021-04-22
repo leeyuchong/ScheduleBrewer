@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -152,6 +153,9 @@ CSRF_TRUSTED_ORIGINS = ['vassar.onelogin.com']
 CORS_ORIGIN_WHITELIST = [
     'https://vassar.onelogin.com',
 ]
+
+CORS_REPLACE_HTTPS_REFERER = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
