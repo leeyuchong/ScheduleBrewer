@@ -18,6 +18,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import SearchIcon from '@material-ui/icons/Search';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Cookies from 'js-cookie'
 
 function Navbar(props) {
   const useStyles = makeStyles((theme) => ({

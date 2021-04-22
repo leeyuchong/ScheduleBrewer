@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import randomColor from 'randomcolor'
 
 const SavedCourseContext = React.createContext([{}, () => {}])
-const sessionID = useState(Cookies.get('sessionid'))
+const sessionID = Cookies.get('sessionid')
 
 const SavedCourseProvider = (props) => {
     const [savedCourses, setSavedCourses] = useState({})

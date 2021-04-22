@@ -14,6 +14,7 @@ import { SavedCourseContext } from '../../Utils/SavedCourseContext';
 import randomColor from 'randomcolor'
 import createDOMPurify from 'dompurify'
 import Box from '@material-ui/core/Box';
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles((theme) => ({
     ...theme.spreadThis,
@@ -32,7 +33,7 @@ function ResultItemComponent(props) {
     const [isCourseSaved, setIsCourseSaved] = useState(false)
     const DOMPurify = createDOMPurify(window)
     const saveCourse = (courseID)=> {
-      if(sessionID!==null){
+      if(Cookies.get('sessionid')!==null){
         const url="https://schedulebrewer.ml/api/save-course"
         let selectedCourse = new FormData()
         selectedCourse.set("course", courseID)
