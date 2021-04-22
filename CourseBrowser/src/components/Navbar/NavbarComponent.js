@@ -108,7 +108,7 @@ function Navbar(props) {
               </Box>
               <Box>
                 <Button color="inherit" onClick={authLink}>
-                  {Console.log("COOKIE", Cookies.get('sessionid'))}
+                  {console.log("COOKIE", Cookies.get('sessionid'))}
                   {Cookies.get('sessionid')!==null ? "Login" : "Logout"}
                 </Button>
               </Box>
