@@ -282,7 +282,7 @@ def saml_index(request):
         if 'samlNameIdSPNameQualifier' in request.session:
             name_id_spnq = request.session['samlNameIdSPNameQualifier']
 
-        return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq))
+        return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq, return_to='https://schedulebrewer.ml'))
         # If LogoutRequest ID need to be stored in order to later validate it, do instead
         # slo_built_url = auth.logout(name_id=name_id, session_index=session_index)
         # request.session['LogoutRequestID'] = auth.get_last_request_id()
