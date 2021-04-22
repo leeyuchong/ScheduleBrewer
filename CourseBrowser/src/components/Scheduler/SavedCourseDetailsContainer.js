@@ -13,7 +13,7 @@ function SavedCourseDetailsContainer() {
           mode: 'cors',
           headers: {
             'X-CSRFToken': Cookies.get('csrftoken'),
-            'authorization': "abc123"
+            'authorization': Cookies.get('sessionid')
           },
         }).then(result =>{
           if(result.status === 200){

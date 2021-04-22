@@ -58,6 +58,11 @@ function Navbar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const authLink = (event) => {
+    window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid') ? "sso" : "slo"}`
+  }
+
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
@@ -100,7 +105,9 @@ function Navbar(props) {
                 </Box>
               </Box>
               <Box>
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" onClick={authLink}>
+                  {Cookies.get('sessionid')!==null ? "Login" : "Logout"}
+                </Button>
               </Box>
             </Box>
           </Box>
@@ -177,7 +184,9 @@ function Navbar(props) {
                     <ExitToAppIcon color="secondary"/>
                   </Box>
                   <Box>
-                    <Typography color="secondary">Log in</Typography>
+                    <Typography color="secondary">
+                      {Cookies.get('sessionid')!==null ? "Login" : "Logout"}
+                    </Typography>
                   </Box>
                 </Box>
               </MenuItem>

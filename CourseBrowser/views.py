@@ -15,6 +15,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 
 @csrf_exempt
 def index(request):
@@ -114,58 +115,116 @@ def search(request):
     return paginator.get_paginated_response(serializer.data)
     # return Response(serializer.data)
 
-@api_view(['GET'])
-def getSavedCourses(request):
-    # print("Request.GET", request.headers)
-    queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=request.headers["Authorization"]).values(
-        "courseID", 
-        "title", 
-        "units", 
-        "format", 
-        "d1",
-        "time1",
-        "starttime1",
-        "endtime1",
-        "duration1",
-        "d2",
-        "time2",
-        "starttime2",
-        "endtime2",
-        "duration2",
-        "instructor",
-        "description"
-        )
-    # print(queriedCourses)
-    serializer = SavedCoursesSerializer(queriedCourses, context={'request': request}, many=True)
-    return Response(serializer.data)
+class SavedCourses(APIView):
+    attributes = False
+    username=""
+    def getAttributes(self, req):
+        if 'samlUserdata' in request.session:
+            if len(request.session['samlUserdata']) > 0:
+                self.attributes = request.session['samlUserdata'].items()
+                self.username=self.attributes[0][1]
+    def get(self, request, format=None):
+        getAttributes(request)
+        if(self.attributes):
+            queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=self.username).values(
+                "courseID", 
+                "title", 
+                "units", 
+                "format", 
+                "d1",
+                "time1",
+                "starttime1",
+                "endtime1",
+                "duration1",
+                "d2",
+                "time2",
+                "starttime2",
+                "endtime2",
+                "duration2",
+                "instructor",
+                "description"
+            )
+            # print(queriedCourses)
+            serializer = SavedCoursesSerializer(queriedCourses, context={'request': request}, many=True)
+            return Response(serializer.data)
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
-@api_view(['POST'])
-def saveCourse(request):
-    print(request)
-    if request.method=="POST":
-        # print("A", request.body.decode("utf-8"))
-        # print("B", request.headers["Authorization"])
-        # print("C", type(request.headers))
-        selectedCourse = request.POST
-        # print(selectedCourse["course"])
-        course=CourseInfo.objects.get(courseID__exact=selectedCourse["course"])
-        # newCourse = UserCourses.objects.create(userID=selectedCourse["token"])
-        newPair = UserCourses.objects.create(userID=request.headers["Authorization"], courseID=course)
-        #         print("A", course)
-        # newCourse.savedCourse.set(course)
+    def post(self, request, format=None):
+        getAttributes(request)
+        if(self.attributes):
+            if request.method=="POST":
+                selectedCourse = request.POST
+                # print(selectedCourse["course"])
+                course=CourseInfo.objects.get(courseID__exact=selectedCourse["course"])
+                # newCourse = UserCourses.objects.create(userID=selectedCourse["token"])
+                newPair = UserCourses.objects.create(userID=self.username, courseID=course)
+                return HttpResponse("Success")
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
-    return HttpResponse("Success")
+    def delete(self, request, pk, format=None):
+        getAttributes(request)
+        if(self.attributes):
+            if request.method=="DELETE":
+                # print(request.body.decode("utf-8"))
+                # selectedCourse = request.POST
+                # print(selectedCourse["course"])
+                course=UserCourses.objects.filter(userID__exact=self.username).filter(courseID__exact=pk)
+                course.delete()
+                return HttpResponse("Success")
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
-@api_view(['DELETE'])
-def delCourse(request, pk):
-    # print(request)
-    if request.method=="DELETE":
-        # print(request.body.decode("utf-8"))
-        # selectedCourse = request.POST
-        # print(selectedCourse["course"])
-        course=UserCourses.objects.filter(userID__exact=request.headers["Authorization"]).filter(courseID__exact=pk)
-        course.delete()
-    return HttpResponse("Success")
+# @api_view(['GET'])
+# def getSavedCourses(request):
+#     # print("Request.GET", request.headers)
+#     queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=request.headers["Authorization"]).values(
+#         "courseID", 
+#         "title", 
+#         "units", 
+#         "format", 
+#         "d1",
+#         "time1",
+#         "starttime1",
+#         "endtime1",
+#         "duration1",
+#         "d2",
+#         "time2",
+#         "starttime2",
+#         "endtime2",
+#         "duration2",
+#         "instructor",
+#         "description"
+#         )
+#     # print(queriedCourses)
+#     serializer = SavedCoursesSerializer(queriedCourses, context={'request': request}, many=True)
+#     return Response(serializer.data)
+
+# @api_view(['POST'])
+# def saveCourse(request):
+#     print(request)
+#     if request.method=="POST":
+#         selectedCourse = request.POST
+#         # print(selectedCourse["course"])
+#         course=CourseInfo.objects.get(courseID__exact=selectedCourse["course"])
+#         # newCourse = UserCourses.objects.create(userID=selectedCourse["token"])
+#         newPair = UserCourses.objects.create(userID=request.headers["Authorization"], courseID=course)
+#         #         print("A", course)
+#         # newCourse.savedCourse.set(course)
+
+#     return HttpResponse("Success")
+
+# @api_view(['DELETE'])
+# def delCourse(request, pk):
+#     # print(request)
+#     if request.method=="DELETE":
+#         # print(request.body.decode("utf-8"))
+#         # selectedCourse = request.POST
+#         # print(selectedCourse["course"])
+#         course=UserCourses.objects.filter(userID__exact=request.headers["Authorization"]).filter(courseID__exact=pk)
+#         course.delete()
+#     return HttpResponse("Success")
 
 @csrf_exempt
 @ensure_csrf_cookie
@@ -175,7 +234,6 @@ def getCSRFCookie(request):
 def init_saml_auth(req):
     auth = OneLogin_Saml2_Auth(req, custom_base_path=settings.SAML_FOLDER)
     return auth
-
 
 def prepare_django_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
@@ -273,30 +331,29 @@ def saml_index(request):
 
     return render(request, 'samlTemplate/index.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo, 'attributes': attributes, 'paint_logout': paint_logout})
 
+# def attrs(request):
+#     paint_logout = False
+#     attributes = False
 
-def attrs(request):
-    paint_logout = False
-    attributes = False
-
-    if 'samlUserdata' in request.session:
-        paint_logout = True
-        if len(request.session['samlUserdata']) > 0:
-            attributes = request.session['samlUserdata'].items()
-    return render(request, 'samlTemplate/attrs.html',
-                  {'paint_logout': paint_logout,
-                   'attributes': attributes})
+#     if 'samlUserdata' in request.session:
+#         paint_logout = True
+#         if len(request.session['samlUserdata']) > 0:
+#             attributes = request.session['samlUserdata'].items()
+#     return render(request, 'samlTemplate/attrs.html',
+#                   {'paint_logout': paint_logout,
+#                    'attributes': attributes})
 
 
-def metadata(request):
-    # req = prepare_django_request(request)
-    # auth = init_saml_auth(req)
-    # saml_settings = auth.get_settings()
-    saml_settings = OneLogin_Saml2_Settings(settings=None, custom_base_path=settings.SAML_FOLDER, sp_validation_only=True)
-    metadata = saml_settings.get_sp_metadata()
-    errors = saml_settings.validate_metadata(metadata)
+# def metadata(request):
+#     # req = prepare_django_request(request)
+#     # auth = init_saml_auth(req)
+#     # saml_settings = auth.get_settings()
+#     saml_settings = OneLogin_Saml2_Settings(settings=None, custom_base_path=settings.SAML_FOLDER, sp_validation_only=True)
+#     metadata = saml_settings.get_sp_metadata()
+#     errors = saml_settings.validate_metadata(metadata)
 
-    if len(errors) == 0:
-        resp = HttpResponse(content=metadata, content_type='text/xml')
-    else:
-        resp = HttpResponseServerError(content=', '.join(errors))
-    return resp
+#     if len(errors) == 0:
+#         resp = HttpResponse(content=metadata, content_type='text/xml')
+#     else:
+#         resp = HttpResponseServerError(content=', '.join(errors))
+#     return resp

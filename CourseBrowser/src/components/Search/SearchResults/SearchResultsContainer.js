@@ -61,7 +61,7 @@ function SearchResultsContainer(props) {
                 : 
                 <div>
                     <Box borderRadius={4}>
-                        {results.map((course) => <ResultItemComponent course={course} csrfToken={csrfToken} />)}
+                        {results.map((course) => <ResultItemComponent course={course} csrfToken={csrfToken} openLoginDialog={props.openLoginDialog}/>)}
                     </Box>
                     <Box display="flex" justifyContent="center" mt={1}>
                         <Pagination count={Math.ceil(numPages/pageSize)} onChange={onPageChange} page={currPage}/>

@@ -32,37 +32,42 @@ function ResultItemComponent(props) {
     const [isCourseSaved, setIsCourseSaved] = useState(false)
     const DOMPurify = createDOMPurify(window)
     const saveCourse = (courseID)=> {
-      const url="https://schedulebrewer.ml/api/save-course"
-      let selectedCourse = new FormData()
-      selectedCourse.set("course", courseID)
-      fetch(url, {
-        credentials: 'include',
-        method: 'POST',
-        mode: 'cors',
-        
-        headers: {
-          // 'Accept': 'application/json',
-          // 'Content-Type': 'application/json',
-          'X-CSRFToken': props.csrfToken,
-          'authorization': "abc123"
-        },
-        body: selectedCourse//JSON.stringify({course: courseID, token: "abc123"})
-      }).then(result => {
-        if(result.status === 200){
-            setSavedCourses(state => ({
-              ...state,
-              [courseID]: {
-                ...props.course, 
-                blockColor: randomColor({
-                  luminosity: 'light',
-                  format: 'rgbArray'
-                })
-              }
-            }))
-        }
-      }).catch(error => {
-        console.log("Error, failed to save course: ", error)
-      })
+      if(sessionID!==null){
+        const url="https://schedulebrewer.ml/api/save-course"
+        let selectedCourse = new FormData()
+        selectedCourse.set("course", courseID)
+        fetch(url, {
+          credentials: 'include',
+          method: 'POST',
+          mode: 'cors',
+          
+          headers: {
+            // 'Accept': 'application/json',
+            // 'Content-Type': 'application/json',
+            'X-CSRFToken': props.csrfToken,
+            'authorization': Cookies.get('sessionid')
+          },
+          body: selectedCourse
+        }).then(result => {
+          if(result.status === 200){
+              setSavedCourses(state => ({
+                ...state,
+                [courseID]: {
+                  ...props.course, 
+                  blockColor: randomColor({
+                    luminosity: 'light',
+                    format: 'rgbArray'
+                  })
+                }
+              }))
+          }
+        }).catch(error => {
+          console.log("Error, failed to save course: ", error)
+        })
+      }
+      else{
+        props.openLoginDialog()
+      }
     }
 
     const deleteCourse = (courseID)=> {
@@ -73,7 +78,7 @@ function ResultItemComponent(props) {
         mode: 'cors',
         headers: {
           'X-CSRFToken': props.csrfToken,
-          'authorization': "abc123"
+          'authorization': Cookies.get('sessionid')
         },
       }).then(result =>{
         if(result.status === 200){
@@ -87,7 +92,6 @@ function ResultItemComponent(props) {
         console.log("Error, failed to delete course: ", error)
       })
     }
-
 
     useEffect(() => {
       setIsCourseSaved(savedCourses.hasOwnProperty(props.course.courseID))
