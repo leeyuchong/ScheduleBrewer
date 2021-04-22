@@ -167,6 +167,7 @@ def delCourse(request, pk):
         course.delete()
     return HttpResponse("Success")
 
+@csrf_exempt
 @ensure_csrf_cookie
 def getCSRFCookie(request):
     return JsonResponse({'Success': 'CSRF Cookie set'}, status=200)
