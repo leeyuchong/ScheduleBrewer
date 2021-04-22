@@ -317,10 +317,7 @@ def saml_index(request):
         url = auth.process_slo(request_id=request_id, delete_session_cb=dscb)
         errors = auth.get_errors()
         if len(errors) == 0:
-            if url is not None:
-                return HttpResponseRedirect(url)
-            else:
-                success_slo = True
+            return HttpResponseRedirect('/')
         elif auth.get_settings().is_debug_active():
             error_reason = auth.get_last_error_reason()
 
