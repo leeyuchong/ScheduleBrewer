@@ -14,6 +14,7 @@ from django.http import (HttpResponse, HttpResponseRedirect,
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
+from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def index(request):
