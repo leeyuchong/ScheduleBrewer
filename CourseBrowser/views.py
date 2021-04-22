@@ -271,8 +271,7 @@ def saml_index(request):
         if len(request.session['samlUserdata']) > 0:
             attributes = request.session['samlUserdata'].items()
 
-    return render(request, 'CourseBrowser/index.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo, 'attributes': attributes, 'paint_logout': paint_logout})
-
+    return render(request, 'CourseBrowser/error.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo, 'attributes': attributes, 'paint_logout': paint_logout})
 
 
 def attrs(request):

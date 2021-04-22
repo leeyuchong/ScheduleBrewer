@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedule Brewer: Fall 2021</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+  <div id="root">
+    {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo, 'attributes': attributes, 'paint_logout': paint_logout})
+    <div>
+      {{ errors }}
+    </div>
+    <div>
+      {{ error_reason }}
+    </div>
+    <div>
+      {{ not_auth_warn }}
+    </div>
+    <div>
+      {{ success_slo }}
+    </div>
+    <div>
+      {{ attributes }}
+    </div>
+    <div>
+      {{ paint_logout }}
+    </div>
+  </div>
+</body>
+</html>
