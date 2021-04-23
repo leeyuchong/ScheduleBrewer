@@ -33,7 +33,7 @@ function ResultItemComponent(props) {
     const [isCourseSaved, setIsCourseSaved] = useState(false)
     const DOMPurify = createDOMPurify(window)
     const saveCourse = (courseID)=> {
-      if(Cookies.get('sessionid')!==null){
+      if(Cookies.get('sessionid')!==undefined){
         const url="https://schedulebrewer.ml/api/save-course"
         let selectedCourse = new FormData()
         selectedCourse.set("course", courseID)

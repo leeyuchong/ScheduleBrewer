@@ -8,7 +8,7 @@ const sessionID = Cookies.get('sessionid')
 const SavedCourseProvider = (props) => {
     const [savedCourses, setSavedCourses] = useState({})
     useEffect(() => {
-        if(sessionID!==null){
+        if(sessionID!==undefined){
             fetch("https://schedulebrewer.ml/getCSRF/", {
                 method: 'GET',
                 credentials: 'include'

@@ -61,8 +61,7 @@ function Navbar(props) {
   };
 
   const authLink = (event) => {
-    console.log("COOKIE B", Cookies.get('sessionid'))
-    window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid') ? "sso" : "slo"}`
+    window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid')===undefined ? "sso" : "slo"}`
   }
 
   return (
@@ -108,8 +107,7 @@ function Navbar(props) {
               </Box>
               <Box>
                 <Button color="inherit" onClick={authLink}>
-                  {console.log("COOKIE A", Cookies.get('sessionid'))}
-                  {Cookies.get('sessionid') ? "Login" : "Logout"}
+                  {Cookies.get('sessionid')===undefined ? "Login" : "Logout"}
                 </Button>
               </Box>
             </Box>
@@ -188,7 +186,7 @@ function Navbar(props) {
                   </Box>
                   <Box>
                     <Typography color="secondary">
-                      {Cookies.get('sessionid')!==null ? "Login" : "Logout"}
+                      {Cookies.get('sessionid')===undefined ? "Login" : "Logout"}
                     </Typography>
                   </Box>
                 </Box>
