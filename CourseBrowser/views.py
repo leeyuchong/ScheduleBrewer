@@ -44,7 +44,7 @@ def search(request):
         if key == "searchTerms":
             terms = request.GET[key].upper().split()
             for term in terms:
-                print(term)
+                logger.info(term)
                 if term in courseCodes: 
                     queriedCourses = queriedCourses.filter(courseID__startswith=term)
                 elif term == "FR": queriedCourses = queriedCourses.filter(fr__exact=1)
@@ -70,6 +70,7 @@ def search(request):
                 elif term == "0.5" or term == "1.0" or term == "1.5":
                     queriedCourses = queriedCourses.filter(units__exact=term)
                 else:
+		    logger.info("else")
                     if len(term)>0 and term[0]=="0":
                         term=term[1:]
                     queriedCourses = queriedCourses.filter(
