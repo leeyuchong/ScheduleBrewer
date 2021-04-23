@@ -16,6 +16,9 @@ from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
+import logging
+
+logger = logging.getLogger(__file__)
 
 @csrf_exempt
 def index(request):
@@ -120,11 +123,15 @@ class SavedCourses(APIView):
     username=""
     def getAttributes(self, req):
         if 'samlUserdata' in request.session:
+            logger.info("A")
             if len(request.session['samlUserdata']) > 0:
                 self.attributes = request.session['samlUserdata'].items()
                 self.username=self.attributes[0][1]
+                logger.info(self.username)
     def get(self, request, format=None):
         getAttributes(request)
+        logger.info("GET")
+        logger.info(self.attributes)
         if(self.attributes):
             queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=self.username).values(
                 "courseID", 
@@ -152,6 +159,8 @@ class SavedCourses(APIView):
 
     def post(self, request, format=None):
         getAttributes(request)
+        logger.info("POST")
+        logger.info(self.attributes)
         if(self.attributes):
             if request.method=="POST":
                 selectedCourse = request.POST
