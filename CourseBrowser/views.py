@@ -44,7 +44,7 @@ def search(request):
         if key == "searchTerms":
             terms = request.GET[key].upper().split()
             for term in terms:
-                # print(term)
+                print(term)
                 if term in courseCodes: 
                     queriedCourses = queriedCourses.filter(courseID__startswith=term)
                 elif term == "FR": queriedCourses = queriedCourses.filter(fr__exact=1)
@@ -78,7 +78,8 @@ def search(request):
                         Q(instructor__contains=term) | 
                         Q(starttime1__contains=term) | 
                         Q(starttime2__contains=term) |
-                        Q(description__contains=term)
+                        Q(description__contains=term) | 
+                        Q(courseID__contains=term)
                     )
         elif key=="department":
             queriedCourses = queriedCourses.filter(courseID__startswith=value)
