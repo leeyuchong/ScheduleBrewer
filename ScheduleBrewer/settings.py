@@ -133,7 +133,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_COOKIE_SECURE = False
 
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
+
+SESSION_COOKIE_HTTPONLY = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -154,7 +156,7 @@ CORS_ORIGIN_WHITELIST = [
     'https://vassar.onelogin.com',
 ]
 
-CORS_REPLACE_HTTPS_REFERER = True
+CORS_REPLACE_HTTPS_REFERER = False
 
 
 # Static files (CSS, JavaScript, Images)
