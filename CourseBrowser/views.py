@@ -28,21 +28,12 @@ def index(request):
 @api_view(['GET'])
 def search(request):
     courseCodes = ("AFRS", "AMCL", "AMST", "ANSO", "ANTH", "AFRS", "ART", "ARTH", "ARTS", "ASIA", "ASL", "ASTR", "BIOC", "BIOL", "BIPS", "CHEM", "CHIN", "CHJA", "CLAN", "CLAS", "CLGR", "CLLA", "CLCS", "CMPU", "COGS", "CREO", "DANC", "DRAM", "ECON", "EDUC", "ENGL", "ENST", "ENVI", "ESCI", "ESSC", "FFS", "FILM", "FREN", "GEAN", "GEOG", "GEOL", "GERM", "GREK", "GRST", "HEBR", "HIND", "HISP", "HIST", "INDP", "INTD", "INTL", "IRSH", "ITAL", "JAPA", "JWST", "ASIA", "LALS", "LAST", "LATI", "MATH", "MEDS", "MRST", "MSDP", "MUSI", "NEUR", "PERS", "PHED", "PHIL", "PHYS", "POLI", "PORT", "PSYC", "PSYC", "RELI", "RUSS", "SOCI", "STS", "SWAH", "SWED", "TURK", "URBS", "VICT", "WMST", "YIDD")    
-
-    # Check to see if user made a search. Add or delete course will get to the search page without a search query
-    # if request.method == 'GET':
-    # print(request.GET)
-    # Searching the database for the query. Create MySQL query manually to search all columns for the keyword
-    
-    # if request.GET.items() == []:
-    #     queriedCourses = CourseInfo.objects.none()
-    # else:
-    #     queriedCourses = CourseInfo.objects.all()
     queriedCourses = CourseInfo.objects.all()
     # <QueryDict: {'searchTerm': ['CMPU 102']}>
     for key, value in request.GET.items():
         if key == "searchTerms":
             terms = request.GET[key].upper().split()
+            logger.info(terms)
             for term in terms:
                 logger.info(term)
                 if term in courseCodes: 
@@ -70,17 +61,17 @@ def search(request):
                 elif term == "0.5" or term == "1.0" or term == "1.5":
                     queriedCourses = queriedCourses.filter(units__exact=term)
                 else:
-		    logger.info("else")
+                    logger.info("else")
                     if len(term)>0 and term[0]=="0":
                         term=term[1:]
                     queriedCourses = queriedCourses.filter(
-                        Q(title__contains=term) | 
-                        Q(loc__contains=term) | 
-                        Q(instructor__contains=term) | 
+                        Q(title__icontains=term) | 
+                        Q(loc__icontains=term) | 
+                        Q(instructor__icontains=term) | 
                         Q(starttime1__contains=term) | 
                         Q(starttime2__contains=term) |
-                        Q(description__contains=term) | 
-                        Q(courseID__contains=term)
+                        Q(description__icontains=term) | 
+                        Q(courseID__icontains=term)
                     )
         elif key=="department":
             queriedCourses = queriedCourses.filter(courseID__startswith=value)

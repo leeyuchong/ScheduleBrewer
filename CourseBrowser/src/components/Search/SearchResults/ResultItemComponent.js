@@ -154,7 +154,7 @@ function ResultItemComponent(props) {
           </AccordionSummary>
           <AccordionDetails>
             <Typography align="left">
-              { props.course.sp === 1 ? "<b>Special permission required</b>" : null }
+              <b>{ props.course.sp === 1 ? "Special permission required" : null }</b>
               <b> Max = { props.course.max } </b> | <b>Enrolled = { props.course.enr } </b>
               { props.course.wl !== 0 ? <span> | <b> Waitlist = {props.course.wl} </b></span> : null }
               { props.course.limits !== null ? <span>| <b> Course Limits = {props.course.limits} </b></span> : null }
