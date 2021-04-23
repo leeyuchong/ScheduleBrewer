@@ -1,0 +1,11 @@
+2021-04-23 02:09:41 [INFO    ] (views.getAttributes) A
+2021-04-23 02:09:41 [INFO    ] (views.get) GET
+2021-04-23 02:09:41 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 02:09:45 [INFO    ] (views.getAttributes) A
+2021-04-23 02:09:45 [INFO    ] (views.post) POST
+2021-04-23 02:09:45 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 02:09:51 [INFO    ] (views.getAttributes) A
+2021-04-23 02:11:44 [INFO    ] (views.getAttributes) A
+2021-04-23 02:11:44 [INFO    ] (views.post) POST
+2021-04-23 02:11:44 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 02:16:01 [INFO    ] (views.getAttributes) A

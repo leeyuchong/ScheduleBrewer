@@ -121,15 +121,14 @@ def search(request):
 class SavedCourses(APIView):
     attributes = False
     username=""
-    def getAttributes(self, req):
+    def getAttributes(self, request):
         if 'samlUserdata' in request.session:
             logger.info("A")
             if len(request.session['samlUserdata']) > 0:
                 self.attributes = request.session['samlUserdata'].items()
-                self.username=self.attributes[0][1]
-                logger.info(self.username)
+                self.username=request.session['samlUserdata']['UserName'][0]
     def get(self, request, format=None):
-        getAttributes(request)
+        self.getAttributes(request)
         logger.info("GET")
         logger.info(self.attributes)
         if(self.attributes):
@@ -158,7 +157,7 @@ class SavedCourses(APIView):
             return HttpResponse('Unauthorised', status=401)
 
     def post(self, request, format=None):
-        getAttributes(request)
+        self.getAttributes(request)
         logger.info("POST")
         logger.info(self.attributes)
         if(self.attributes):
@@ -173,7 +172,7 @@ class SavedCourses(APIView):
             return HttpResponse('Unauthorised', status=401)
 
     def delete(self, request, pk, format=None):
-        getAttributes(request)
+        self.getAttributes(request)
         if(self.attributes):
             if request.method=="DELETE":
                 # print(request.body.decode("utf-8"))
