@@ -107,7 +107,7 @@ function ResultItemComponent(props) {
             
           >
             <Grid container justify="space-between" spacing={0}>
-              <Grid item xs={9}>
+              <Grid item xs={8} sm={9}>
                 <Grid container direction="column" spacing={0}>
                     <Box mr={1}>
                       <Typography className={classes.heading} align="left" > {props.course.courseID} - {props.course.title} </Typography> 
@@ -154,10 +154,10 @@ function ResultItemComponent(props) {
           </AccordionSummary>
           <AccordionDetails>
             <Typography align="left">
-              <b>{ props.course.sp === 1 ? "Special permission required" : null }</b>
+              { props.course.sp === 1 ? <span><b>Special permission required</b> | </span> : null }
               <b> Max = { props.course.max } </b> | <b>Enrolled = { props.course.enr } </b>
               { props.course.wl !== 0 ? <span> | <b> Waitlist = {props.course.wl} </b></span> : null }
-              { props.course.limits !== null ? <span>| <b> Course Limits = {props.course.limits} </b></span> : null }
+              { props.course.limits !== null ? <span> | <b> Course Limits = {props.course.limits} </b></span> : null }
               <br/>
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.course.description)}}/>
             </Typography>

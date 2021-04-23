@@ -178,7 +178,7 @@ function Navbar(props) {
                 }
               </MenuItem>
               <MenuItem onClick={() => {
-                handleClose()
+                authLink()
               }}>
                 <Box display='flex'>
                   <Box pr={1}>
