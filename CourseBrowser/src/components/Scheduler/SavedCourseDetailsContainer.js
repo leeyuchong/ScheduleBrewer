@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core'
 import Cookies from 'js-cookie'
 import React, { useContext } from 'react'
 import { SavedCourseContext } from '../Utils/SavedCourseContext'
@@ -26,11 +27,40 @@ function SavedCourseDetailsContainer() {
           console.log("Error, failed to save course: ", error)
         })
     }
+    const [classroomUnits, setClassroomUnits] = useState(0)
+    const [intUnits, setIntUnits] = useState(0)
+    const [otherUnits, setOtherUnits] = useState(0)
+    useEffect(() => {
+      let cls = 0
+      let int = 0
+      let oth = 0
+      Object.values(savedCourses).forEach(course => {
+        if(course.format==="CLS"){
+          cls+=course.units
+        }
+        else if(course.format=="INT"){
+          int+=course.units
+        }
+        else{
+          oth+=course.units
+        }
+      })
+      setClassroomUnits(cls)
+      setIntUnits(int)
+      setOtherUnits(oth)
+    }, [savedCourses])
     return (
         <div>
-            {savedCourses && Object.values(savedCourses).map(course => 
-                <SavedCourseDetail course={course} deleteCourse={deleteCourse}/>    
-            )}
+          <Typography>
+            {classroomUnits>0 ? `Classroom: ${classroomUnits}` : null} 
+            {classroomUnits>0 && intUnits>0 && otherUnits>0 ? " | " : null} 
+            {intUnits>0 ? `Intensive: ${intUnits}` : null}
+            {intUnits>0 && otherUnits>0 ? " | " : null} 
+            {otherUnits>0 ? `Other: ${otherUnits}` : null}
+          </Typography>
+          {savedCourses && Object.values(savedCourses).map(course => 
+              <SavedCourseDetail course={course} deleteCourse={deleteCourse}/>    
+          )}
         </div>
     )
 }

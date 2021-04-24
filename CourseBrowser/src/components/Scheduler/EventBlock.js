@@ -12,7 +12,7 @@ function EventBlock(props) {
     const elementRef = useRef(null)
     const boxColor = props.course.blockColor
     const startTime = (Math.floor(props.course.startTime/100)+(props.course.startTime%100)/60)
-    const topValue = 44 + (startTime-props.minTime)*42 + ((startTime-props.minTime)) - topOffset
+    const topValue = 43 + (startTime-props.minTime)*42 + ((startTime-props.minTime)) - topOffset
     const useStyles = makeStyles((theme) => ({
         eventBlock: {
             position: 'relative',
@@ -52,6 +52,7 @@ function EventBlock(props) {
                         <React.Fragment className={classes.paper}>
                             <Typography color="inherit" variant="subtitle2">{savedCourses[props.course.courseID] && savedCourses[props.course.courseID].title}</Typography>
                             <Typography variant="caption">{savedCourses[props.course.courseID] && savedCourses[props.course.courseID].instructor}</Typography>
+                            <Typography variant="caption">{savedCourses[props.course.courseID] && `${props.startTime} - ${props.endTime}`}</Typography>
                         </React.Fragment>
                     }
                     arrow

@@ -18,11 +18,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 import logging
 
-logger = logging.getLogger(__file__)
+# logger = logging.getLogger(__file__)
 
 @csrf_exempt
 def index(request):
-  return render(request, 'CourseBrowser/index.html')
+    return render(request, 'CourseBrowser/index.html')
 
 @csrf_exempt
 @api_view(['GET'])

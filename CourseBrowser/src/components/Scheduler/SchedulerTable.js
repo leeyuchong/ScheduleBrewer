@@ -9,18 +9,22 @@ import DayColumn from './DayColumn';
 function SchedulerTable(props) {
     const useStyles = makeStyles((theme) => ({
         ...theme.spreadThis,
-        tableAllCell:{
-            paddingTop: 11,
-            paddingBottom: 11,
+        tableBodyCells:{
             paddingLeft: 7,
             paddingRight: 7,
-            border: "0.5px solid rgb(171, 171, 171, 0.5)",
         },
-        tableHeaderCells: {
+        tableAllCells: {
             paddingTop: 11,
             paddingBottom: 11,
-            textAlign:"center",
-            border: "0.5px solid rgb(171, 171, 171, 0.5)",
+            borderTopWidth: "0px", 
+            borderRightWidth: "0px",
+            borderBottomWidth: "1px",
+            borderLeftWidth: "1px",
+            borderColor: "rgb(171, 171, 171, 0.5)",
+            borderStyle: "solid",
+        },
+        tableRightBorder: {
+            borderRightWidth: "1px"
         },
         eventSpace:{
             paddingLeft: 0,
@@ -111,7 +115,7 @@ function SchedulerTable(props) {
                 }
             }
         }
-        tempTableRange = [Math.floor(tempTableRange[0]/100)*100, Math.ceil(tempTableRange[1]/100)*100]
+        tempTableRange = [Math.floor(tempTableRange[0]/100)*100, Math.floor(tempTableRange[1]/100)*100]
         setMonBlocks(tempMonBlocks)
         setTueBlocks(tempTueBlocks)
         setWedBlocks(tempWedBlocks)
@@ -270,19 +274,19 @@ function SchedulerTable(props) {
                 </Grid>
             </div>
             <div ref={timeTableRef} className={`${classes.componentBackground}`}>
-                <Grid container spacing={0}>
-                    <Grid item xs={1} className={classes.tableHeaderCells}></Grid>
+                <Grid container spacing={0} style={{textAlign:"center"}}>
+                    <Grid item xs={1} className={`${classes.tableHeaderCells} ${classes.tableAllCells}`} style={{borderTopWidth: "1px"}}></Grid>
                     {days.map((day) => 
-                        <Grid item xs className={classes.tableHeaderCells}>{day}</Grid>
+                        <Grid item xs className={ `${day !== "Fri" ? null : classes.tableRightBorder} ${classes.tableHeaderCells} ${classes.tableAllCells}`} style={{borderTopWidth: "1px"}}>{day}</Grid>
                     )}
                 </Grid>
-                {createTimes(tableRange[0], tableRange[1]).map((time) => 
+                {createTimes(tableRange[0], tableRange[1]).map((time, idx) => 
                     <Grid container spacing={0}>
-                        <Grid item xs={1} className={classes.tableAllCell}>
+                        <Grid item xs={1} className={`${classes.tableAllCells}`}>
                             <Typography variant="body2" align="center">{time}</Typography>
                         </Grid>
-                        {days.map(_ => 
-                            <Grid item xs className={classes.tableAllCell}></Grid>
+                        {days.map((day) => 
+                            <Grid item xs className={`${day !== "Fri" ? null : classes.tableRightBorder} ${classes.tableAllCells}`}></Grid>
                         )}
                     </Grid>
                 )}
