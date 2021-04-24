@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import Cookies from 'js-cookie'
 import React, { useContext, useState, useEffect } from 'react'
 import { SavedCourseContext } from '../Utils/SavedCourseContext'
@@ -50,18 +50,19 @@ function SavedCourseDetailsContainer() {
       setOtherUnits(oth)
     }, [savedCourses])
     return (
-        <div>
+        <Box my={1}>
           <Typography align='left'>
-            {classroomUnits>0 ? `Classroom: ${classroomUnits}` : null} 
-            {classroomUnits>0 && intUnits>0 && otherUnits>0 ? " | " : null} 
-            {intUnits>0 ? `Intensive: ${intUnits}` : null}
+            Units: 
+            {classroomUnits>0 ? `Classroom - ${classroomUnits}` : null} 
+            {classroomUnits>0 && (intUnits>0 || otherUnits>0) ? " | " : null} 
+            {intUnits>0 ? `Intensive - ${intUnits}` : null}
             {intUnits>0 && otherUnits>0 ? " | " : null} 
-            {otherUnits>0 ? `Other: ${otherUnits}` : null}
+            {otherUnits>0 ? `Other - ${otherUnits}` : null}
           </Typography>
           {savedCourses && Object.values(savedCourses).map(course => 
               <SavedCourseDetail course={course} deleteCourse={deleteCourse}/>    
           )}
-        </div>
+        </Box>
     )
 }
 

@@ -45,27 +45,33 @@ function EventBlock(props) {
       setOpen(true);
     };
     return (
-        <Box ref={elementRef} >
-            <ClickAwayListener onClickAway={handleTooltipClose}>
-                <Tooltip
-                    title={
-                        <React.Fragment className={classes.paper}>
-                            <Typography color="inherit" variant="subtitle2">{savedCourses[props.course.courseID] && savedCourses[props.course.courseID].title}</Typography>
-                            <Typography variant="caption">{savedCourses[props.course.courseID] && savedCourses[props.course.courseID].instructor}</Typography>
-                            <Typography variant="caption">{savedCourses[props.course.courseID] && `${props.startTime} - ${props.endTime}`}</Typography>
-                        </React.Fragment>
-                    }
-                    arrow
-                    onClose={handleTooltipClose}
-                    open={open}
-                    >
-                    <Paper className={classes.eventBlock} align="left" pl={1} onClick={handleTooltipOpen} onMouseEnter={handleTooltipOpen} onMouseLeave={handleTooltipClose}>
-                        <Box ml={0.5}>
-                            <Typography variant="caption" align="left">{props.course.courseID}</Typography>
-                        </Box>
-                    </Paper>
-                </Tooltip>
-            </ClickAwayListener>
+        <Box ref={elementRef}>
+            {savedCourses[props.course.courseID] ? 
+                <ClickAwayListener onClickAway={handleTooltipClose}>
+                    <Tooltip
+                        title={
+                            <React.Fragment className={classes.paper}>
+                                <Box display="block">
+                                    <Typography color="inherit" variant="subtitle2">{savedCourses[props.course.courseID].title}</Typography>
+                                    <Typography variant="caption">{savedCourses[props.course.courseID].instructor}</Typography>
+                                    <Typography variant="caption">{`${props.course.startTime} - ${props.course.endTime}`}</Typography>
+                                </Box>
+                            </React.Fragment>
+                        }
+                        arrow
+                        onClose={handleTooltipClose}
+                        open={open}
+                        >
+                        <Paper className={classes.eventBlock} align="left" pl={1} onClick={handleTooltipOpen} onMouseEnter={handleTooltipOpen} onMouseLeave={handleTooltipClose}>
+                            <Box ml={0.5}>
+                                <Typography variant="caption" align="left">{props.course.courseID}</Typography>
+                            </Box>
+                        </Paper>
+                    </Tooltip>
+                </ClickAwayListener>
+            : 
+            null
+            }
         </Box>
     )
 }

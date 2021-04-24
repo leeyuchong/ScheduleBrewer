@@ -25,7 +25,7 @@ function SavedCourseDetail(props) {
     const classes = useStyles();
     
     return (
-        <Box my={1} >
+        <Box my={1}>
             <Paper className={classes.detail}>
                 <Box p={1}>
                 <Grid container justify="space-between" spacing={0}>
