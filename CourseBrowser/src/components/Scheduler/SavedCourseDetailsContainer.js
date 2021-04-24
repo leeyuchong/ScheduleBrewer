@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core'
 import Cookies from 'js-cookie'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { SavedCourseContext } from '../Utils/SavedCourseContext'
 import SavedCourseDetail from './SavedCourseDetail'
 
