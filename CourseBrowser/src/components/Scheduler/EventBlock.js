@@ -52,8 +52,8 @@ function EventBlock(props) {
                         title={
                             <React.Fragment className={classes.paper}>
                                 <Typography color="inherit" variant="subtitle2">{savedCourses[props.course.courseID].title}</Typography>
-                                <Typography variant="caption" display="block" gutterBottom>{savedCourses[props.course.courseID].instructor}</Typography>
-                                <Typography variant="caption" display="block" gutterBottom>{`${props.course.startTime} - ${props.course.endTime}`}</Typography>
+                                <Typography variant="caption">{savedCourses[props.course.courseID].instructor}</Typography>
+                                <Typography variant="caption" paragraph>{`${props.course.startTime} - ${props.course.endTime}`}</Typography>
                             </React.Fragment>
                         }
                         arrow
