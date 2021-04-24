@@ -3,11 +3,17 @@ import SchedulerTable from './Scheduler/SchedulerTable'
 import SavedCourseDetailsContainer from './Scheduler/SavedCourseDetailsContainer'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { Box } from '@material-ui/core';
 
 function SchedulerPageContainer() {
     return (
         <div>
-            <Typography>Best viewed in landscape mode</Typography>
+            <Box
+                component={Typography}
+                display={{ sm: 'block', md: 'none' }}
+            >
+                Best viewed in landscape mode
+            </Box>
             <Grid
                 container
                 justify="center"

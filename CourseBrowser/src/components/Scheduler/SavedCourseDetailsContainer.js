@@ -52,7 +52,7 @@ function SavedCourseDetailsContainer() {
     return (
         <Box my={1}>
           <Typography align='left'>
-            Units: 
+            {"Units: "}
             {classroomUnits>0 ? `Classroom - ${classroomUnits}` : null} 
             {classroomUnits>0 && (intUnits>0 || otherUnits>0) ? " | " : null} 
             {intUnits>0 ? `Intensive - ${intUnits}` : null}
