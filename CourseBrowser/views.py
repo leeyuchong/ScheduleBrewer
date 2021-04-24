@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 import logging
 
-# logger = logging.getLogger(__file__)
+logger = logging.getLogger(__file__)
 
 @csrf_exempt
 def index(request):
@@ -33,9 +33,7 @@ def search(request):
     for key, value in request.GET.items():
         if key == "searchTerms":
             terms = request.GET[key].upper().split()
-            logger.info(terms)
             for term in terms:
-                logger.info(term)
                 if term in courseCodes: 
                     queriedCourses = queriedCourses.filter(courseID__startswith=term)
                 elif term == "FR": queriedCourses = queriedCourses.filter(fr__exact=1)
@@ -61,7 +59,6 @@ def search(request):
                 elif term == "0.5" or term == "1.0" or term == "1.5":
                     queriedCourses = queriedCourses.filter(units__exact=term)
                 else:
-                    logger.info("else")
                     if len(term)>0 and term[0]=="0":
                         term=term[1:]
                     queriedCourses = queriedCourses.filter(
@@ -116,14 +113,11 @@ class SavedCourses(APIView):
     username=""
     def getAttributes(self, request):
         if 'samlUserdata' in request.session:
-            logger.info("A")
             if len(request.session['samlUserdata']) > 0:
                 self.attributes = request.session['samlUserdata'].items()
                 self.username=request.session['samlUserdata']['UserName'][0]
     def get(self, request, format=None):
         self.getAttributes(request)
-        logger.info("GET")
-        logger.info(self.attributes)
         if(self.attributes):
             queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=self.username).values(
                 "courseID", 
@@ -151,8 +145,6 @@ class SavedCourses(APIView):
 
     def post(self, request, format=None):
         self.getAttributes(request)
-        logger.info("POST")
-        logger.info(self.attributes)
         if(self.attributes):
             if request.method=="POST":
                 selectedCourse = request.POST
