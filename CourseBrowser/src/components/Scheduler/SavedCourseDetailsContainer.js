@@ -51,16 +51,16 @@ function SavedCourseDetailsContainer() {
     }, [savedCourses])
     return (
         <Box my={1}>
-          <Typography align='left'>
+          <Box component={Typography} display={classroomUnits>0 || intUnits>0 || otherUnits>0 ? 'block': 'none'} align='left'>
             {"Units: "}
             {classroomUnits>0 ? `Classroom - ${classroomUnits}` : null} 
             {classroomUnits>0 && (intUnits>0 || otherUnits>0) ? " | " : null} 
             {intUnits>0 ? `Intensive - ${intUnits}` : null}
             {intUnits>0 && otherUnits>0 ? " | " : null} 
             {otherUnits>0 ? `Other - ${otherUnits}` : null}
-          </Typography>
+          </Box>
           {savedCourses && Object.values(savedCourses).map(course => 
-              <SavedCourseDetail course={course} deleteCourse={deleteCourse}/>    
+              <SavedCourseDetail course={course} deleteCourse={deleteCourse}/>
           )}
         </Box>
     )
