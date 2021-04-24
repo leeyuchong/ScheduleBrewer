@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core'
 import Cookies from 'js-cookie'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { SavedCourseContext } from '../Utils/SavedCourseContext'
 import SavedCourseDetail from './SavedCourseDetail'
 
@@ -51,7 +51,7 @@ function SavedCourseDetailsContainer() {
     }, [savedCourses])
     return (
         <div>
-          <Typography>
+          <Typography align='left'>
             {classroomUnits>0 ? `Classroom: ${classroomUnits}` : null} 
             {classroomUnits>0 && intUnits>0 && otherUnits>0 ? " | " : null} 
             {intUnits>0 ? `Intensive: ${intUnits}` : null}
