@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY'),
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['ec2-54-83-17-12.compute-1.amazonaws.com', '54.83.17.12', 'localhost', 'schedulebrewer.ml', 'www.schedulebrewer.ml', '127.0.0.1']
 
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -129,9 +128,9 @@ WEBPACK_LOADER = {
   }
 }
 
-CORS_ALLOW_CREDENTIALS = True
+#CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SECURE = True
 
@@ -156,7 +155,7 @@ CORS_ORIGIN_WHITELIST = [
     'https://vassar.onelogin.com',
 ]
 
-CORS_REPLACE_HTTPS_REFERER = False
+#CORS_REPLACE_HTTPS_REFERER = False
 
 
 # Static files (CSS, JavaScript, Images)

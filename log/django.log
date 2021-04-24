@@ -62,3 +62,229 @@ Traceback (most recent call last):
     logger.info("else")
                       ^
 TabError: inconsistent use of tabs and spaces in indentation
+2021-04-23 17:17:29 [INFO    ] (views.search) ['HUNSBERGER']
+2021-04-23 17:17:29 [INFO    ] (views.search) HUNSBERGER
+2021-04-23 17:17:29 [INFO    ] (views.search) else
+2021-04-23 17:18:20 [INFO    ] (views.search) ['COMPUTER']
+2021-04-23 17:18:20 [INFO    ] (views.search) COMPUTER
+2021-04-23 17:18:20 [INFO    ] (views.search) else
+2021-04-23 17:18:35 [INFO    ] (views.search) ['COMPUTER']
+2021-04-23 17:18:35 [INFO    ] (views.search) COMPUTER
+2021-04-23 17:18:35 [INFO    ] (views.search) else
+2021-04-23 17:18:51 [INFO    ] (views.search) ['TASGREED']
+2021-04-23 17:18:51 [INFO    ] (views.search) TASGREED
+2021-04-23 17:18:51 [INFO    ] (views.search) else
+2021-04-23 17:19:05 [INFO    ] (views.search) ['TAGREED']
+2021-04-23 17:19:05 [INFO    ] (views.search) TAGREED
+2021-04-23 17:19:05 [INFO    ] (views.search) else
+2021-04-23 17:32:53 [INFO    ] (views.getAttributes) A
+2021-04-23 17:32:53 [INFO    ] (views.get) GET
+2021-04-23 17:32:53 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 17:33:22 [INFO    ] (views.getAttributes) A
+2021-04-23 17:33:22 [INFO    ] (views.get) GET
+2021-04-23 17:33:22 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 18:00:26 [INFO    ] (views.search) ['TAGREED']
+2021-04-23 18:00:26 [INFO    ] (views.search) TAGREED
+2021-04-23 18:00:26 [INFO    ] (views.search) else
+2021-04-23 18:00:30 [INFO    ] (views.search) ['TAGREED']
+2021-04-23 18:00:30 [INFO    ] (views.search) TAGREED
+2021-04-23 18:00:30 [INFO    ] (views.search) else
+2021-04-23 18:00:49 [INFO    ] (views.search) ['TAGREED']
+2021-04-23 18:00:49 [INFO    ] (views.search) TAGREED
+2021-04-23 18:00:49 [INFO    ] (views.search) else
+2021-04-23 18:01:06 [INFO    ] (views.search) ['SMART']
+2021-04-23 18:01:06 [INFO    ] (views.search) SMART
+2021-04-23 18:01:06 [INFO    ] (views.search) else
+2021-04-23 18:01:10 [INFO    ] (views.search) ['SMART']
+2021-04-23 18:01:10 [INFO    ] (views.search) SMART
+2021-04-23 18:01:10 [INFO    ] (views.search) else
+2021-04-23 18:01:13 [INFO    ] (views.search) ['NEWMAN']
+2021-04-23 18:01:13 [INFO    ] (views.search) NEWMAN
+2021-04-23 18:01:13 [INFO    ] (views.search) else
+2021-04-23 18:01:17 [INFO    ] (views.search) ['NEWMAN']
+2021-04-23 18:01:17 [INFO    ] (views.search) NEWMAN
+2021-04-23 18:01:17 [INFO    ] (views.search) else
+2021-04-23 18:01:33 [INFO    ] (views.search) ['BEUWOLF']
+2021-04-23 18:01:33 [INFO    ] (views.search) BEUWOLF
+2021-04-23 18:01:33 [INFO    ] (views.search) else
+2021-04-23 18:01:36 [INFO    ] (views.search) ['WOL']
+2021-04-23 18:01:36 [INFO    ] (views.search) WOL
+2021-04-23 18:01:36 [INFO    ] (views.search) else
+2021-04-23 18:01:41 [INFO    ] (views.search) ['WOLF']
+2021-04-23 18:01:41 [INFO    ] (views.search) WOLF
+2021-04-23 18:01:41 [INFO    ] (views.search) else
+2021-04-23 18:50:54 [INFO    ] (views.getAttributes) A
+2021-04-23 18:50:54 [INFO    ] (views.get) GET
+2021-04-23 18:50:54 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 18:50:56 [INFO    ] (views.getAttributes) A
+2021-04-23 18:50:56 [INFO    ] (views.post) POST
+2021-04-23 18:50:56 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 19:11:31 [WARNING ] (log.log_response) Not Found: /remote/login
+2021-04-23 19:11:31 [WARNING ] (log.log_response) Not Found: /remote/login
+2021-04-23 19:20:48 [INFO    ] (views.getAttributes) A
+2021-04-23 19:20:48 [INFO    ] (views.get) GET
+2021-04-23 19:20:48 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-23 19:21:54 [INFO    ] (views.getAttributes) A
+2021-04-23 19:21:54 [INFO    ] (views.get) GET
+2021-04-23 19:21:54 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-23 19:25:12 [INFO    ] (views.getAttributes) A
+2021-04-23 19:25:12 [INFO    ] (views.get) GET
+2021-04-23 19:25:12 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-23 19:36:24 [WARNING ] (log.log_response) Not Found: /.env
+2021-04-23 19:36:24 [WARNING ] (log.log_response) Not Found: /.env
+2021-04-23 20:22:23 [INFO    ] (views.getAttributes) A
+2021-04-23 20:22:23 [INFO    ] (views.get) GET
+2021-04-23 20:22:23 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 20:27:42 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-23 20:27:42 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-23 20:27:43 [WARNING ] (log.log_response) Not Found: /api/jsonws/invoke
+2021-04-23 20:27:43 [WARNING ] (log.log_response) Not Found: /api/jsonws/invoke
+2021-04-23 20:27:46 [WARNING ] (log.log_response) Not Found: /index.php
+2021-04-23 20:27:46 [WARNING ] (log.log_response) Not Found: /index.php
+2021-04-23 20:27:48 [WARNING ] (log.log_response) Not Found: /mifs/.;/services/LogService
+2021-04-23 20:27:48 [WARNING ] (log.log_response) Not Found: /mifs/.;/services/LogService
+2021-04-23 20:27:49 [WARNING ] (log.log_response) Not Found: /_ignition/execute-solution
+2021-04-23 20:27:49 [WARNING ] (log.log_response) Not Found: /_ignition/execute-solution
+2021-04-23 20:27:51 [WARNING ] (log.log_response) Not Found: /Autodiscover/Autodiscover.xml
+2021-04-23 20:27:51 [WARNING ] (log.log_response) Not Found: /Autodiscover/Autodiscover.xml
+2021-04-23 20:27:51 [WARNING ] (log.log_response) Not Found: /console/
+2021-04-23 20:27:51 [WARNING ] (log.log_response) Not Found: /console/
+2021-04-23 20:27:52 [WARNING ] (log.log_response) Not Found: /wp-content/plugins/wp-file-manager/readme.txt
+2021-04-23 20:27:52 [WARNING ] (log.log_response) Not Found: /wp-content/plugins/wp-file-manager/readme.txt
+2021-04-23 20:27:54 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-23 20:27:54 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-23 21:12:55 [INFO    ] (views.getAttributes) A
+2021-04-23 21:12:55 [INFO    ] (views.get) GET
+2021-04-23 21:12:55 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-23 21:58:01 [INFO    ] (views.getAttributes) A
+2021-04-23 21:58:01 [INFO    ] (views.get) GET
+2021-04-23 21:58:01 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-23 22:15:17 [INFO    ] (views.getAttributes) A
+2021-04-23 22:15:17 [INFO    ] (views.get) GET
+2021-04-23 22:15:17 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 22:15:18 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-23 22:15:18 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-23 22:15:18 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-23 22:15:18 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-23 22:45:41 [WARNING ] (log.log_response) Not Found: /.env
+2021-04-23 22:45:41 [WARNING ] (log.log_response) Not Found: /.env
+2021-04-23 23:06:41 [INFO    ] (views.getAttributes) A
+2021-04-23 23:06:41 [INFO    ] (views.get) GET
+2021-04-23 23:06:41 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-23 23:06:41 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-23 23:06:41 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-23 23:06:41 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-23 23:06:41 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-24 01:36:52 [WARNING ] (log.log_response) Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+2021-04-24 01:36:52 [WARNING ] (log.log_response) Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+2021-04-24 04:19:11 [ERROR   ] (exception.response_for_exception) Invalid HTTP_HOST header: '169.254.169.254'. You may need to add '169.254.169.254' to ALLOWED_HOSTS.
+2021-04-24 04:19:11 [ERROR   ] (exception.response_for_exception) Invalid HTTP_HOST header: '169.254.169.254'. You may need to add '169.254.169.254' to ALLOWED_HOSTS.
+2021-04-24 04:19:11 [WARNING ] (log.log_response) Bad Request: /latest/meta-data/
+2021-04-24 04:19:11 [WARNING ] (log.log_response) Bad Request: /latest/meta-data/
+2021-04-24 05:03:23 [WARNING ] (log.log_response) Not Found: /owa/auth/logon.aspx
+2021-04-24 05:03:23 [WARNING ] (log.log_response) Not Found: /owa/auth/logon.aspx
+2021-04-24 05:43:48 [WARNING ] (log.log_response) Not Found: /bag2
+2021-04-24 05:43:48 [WARNING ] (log.log_response) Not Found: /bag2
+2021-04-24 09:19:45 [ERROR   ] (exception.response_for_exception) Invalid HTTP_HOST header: '192.168.0.1:443'. You may need to add '192.168.0.1' to ALLOWED_HOSTS.
+2021-04-24 09:19:45 [ERROR   ] (exception.response_for_exception) Invalid HTTP_HOST header: '192.168.0.1:443'. You may need to add '192.168.0.1' to ALLOWED_HOSTS.
+2021-04-24 09:19:45 [WARNING ] (log.log_response) Bad Request: /GponForm/diag_Form
+2021-04-24 09:19:45 [WARNING ] (log.log_response) Bad Request: /GponForm/diag_Form
+2021-04-24 09:39:36 [WARNING ] (log.log_response) Not Found: /owa/auth/logon.aspx
+2021-04-24 09:39:36 [WARNING ] (log.log_response) Not Found: /owa/auth/logon.aspx
+2021-04-24 11:12:30 [WARNING ] (log.log_response) Not Found: /actuator/health
+2021-04-24 11:12:30 [WARNING ] (log.log_response) Not Found: /actuator/health
+2021-04-24 12:16:16 [WARNING ] (log.log_response) Not Found: /owa/
+2021-04-24 12:16:16 [WARNING ] (log.log_response) Not Found: /owa/
+2021-04-24 12:19:32 [INFO    ] (views.getAttributes) A
+2021-04-24 12:19:32 [INFO    ] (views.get) GET
+2021-04-24 12:19:32 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-24 12:20:34 [INFO    ] (views.getAttributes) A
+2021-04-24 12:20:34 [INFO    ] (views.get) GET
+2021-04-24 12:20:34 [INFO    ] (views.get) dict_items([('UserName', ['mcgowan'])])
+2021-04-24 12:43:53 [WARNING ] (log.log_response) Not Found: /api/jsonws/invoke
+2021-04-24 12:43:53 [WARNING ] (log.log_response) Not Found: /api/jsonws/invoke
+2021-04-24 12:43:55 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-24 12:43:55 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-24 12:43:56 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-24 12:43:56 [WARNING ] (log.log_response) Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+2021-04-24 12:43:57 [WARNING ] (log.log_response) Not Found: /index.php
+2021-04-24 12:43:57 [WARNING ] (log.log_response) Not Found: /index.php
+2021-04-24 12:43:58 [WARNING ] (log.log_response) Not Found: /wp-content/plugins/wp-file-manager/readme.txt
+2021-04-24 12:43:58 [WARNING ] (log.log_response) Not Found: /wp-content/plugins/wp-file-manager/readme.txt
+2021-04-24 12:43:58 [WARNING ] (log.log_response) Not Found: /mifs/.;/services/LogService
+2021-04-24 12:43:58 [WARNING ] (log.log_response) Not Found: /mifs/.;/services/LogService
+2021-04-24 12:44:01 [WARNING ] (log.log_response) Not Found: /console/
+2021-04-24 12:44:01 [WARNING ] (log.log_response) Not Found: /console/
+2021-04-24 12:44:02 [WARNING ] (log.log_response) Not Found: /Autodiscover/Autodiscover.xml
+2021-04-24 12:44:02 [WARNING ] (log.log_response) Not Found: /Autodiscover/Autodiscover.xml
+2021-04-24 12:44:03 [WARNING ] (log.log_response) Not Found: /_ignition/execute-solution
+2021-04-24 12:44:03 [WARNING ] (log.log_response) Not Found: /_ignition/execute-solution
+2021-04-24 13:13:09 [INFO    ] (views.getAttributes) A
+2021-04-24 13:13:09 [INFO    ] (views.get) GET
+2021-04-24 13:13:09 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 13:13:25 [INFO    ] (views.getAttributes) A
+2021-04-24 13:13:25 [INFO    ] (views.post) POST
+2021-04-24 13:13:25 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 13:13:27 [INFO    ] (views.getAttributes) A
+2021-04-24 13:13:27 [INFO    ] (views.post) POST
+2021-04-24 13:13:27 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 13:13:33 [INFO    ] (views.search) ['331']
+2021-04-24 13:13:33 [INFO    ] (views.search) 331
+2021-04-24 13:13:33 [INFO    ] (views.search) else
+2021-04-24 13:13:36 [INFO    ] (views.getAttributes) A
+2021-04-24 13:13:36 [INFO    ] (views.post) POST
+2021-04-24 13:13:36 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 13:14:08 [INFO    ] (views.getAttributes) A
+2021-04-24 13:14:08 [INFO    ] (views.post) POST
+2021-04-24 13:14:08 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 13:14:18 [INFO    ] (views.getAttributes) A
+2021-04-24 13:14:18 [INFO    ] (views.post) POST
+2021-04-24 13:14:18 [INFO    ] (views.post) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 16:17:51 [INFO    ] (views.getAttributes) A
+2021-04-24 16:17:51 [INFO    ] (views.get) GET
+2021-04-24 16:17:51 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 17:45:14 [INFO    ] (views.getAttributes) A
+2021-04-24 17:45:14 [INFO    ] (views.get) GET
+2021-04-24 17:45:14 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 17:45:15 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-24 17:45:15 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-24 17:45:15 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-24 17:45:15 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-24 18:01:37 [WARNING ] (log.log_response) Not Found: /dns-query
+2021-04-24 18:01:37 [WARNING ] (log.log_response) Not Found: /dns-query
+2021-04-24 18:01:37 [WARNING ] (log.log_response) Not Found: /dns-query
+2021-04-24 18:01:37 [WARNING ] (log.log_response) Not Found: /dns-query
+2021-04-24 18:02:26 [INFO    ] (views.getAttributes) A
+2021-04-24 18:02:26 [INFO    ] (views.get) GET
+2021-04-24 18:02:26 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 18:02:38 [INFO    ] (views.search) ['ENGL', '272']
+2021-04-24 18:02:38 [INFO    ] (views.search) ENGL
+2021-04-24 18:02:38 [INFO    ] (views.search) 272
+2021-04-24 18:02:38 [INFO    ] (views.search) else
+2021-04-24 18:04:27 [INFO    ] (views.getAttributes) A
+2021-04-24 18:04:27 [INFO    ] (views.get) GET
+2021-04-24 18:04:27 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 18:42:55 [WARNING ] (log.log_response) Not Found: /.env
+2021-04-24 18:42:55 [WARNING ] (log.log_response) Not Found: /.env
+2021-04-24 18:59:02 [INFO    ] (views.getAttributes) A
+2021-04-24 18:59:02 [INFO    ] (views.get) GET
+2021-04-24 18:59:02 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 18:59:03 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-24 18:59:03 [WARNING ] (log.log_response) Not Found: /apple-touch-icon-precomposed.png
+2021-04-24 18:59:03 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-24 18:59:03 [WARNING ] (log.log_response) Not Found: /apple-touch-icon.png
+2021-04-24 18:59:17 [INFO    ] (views.getAttributes) A
+2021-04-24 18:59:17 [INFO    ] (views.get) GET
+2021-04-24 18:59:17 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 18:59:30 [INFO    ] (views.getAttributes) A
+2021-04-24 18:59:30 [INFO    ] (views.get) GET
+2021-04-24 18:59:30 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 18:59:48 [INFO    ] (views.getAttributes) A
+2021-04-24 18:59:48 [INFO    ] (views.get) GET
+2021-04-24 18:59:48 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 19:14:05 [INFO    ] (views.getAttributes) A
+2021-04-24 19:14:05 [INFO    ] (views.get) GET
+2021-04-24 19:14:05 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])
+2021-04-24 19:24:58 [INFO    ] (views.getAttributes) A
+2021-04-24 19:24:58 [INFO    ] (views.get) GET
+2021-04-24 19:24:58 [INFO    ] (views.get) dict_items([('UserName', ['lyuchong'])])

@@ -20,11 +20,9 @@ import logging
 
 logger = logging.getLogger(__file__)
 
-@csrf_exempt
 def index(request):
     return render(request, 'CourseBrowser/index.html')
 
-@csrf_exempt
 @api_view(['GET'])
 def search(request):
     courseCodes = ("AFRS", "AMCL", "AMST", "ANSO", "ANTH", "AFRS", "ART", "ARTH", "ARTS", "ASIA", "ASL", "ASTR", "BIOC", "BIOL", "BIPS", "CHEM", "CHIN", "CHJA", "CLAN", "CLAS", "CLGR", "CLLA", "CLCS", "CMPU", "COGS", "CREO", "DANC", "DRAM", "ECON", "EDUC", "ENGL", "ENST", "ENVI", "ESCI", "ESSC", "FFS", "FILM", "FREN", "GEAN", "GEOG", "GEOL", "GERM", "GREK", "GRST", "HEBR", "HIND", "HISP", "HIST", "INDP", "INTD", "INTL", "IRSH", "ITAL", "JAPA", "JWST", "ASIA", "LALS", "LAST", "LATI", "MATH", "MEDS", "MRST", "MSDP", "MUSI", "NEUR", "PERS", "PHED", "PHIL", "PHYS", "POLI", "PORT", "PSYC", "PSYC", "RELI", "RUSS", "SOCI", "STS", "SWAH", "SWED", "TURK", "URBS", "VICT", "WMST", "YIDD")    
@@ -219,7 +217,6 @@ class SavedCourses(APIView):
 #         course.delete()
 #     return HttpResponse("Success")
 
-@csrf_exempt
 @ensure_csrf_cookie
 def getCSRFCookie(request):
     return JsonResponse({'Success': 'CSRF Cookie set'}, status=200)
