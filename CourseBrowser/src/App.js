@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import NavBar from "./components/Navbar/NavbarComponent"
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SavedCourseProvider } from './components/Utils/SavedCourseContext'
@@ -14,26 +14,31 @@ function App() {
   const darkTheme = createMuiTheme(DarkTheme)
   const lightTheme = createMuiTheme(LightTheme)
   const [currentPage, setCurrentPage] = useState("default")
-  const [prefersDarkMode, setPrefersDarkMode] = useState(useMediaQuery('(prefers-color-scheme: dark)'))
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  const [darkMode, setDarkMode] = useState(prefersDarkMode)
   const [hideSearchSection, setHideSearchSection] = useState(false)
   function handleChange(newValue){
     setCurrentPage(newValue)
   }
   const toggleTheme = () => {
-    setPrefersDarkMode(!prefersDarkMode)
+    setDarkMode(!darkMode)
   }
   const toggleSearchVisibility = () => {
     setHideSearchSection(!hideSearchSection)
   }
+  useEffect(() => {
+    setDarkMode(prefersDarkMode)
+  }, [prefersDarkMode])
+
   return (
     <div className="App">
-      <ThemeProvider theme={prefersDarkMode ? darkTheme : lightTheme}>
+      <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <CssBaseline />
         <NavBar 
           currentPage={currentPage} 
           handleChange={handleChange} 
           toggleTheme={toggleTheme} 
-          prefersDarkMode={prefersDarkMode}
+          prefersDarkMode={darkMode}
           hideSearchSection={hideSearchSection}
           toggleSearchVisibility={toggleSearchVisibility}
           />
