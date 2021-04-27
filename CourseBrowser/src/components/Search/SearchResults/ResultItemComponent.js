@@ -115,7 +115,7 @@ function ResultItemComponent(props) {
                     <Box mr={0} pr={0} style={{textAlign: "left"}}>
                       {props.course.requests!==null 
                       ?
-                      <BadgeRect content={`Requests: ${props.course.requests}`} badgeStyle={props.course.requests > 0 ? "badgeGreen" : "badgeRed"} />
+                      <BadgeRect content={`Requests: ${props.course.requests}`} badgeStyle={props.course.requests > props.course.max ? "badgeGreen" : "badgeRed"} />
                       :
                       <BadgeRect content={`Avail: ${props.course.avl}`} badgeStyle={props.course.avl > 0 ? "badgeGreen" : "badgeRed"} />
                       }
