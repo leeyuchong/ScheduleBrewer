@@ -113,7 +113,12 @@ function ResultItemComponent(props) {
                       <Typography className={classes.heading} align="left" > {props.course.courseID} - {props.course.title} </Typography> 
                     </Box>
                     <Box mr={0} pr={0} style={{textAlign: "left"}}>
+                      {props.course.requests!==null 
+                      ?
+                      <BadgeRect content={`Requests: ${props.course.requests}`} badgeStyle={props.course.requests > 0 ? "badgeGreen" : "badgeRed"} />
+                      :
                       <BadgeRect content={`Avail: ${props.course.avl}`} badgeStyle={props.course.avl > 0 ? "badgeGreen" : "badgeRed"} />
+                      }
                       {props.course.gm !== null ? <BadgeRect content={props.course.gm} badgeStyle="badgeBlue" /> : null }
                       <BadgeRect content={props.course.format} badgeStyle="badgeLightBlue" />
                       <BadgeRect content={`${ props.course.units } ${props.course.units===1 ? "unit " : "units "}`} badgeStyle="badgeBrown" />
