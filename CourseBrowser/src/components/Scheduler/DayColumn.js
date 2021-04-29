@@ -6,19 +6,19 @@ import Grid from '@material-ui/core/Grid';
 function DayColumn(props) {
     return (
         <Box px={0.2}>
-            {props.dayBlock.map(cluster => 
+            {props.dayBlock.map((cluster, clusterIndex) => 
                 <Grid container spacing={0} > 
-                {cluster.lanes.map(lane => 
+                {cluster.lanes.map((lane, laneIndex) => 
                     <Grid item xs zeroMinWidth>
                         <Grid container spacing={0} zeroMinWidth>
                             {lane.map(course => 
-                                <Grid item xs id={course.courseID} zeroMinWidth>
+                                <Grid item xs id={`block-${clusterIndex}-${laneIndex}-${course.courseID}`} zeroMinWidth>
                                     <EventBlock course={course} dayBlock={props.dayBlock} minTime={props.minTime} />
                                 </Grid>
                             )}
                         </Grid>
                     </Grid>
-                    )}
+                )}
                 </Grid>
             )}
         </Box> 

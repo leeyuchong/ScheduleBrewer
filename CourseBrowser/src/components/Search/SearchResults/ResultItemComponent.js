@@ -103,8 +103,7 @@ function ResultItemComponent(props) {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls={props.course.courseID}
-            id={props.course.courseID}
-            
+            id={`accord-${props.course.courseID}`}
           >
             <Grid container justify="space-between" spacing={0}>
               <Grid item xs={8} sm={9}>
@@ -115,7 +114,7 @@ function ResultItemComponent(props) {
                     <Box mr={0} pr={0} style={{textAlign: "left"}}>
                       {props.course.requests!==null 
                       ?
-                      <BadgeRect content={`Req: ${props.course.requests}`} badgeStyle={props.course.requests <= props.course.max ? "badgeGreen" : "badgeRed"} />
+                      <BadgeRect content={`Req: ${props.course.requests}`} badgeStyle={props.course.requests < props.course.max ? "badgeGreen" : "badgeRed"} />
                       :
                       <BadgeRect content={`Avail: ${props.course.avl}`} badgeStyle={props.course.avl > 0 ? "badgeGreen" : "badgeRed"} />
                       }

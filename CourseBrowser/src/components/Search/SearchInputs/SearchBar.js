@@ -59,7 +59,7 @@ function SearchBar(props) {
                 <Box display="flex">
                     <Box m={0.5} ml={0}>
                         <FormControl variant="outlined" color="secondary" className={classes.componentBackground}>
-                            <InputLabel id="department">Dept</InputLabel>
+                            <InputLabel id="department-label">Dept</InputLabel>
                             <Select
                                 native
                                 labelId="Department"
