@@ -36,8 +36,10 @@ function SearchSection(props) {
         <div>
             <Box>
                 <SearchInputsContainer setSearchURL={setSearchURL}/>
-                <br/>
-                <Collapse in={openAlert}>
+                <Box 
+                    component={Collapse}
+                    my={1}
+                    in={openAlert}>
                     <Alert 
                         severity="warning"
                         action={
@@ -62,8 +64,7 @@ function SearchSection(props) {
                             Saving a class does not mean you have registered for it. Remember to log in at <Link href="https://aisapps.vassar.edu/prereg/" onClick={redirectToPreregSite} style={{color: "#E88B00"}}>https://aisapps.vassar.edu/prereg/</Link> and formally register for your classes before preregistration ends.
                         </Typography>
                     </Alert>
-                </Collapse>
-                <br/>
+                </Box>
                 <SearchResults 
                     searchURL={searchURL} 
                     setNumberSearchResults={props.setNumberSearchResults} 
