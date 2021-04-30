@@ -14,12 +14,12 @@ const DarkTheme = {
             contrastText: '#000000',
         },
         background: {
-            default: '#121212'
+            default: '#1B1B1B'
         }
     },
     spreadThis: {
         componentBackground: {
-            backgroundColor: '#333333'
+            backgroundColor: '#303030'
         },
         blackButton: {
             color: "#212121",
