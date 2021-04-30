@@ -29,7 +29,9 @@ function SearchSection(props) {
     const authLink = (event) => {
         window.location.href = 'https://schedulebrewer.ml/saml/?sso'
     }
-    const preventDefault = (event) => event.preventDefault();
+    const redirectToPreregSite = (event) => {
+        window.location.href = 'https://aisapps.vassar.edu/prereg/'
+    }
     return (
         <div>
             <Box>
@@ -57,7 +59,7 @@ function SearchSection(props) {
                             </Typography>
                         </AlertTitle>
                         <Typography variant="caption">
-                            Saving a class does not mean you have registered for it. Remember to log in at <Link href="https://aisapps.vassar.edu/prereg/" onClick={preventDefault} style={{color: "#E88B00"}}>https://aisapps.vassar.edu/prereg/</Link> and formally register for your classes before preregistration ends.
+                            Saving a class does not mean you have registered for it. Remember to log in at <Link href="https://aisapps.vassar.edu/prereg/" onClick={redirectToPreregSite} style={{color: "#E88B00"}}>https://aisapps.vassar.edu/prereg/</Link> and formally register for your classes before preregistration ends.
                         </Typography>
                     </Alert>
                 </Collapse>
