@@ -4,7 +4,8 @@ import randomColor from 'randomcolor'
 
 const SavedCourseContext = React.createContext([{}, () => {}])
 const sessionID = Cookies.get('sessionid')
-
+const hues = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'monochrome']
+const hues_length = hues.length
 const SavedCourseProvider = (props) => {
     const [savedCourses, setSavedCourses] = useState({})
     useEffect(() => {
@@ -24,11 +25,12 @@ const SavedCourseProvider = (props) => {
                     }
                 }).then(response => response.json()).then(data => {
                     let responseCourses = {}
-                    data.forEach(course => 
+                    data.forEach((course, index) => 
                         responseCourses[course.courseID] = {
                             ...course, 
                             blockColor: randomColor({
                                 luminosity: 'light',
+                                hue: hues[index % hues_length],
                                 format: 'rgbArray'
                             })
                         },
