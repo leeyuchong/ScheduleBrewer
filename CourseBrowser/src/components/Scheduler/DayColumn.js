@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import EventBlock from './EventBlock'
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -12,8 +12,17 @@ function DayColumn(props) {
                     <Grid item xs zeroMinWidth>
                         <Grid container spacing={0} zeroMinWidth>
                             {lane.map(course => 
-                                <Grid item xs id={`block-${clusterIndex}-${laneIndex}-${course.courseID}`} zeroMinWidth>
-                                    <EventBlock course={course} dayBlock={props.dayBlock} minTime={props.minTime} />
+                                <Grid 
+                                    item 
+                                    xs 
+                                    id={`block-${clusterIndex}-${laneIndex}-${course.courseID}`} 
+                                    zeroMinWidth
+                                >
+                                    <EventBlock 
+                                        course={course} 
+                                        dayBlock={props.dayBlock} 
+                                        minTime={props.minTime} 
+                                    />
                                 </Grid>
                             )}
                         </Grid>
@@ -22,7 +31,7 @@ function DayColumn(props) {
                 </Grid>
             )}
         </Box> 
-    )
+    );
 }
 
-export default DayColumn
+export default DayColumn;

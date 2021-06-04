@@ -1,6 +1,6 @@
-import React, { useState } from "react"
-import SearchInputsContainer from "./SearchInputs/SearchInputsContainer"
-import SearchResults from './SearchResults/SearchResultsContainer'
+import React, { useState } from "react";
+import SearchInputsContainer from "./SearchInputs/SearchInputsContainer";
+import SearchResults from './SearchResults/SearchResultsContainer';
 import Box from '@material-ui/core/Box';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,21 +17,21 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 function SearchSection(props) {
-    const [searchURL, setSearchURL] = useState("https://schedulebrewer.ml/api/search/?")
+    const [searchURL, setSearchURL] = useState("https://schedulebrewer.ml/api/search/?");
     const [open, setOpen] = useState(false);
-    const [openAlert, setOpenAlert] = useState(true)
+    const [openAlert, setOpenAlert] = useState(true);
     const handleClickOpen = () => {
         setOpen(true);
-      };
+    };
     const handleClose = () => {
         setOpen(false);
     };
     const authLink = (event) => {
-        window.location.href = 'https://schedulebrewer.ml/saml/?sso'
-    }
+        window.location.href = 'https://schedulebrewer.ml/saml/?sso';
+    };
     const redirectToPreregSite = (event) => {
-        window.location.href = 'https://aisapps.vassar.edu/prereg/'
-    }
+        window.location.href = 'https://aisapps.vassar.edu/prereg/';
+    };
     return (
         <div>
             <Box>
@@ -57,17 +57,28 @@ function SearchSection(props) {
                     >
                         <AlertTitle>
                             <Typography variant="body2">
-                                ScheduleBrewer is a tool to help visualize various class schedules in preparation for pre-registration.
+                                ScheduleBrewer is a tool to help visualize 
+                                various class schedules in preparation for 
+                                pre-registration.
                             </Typography>
                         </AlertTitle>
                         <Typography variant="caption">
-                            Saving a class does not mean you have registered for it. Remember to log in at <Link href="https://aisapps.vassar.edu/prereg/" onClick={redirectToPreregSite} style={{color: "#E88B00"}}>https://aisapps.vassar.edu/prereg/</Link> and formally register for your classes before preregistration ends.
+                            Saving a class does not mean you have registered 
+                            for it. Remember to log in at 
+                            <Link 
+                                href="https://aisapps.vassar.edu/prereg/" 
+                                onClick={redirectToPreregSite} 
+                                style={{color: "#E88B00"}}
+                            >
+                                https://aisapps.vassar.edu/prereg/
+                            </Link> 
+                            and formally register for your classes before 
+                            preregistration ends.
                         </Typography>
                     </Alert>
                 </Box>
                 <SearchResults 
                     searchURL={searchURL} 
-                    setNumberSearchResults={props.setNumberSearchResults} 
                     openLoginDialog={handleClickOpen}
                 />
             </Box>
@@ -77,7 +88,9 @@ function SearchSection(props) {
                 aria-labelledby="Login required"
                 aria-describedby="Log in to save a course"
             >
-                <DialogTitle id="login-dialog-title">{"Login Required"}</DialogTitle>
+                <DialogTitle id="login-dialog-title">
+                    {"Login Required"}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="login-dialog-description">
                         Login to save a course to your schedule
@@ -90,7 +103,7 @@ function SearchSection(props) {
                 </DialogActions>
             </Dialog>
         </div>
-    )
+    );
 }
 
-export default SearchSection
+export default SearchSection;

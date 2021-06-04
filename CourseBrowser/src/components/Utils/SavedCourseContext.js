@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import Cookies from 'js-cookie'
-import randomColor from 'randomcolor'
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import randomColor from 'randomcolor';
 
-const SavedCourseContext = React.createContext([{}, () => {}])
-const sessionID = Cookies.get('sessionid')
-const hues = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'monochrome']
-const hues_length = hues.length
+const SavedCourseContext = React.createContext([{}, () => {}]);
+const sessionID = Cookies.get('sessionid');
+const hues = [
+    'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'monochrome',
+];
+const hues_length = hues.length;
 const SavedCourseProvider = (props) => {
-    const [savedCourses, setSavedCourses] = useState({})
+    const [savedCourses, setSavedCourses] = useState({});
     useEffect(() => {
         if(sessionID!==undefined){
             fetch("https://schedulebrewer.ml/getCSRF/", {
@@ -35,18 +37,18 @@ const SavedCourseProvider = (props) => {
                             })
                         },
                     )
-                    setSavedCourses(responseCourses)
+                    setSavedCourses(responseCourses);
                 })
             ).catch(error => {
                 console.log("Error, failed to load courses: ", error)
-              })
+              });
         }
-    }, [])
+    }, []);
     return (
         <SavedCourseContext.Provider value={[savedCourses, setSavedCourses]}>
             {props.children}
         </SavedCourseContext.Provider>
-    )
+    );
 }
 
-export { SavedCourseContext, SavedCourseProvider }
+export { SavedCourseContext, SavedCourseProvider };

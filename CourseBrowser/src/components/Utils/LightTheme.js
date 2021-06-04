@@ -36,6 +36,6 @@ const LightTheme = {
             },
         }
     },
-}
+};
 
-export default LightTheme
+export default LightTheme;

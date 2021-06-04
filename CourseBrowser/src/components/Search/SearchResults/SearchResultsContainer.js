@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import ResultItemComponent from './ResultItemComponent'
+import React, { useState, useEffect } from "react";
+import ResultItemComponent from './ResultItemComponent';
 import Pagination from '@material-ui/lab/Pagination';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core";
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -17,59 +17,71 @@ function SearchResultsContainer(props) {
             },
         },
     }));
-      
-    const pageSize = 10
-    const [results, setResults] = useState([])
-    const [numPages, setNumPages] = useState(0)
-    const [currPage, setCurrPage] = useState(1)
-    const [csrfToken, setCSRFToken] = useState(Cookies.get('csrftoken'))
-    const [isLoading, setIsLoading] = useState(true)
-    const classes = useStyles()
+    const pageSize = 10;
+    const [results, setResults] = useState([]);
+    const [numPages, setNumPages] = useState(0);
+    const [currPage, setCurrPage] = useState(1);
+    const [csrfToken, setCSRFToken] = useState(Cookies.get('csrftoken'));
+    const [isLoading, setIsLoading] = useState(true);
+    const classes = useStyles();
     useEffect(() => {
-        setCurrPage(1)
+        setCurrPage(1);
         fetch(props.searchURL).then(response => {
-            setIsLoading(true)
-            return response.json()
+            setIsLoading(true);
+            return response.json();
         }).then(data => {
-            setResults(data.results)
-            setNumPages(data.count)
-            setIsLoading(false)
+            setResults(data.results);
+            setNumPages(data.count);
+            setIsLoading(false);
         })
-    }, [props.searchURL])
-
+    }, [props.searchURL]);
     useEffect(() => {
         fetch("https://schedulebrewer.ml/getCSRF/", {
             method: 'GET',
             credentials: 'include'
         }).then(response => {
-            setCSRFToken(Cookies.get('csrftoken'))
-        })
-    }, [csrfToken]) // delete this?
-
+            setCSRFToken(Cookies.get('csrftoken'));
+        });
+    }, [csrfToken]);
     const onPageChange = (event, value) => {
-        setCurrPage(value)
-        fetch(props.searchURL+`&page=${value}`).then(response => response.json()).then(data => {
-            setResults(data.results)
-        })
-    }
+        setCurrPage(value);
+        fetch(props.searchURL+`&page=${value}`)
+            .then(response => response.json())
+            .then(data => {
+                setResults(data.results);
+            });
+    };
     return (
         <div>
-            {isLoading ? 
+            {isLoading ? (
                 <div>
-                    <LinearProgress className={classes.root} color="secondary"/>
+                    <LinearProgress 
+                        className={classes.root} 
+                        color="secondary"
+                    />
                 </div>
-                : 
+            ) : (
                 <div>
                     <Box borderRadius={4}>
-                        {results.map((course) => <ResultItemComponent course={course} csrfToken={csrfToken} openLoginDialog={props.openLoginDialog}/>)}
+                        {results.map((course) => 
+                            <ResultItemComponent 
+                                course={course} 
+                                csrfToken={csrfToken} 
+                                openLoginDialog={props.openLoginDialog}
+                            />
+                        )}
                     </Box>
                     <Box display="flex" justifyContent="center" mt={1}>
-                        <Pagination count={Math.ceil(numPages/pageSize)} onChange={onPageChange} page={currPage}/>
+                        <Pagination 
+                            count={Math.ceil(numPages/pageSize)} 
+                            onChange={onPageChange} 
+                            page={currPage}
+                        />
                     </Box>
                 </div>
-            }
+            )}
         </div>
-    )
+    );
 }
 
-export default SearchResultsContainer
+export default SearchResultsContainer;

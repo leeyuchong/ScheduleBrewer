@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -18,7 +18,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import SearchIcon from '@material-ui/icons/Search';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 function Navbar(props) {
   const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,6 @@ function Navbar(props) {
     }
   }));
   const classes = useStyles();
-
   const togglePage = () => {
     if (props.currentPage === "default") {
       props.handleChange("scheduler")
@@ -48,21 +47,18 @@ function Navbar(props) {
     else {
       props.handleChange("default")
     }
-  }
+  };
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const authLink = (event) => {
     window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid')===undefined ? "sso" : "slo"}`
-  }
+  };
 
   return (
     <AppBar position="static">
@@ -79,14 +75,19 @@ function Navbar(props) {
           </Box>
           <Grid item>
             <Typography variant="h6" className={classes.title}>
+              {/* Change the semester and year here */}
               Schedule Brewer - Fall 2021
             </Typography>
           </Grid>
-          <Box component={Grid} item display={{ xs: 'none', sm: 'block' }} >
+          <Box component={Grid} item display={{ xs: 'none', sm: 'block' }}>
             <Box display="flex">
               <Box>
-                <Tooltip title={`Toggle ${props.prefersDarkMode ? "Light" : "Dark"} Mode`} arrow>
-                  <Button onClick={props.toggleTheme}
+                <Tooltip 
+                  title={`Toggle ${props.prefersDarkMode ? "Light" : "Dark"} Mode`} 
+                  arrow
+                >
+                  <Button 
+                    onClick={props.toggleTheme}
                     aria-haspopup="true"
                     color="inherit"
                     title="Testing"
@@ -133,7 +134,7 @@ function Navbar(props) {
                 handleClose()
                 togglePage()
               }}>
-                {props.currentPage === "default" ? 
+                {props.currentPage === "default" ? (
                   <Box display='flex'>
                       <Box pr={1}>
                         <CalendarTodayIcon color="secondary"/>
@@ -142,7 +143,7 @@ function Navbar(props) {
                       <Typography color="secondary">Scheduler</Typography>
                     </Box>
                   </Box>
-                  :
+                ) : (
                   <Box display='flex'>
                     <Box pr={1}>
                       <SearchIcon color="secondary"/>
@@ -151,13 +152,13 @@ function Navbar(props) {
                     <Typography color="secondary">Search</Typography>
                   </Box>
                 </Box>
-                }
+              )}
               </MenuItem>
               <MenuItem onClick={() => {
                 handleClose()
                 props.toggleTheme()
               }}>
-                {props.prefersDarkMode ? 
+                {props.prefersDarkMode ? (
                   <Box display='flex'>
                       <Box pr={1}>
                         <Brightness7Icon color="secondary"/> 
@@ -166,7 +167,7 @@ function Navbar(props) {
                       <Typography color="secondary">Light Mode</Typography>
                     </Box>
                   </Box>
-                  : 
+                ) : ( 
                   <Box display='flex'>
                       <Box pr={1}>
                       <Brightness4Icon color="secondary"/>
@@ -175,7 +176,7 @@ function Navbar(props) {
                       <Typography color="secondary">Dark Mode</Typography>
                     </Box>
                   </Box>
-                }
+              )}
               </MenuItem>
               <MenuItem onClick={() => {
                 authLink()
@@ -197,7 +198,7 @@ function Navbar(props) {
       </Toolbar>
     </AppBar>
   )
-}
+};
 
 
-export default Navbar
+export default Navbar;

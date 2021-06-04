@@ -1,13 +1,14 @@
 from django.db import models
 
+
 class CourseInfo(models.Model):
-    courseID = models.CharField(max_length=12, primary_key=True)  # Field name made lowercase.
+    courseID = models.CharField(max_length=12, primary_key=True) 
     title = models.CharField(max_length=31)
     units = models.DecimalField(max_digits=2, decimal_places=1)
     sp = models.IntegerField()
     requests = models.PositiveSmallIntegerField(blank=True, null=True)
     limits = models.CharField(max_length=20, blank=True, null=True)
-    max = models.PositiveSmallIntegerField(db_column='Max')  # Field name made lowercase.
+    max_enr = models.PositiveSmallIntegerField(db_column='Max')  
     enr = models.PositiveSmallIntegerField()
     avl = models.SmallIntegerField()
     wl = models.PositiveSmallIntegerField()
@@ -17,7 +18,7 @@ class CourseInfo(models.Model):
     fr = models.IntegerField()
     la = models.IntegerField()
     qa = models.IntegerField()
-    format = models.CharField(db_column='Format', max_length=3)  # Field name made lowercase.
+    format = models.CharField(db_column='Format', max_length=3)  
     xlist = models.CharField(max_length=20)
     d1 = models.CharField(max_length=5)
     time1 = models.CharField(max_length=15)
@@ -40,8 +41,8 @@ class CourseInfo(models.Model):
 
 class UserCourses(models.Model):
     id = models.AutoField(primary_key=True)
-    userID=models.CharField(max_length=12, db_index=True)
-    courseID=models.ForeignKey(
+    userID = models.CharField(max_length=12, db_index=True)
+    courseID = models.ForeignKey(
         CourseInfo,
         on_delete=models.PROTECT,
         db_column="courseID"
@@ -49,7 +50,8 @@ class UserCourses(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["userID", "courseID"], name="unique_pairing")
+            models.UniqueConstraint(
+                fields=["userID", "courseID"], name="unique_pairing")
         ]
-        managed=False
+        managed = False
         db_table = "UserCourses"

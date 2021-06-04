@@ -11,7 +11,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "title",
             "units",
             "sp",
-            "max",
+            "max_enr",
             "enr",
             "avl",
             "wl",

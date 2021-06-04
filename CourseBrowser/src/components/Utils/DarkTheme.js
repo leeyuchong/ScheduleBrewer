@@ -36,6 +36,6 @@ const DarkTheme = {
             },
         }
     },
-}
+};
 
-export default DarkTheme
+export default DarkTheme;

@@ -1,6 +1,6 @@
-import React from 'react'
-import SchedulerTable from './Scheduler/SchedulerTable'
-import SavedCourseDetailsContainer from './Scheduler/SavedCourseDetailsContainer'
+import React from 'react';
+import SchedulerTable from './Scheduler/SchedulerTable';
+import SavedCourseDetailsContainer from './Scheduler/SavedCourseDetailsContainer';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Box } from '@material-ui/core';
@@ -28,7 +28,7 @@ function SchedulerPageContainer() {
                 </Grid>
             </Grid>
         </div>
-    )
+    );
 }
 
-export default SchedulerPageContainer
+export default SchedulerPageContainer;

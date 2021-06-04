@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import NavBar from "./components/Navbar/NavbarComponent"
+import React, { useState, useEffect } from "react";
+import NavBar from "./components/Navbar/NavbarComponent";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { SavedCourseProvider } from './components/Utils/SavedCourseContext'
+import { SavedCourseProvider } from './components/Utils/SavedCourseContext';
 import LightTheme from './components/Utils/LightTheme';
 import DarkTheme from './components/Utils/DarkTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -11,24 +11,24 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 
 function App() {
-  const darkTheme = createMuiTheme(DarkTheme)
-  const lightTheme = createMuiTheme(LightTheme)
-  const [currentPage, setCurrentPage] = useState("default")
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-  const [darkMode, setDarkMode] = useState(prefersDarkMode)
-  const [hideSearchSection, setHideSearchSection] = useState(false)
+  const darkTheme = createMuiTheme(DarkTheme);
+  const lightTheme = createMuiTheme(LightTheme);
+  const [currentPage, setCurrentPage] = useState("default");
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [darkMode, setDarkMode] = useState(prefersDarkMode);
+  const [hideSearchSection, setHideSearchSection] = useState(false);
   function handleChange(newValue){
-    setCurrentPage(newValue)
+    setCurrentPage(newValue);
   }
   const toggleTheme = () => {
-    setDarkMode(!darkMode)
-  }
+    setDarkMode(!darkMode);
+  };
   const toggleSearchVisibility = () => {
-    setHideSearchSection(!hideSearchSection)
-  }
+    setHideSearchSection(!hideSearchSection);
+  };
   useEffect(() => {
-    setDarkMode(prefersDarkMode)
-  }, [prefersDarkMode])
+    setDarkMode(prefersDarkMode);
+  }, [prefersDarkMode]);
 
   return (
     <div className="App">
@@ -44,7 +44,11 @@ function App() {
           />
         <SavedCourseProvider>
           <Box m={1}>
-            {currentPage==="default" ? <DefaultPageContainer hideSearchSection={hideSearchSection}/> : <SchedulerPageContainer/>}
+            {currentPage==="default" ? (
+              <DefaultPageContainer hideSearchSection={hideSearchSection}/>
+            ) : (
+              <SchedulerPageContainer/>
+            )}
           </Box>
         </SavedCourseProvider>
       </ThemeProvider>

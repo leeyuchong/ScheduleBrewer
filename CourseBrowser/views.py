@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -12,7 +11,7 @@ from django.urls import reverse
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseServerError, JsonResponse)
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
-from onelogin.saml2.settings import OneLogin_Saml2_Settings
+# from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
@@ -20,211 +19,180 @@ import logging
 
 logger = logging.getLogger(__file__)
 
+
 def index(request):
     return render(request, 'CourseBrowser/index.html')
 
+
 @api_view(['GET'])
 def search(request):
-    courseCodes = ("AFRS", "AMCL", "AMST", "ANSO", "ANTH", "AFRS", "ART", "ARTH", "ARTS", "ASIA", "ASL", "ASTR", "BIOC", "BIOL", "BIPS", "CHEM", "CHIN", "CHJA", "CLAN", "CLAS", "CLGR", "CLLA", "CLCS", "CMPU", "COGS", "CREO", "DANC", "DRAM", "ECON", "EDUC", "ENGL", "ENST", "ENVI", "ESCI", "ESSC", "FFS", "FILM", "FREN", "GEAN", "GEOG", "GEOL", "GERM", "GREK", "GRST", "HEBR", "HIND", "HISP", "HIST", "INDP", "INTD", "INTL", "IRSH", "ITAL", "JAPA", "JWST", "ASIA", "LALS", "LAST", "LATI", "MATH", "MEDS", "MRST", "MSDP", "MUSI", "NEUR", "PERS", "PHED", "PHIL", "PHYS", "POLI", "PORT", "PSYC", "PSYC", "RELI", "RUSS", "SOCI", "STS", "SWAH", "SWED", "TURK", "URBS", "VICT", "WMST", "YIDD")    
+    courseCodes = (
+        "AFRS", "AMCL", "AMST", "ANSO", "ANTH", "AFRS", "ART", "ARTH", "ARTS", 
+        "ASIA", "ASL", "ASTR", "BIOC", "BIOL", "BIPS", "CHEM", "CHIN", "CHJA", 
+        "CLAN", "CLAS", "CLGR", "CLLA", "CLCS", "CMPU", "COGS", "CREO", "DANC",
+        "DRAM", "ECON", "EDUC", "ENGL", "ENST", "ENVI", "ESCI", "ESSC", "FFS",
+        "FILM", "FREN", "GEAN", "GEOG", "GEOL", "GERM", "GREK", "GRST", "HEBR",
+        "HIND", "HISP", "HIST", "INDP", "INTD", "INTL", "IRSH", "ITAL", "JAPA",
+        "JWST", "ASIA", "LALS", "LAST", "LATI", "MATH", "MEDS", "MRST", "MSDP",
+        "MUSI", "NEUR", "PERS", "PHED", "PHIL", "PHYS", "POLI", "PORT", "PSYC",
+        "PSYC", "RELI", "RUSS", "SOCI", "STS", "SWAH", "SWED", "TURK", "URBS", 
+        "VICT", "WMST", "YIDD"
+    )    
     queriedCourses = CourseInfo.objects.all()
-    # <QueryDict: {'searchTerm': ['CMPU 102']}>
+    # <QueryDict: {'searchTerms': ['CMPU 102']}>
     for key, value in request.GET.items():
+        # Search term from the search box
         if key == "searchTerms":
             terms = request.GET[key].upper().split()
             for term in terms:
                 if term in courseCodes: 
-                    queriedCourses = queriedCourses.filter(courseID__startswith=term)
-                elif term == "FR": queriedCourses = queriedCourses.filter(fr__exact=1)
-                elif term == "NR" or term == "NRO": queriedCourses = queriedCourses.filter(gm__exact="NR")
-                elif term == "SU": queriedCourses = queriedCourses.filter(gm__exact="SU")
-                elif term == "YL": queriedCourses = queriedCourses.filter(yl__exact=1)
-                elif term == "QA": queriedCourses = queriedCourses.filter(qa__exact=1)
-                elif term == "LA": queriedCourses = queriedCourses.filter(la__exact=1)
-                elif term == "SP": queriedCourses = queriedCourses.filter(sp__exact=1)
-                elif term == "CLS": queriedCourses = queriedCourses.filter(format__exact="CLS")
-                elif term == "INT": queriedCourses = queriedCourses.filter(format__exact="INT")
-                elif term == "OTH": queriedCourses = queriedCourses.filter(format__exact="OTH")
+                    queriedCourses = queriedCourses.filter(
+                        courseID__startswith=term)
+                elif term == "FR": 
+                    queriedCourses = queriedCourses.filter(fr__exact=1)
+                elif term == "NR" or term == "NRO": 
+                    queriedCourses = queriedCourses.filter(gm__exact="NR")
+                elif term == "SU": 
+                    queriedCourses = queriedCourses.filter(gm__exact="SU")
+                elif term == "YL": 
+                    queriedCourses = queriedCourses.filter(yl__exact=1)
+                elif term == "QA": 
+                    queriedCourses = queriedCourses.filter(qa__exact=1)
+                elif term == "LA": 
+                    queriedCourses = queriedCourses.filter(la__exact=1)
+                elif term == "SP": 
+                    queriedCourses = queriedCourses.filter(sp__exact=1)
+                elif term == "CLS": 
+                    queriedCourses = queriedCourses.filter(format__exact="CLS")
+                elif term == "INT": 
+                    queriedCourses = queriedCourses.filter(format__exact="INT")
+                elif term == "OTH": 
+                    queriedCourses = queriedCourses.filter(format__exact="OTH")
                 elif term == "MON" or term == "MONDAY":
-                    queriedCourses = queriedCourses.filter(Q(d1__contains="M") | Q(d2__contains="M"))
+                    queriedCourses = queriedCourses.filter(
+                        Q(d1__contains="M") | Q(d2__contains="M"))
                 elif term == "TUE" or term == "TUESDAY":
-                    queriedCourses = queriedCourses.filter(Q(d1__contains="T") | Q(d2__contains="T"))
+                    queriedCourses = queriedCourses.filter(
+                        Q(d1__contains="T") | Q(d2__contains="T"))
                 elif term == "WED" or term == "WEDNESDAY":
-                    queriedCourses = queriedCourses.filter(Q(d1__contains="W") | Q(d2__contains="W"))
+                    queriedCourses = queriedCourses.filter(
+                        Q(d1__contains="W") | Q(d2__contains="W"))
                 elif term == "THUR" or term == "THURS" or term == "THURSDAY":
-                    queriedCourses = queriedCourses.filter(Q(d1__contains="R") | Q(d2__contains="R"))
+                    queriedCourses = queriedCourses.filter(
+                        Q(d1__contains="R") | Q(d2__contains="R"))
                 elif term == "FRI" or term == "FRIDAY":
-                    queriedCourses = queriedCourses.filter(Q(d1__contains="F") | Q(d2__contains="F"))
+                    queriedCourses = queriedCourses.filter(
+                        Q(d1__contains="F") | Q(d2__contains="F"))
                 elif term == "0.5" or term == "1.0" or term == "1.5":
                     queriedCourses = queriedCourses.filter(units__exact=term)
                 else:
                     if len(term)>0 and term[0]=="0":
-                        term=term[1:]
+                        term = term[1:]
                     queriedCourses = queriedCourses.filter(
-                        Q(title__icontains=term) | 
-                        Q(loc__icontains=term) | 
-                        Q(instructor__icontains=term) | 
-                        Q(starttime1__contains=term) | 
-                        Q(starttime2__contains=term) |
-                        Q(description__icontains=term) | 
-                        Q(courseID__icontains=term)
-                    )
-        elif key=="department":
+                        Q(title__icontains=term)
+                        | Q(loc__icontains=term)
+                        | Q(instructor__icontains=term)
+                        | Q(starttime1__contains=term)
+                        | Q(starttime2__contains=term)
+                        | Q(description__icontains=term)
+                        | Q(courseID__icontains=term))
+        # Department select box
+        elif key=="department": 
             queriedCourses = queriedCourses.filter(courseID__startswith=value)
-        elif key == "writingSem": queriedCourses = queriedCourses.filter(fr__exact=1)
-        elif key == "gradeOption": queriedCourses = queriedCourses.filter(gm__exact=value)
-        elif key == "yearLong": queriedCourses = queriedCourses.filter(yl__exact=1)
-        elif key == "quant": queriedCourses = queriedCourses.filter(qa__exact=1)
-        elif key == "lang": queriedCourses = queriedCourses.filter(la__exact=1)
-        elif key == "specialPerm": queriedCourses = queriedCourses.filter(sp__exact=1)
-        elif key == "courseFormat": queriedCourses = queriedCourses.filter(format__exact=value)
-        elif key == "day":
-            queriedCourses = queriedCourses.filter(Q(d1__contains=value) | Q(d2__contains=value))
-        elif key == "units":
+        # Filters: 
+        elif key == "writingSem": 
+            queriedCourses = queriedCourses.filter(fr__exact=1)
+        elif key == "gradeOption": 
+            queriedCourses = queriedCourses.filter(gm__exact=value)
+        elif key == "yearLong": 
+            queriedCourses = queriedCourses.filter(yl__exact=1)
+        elif key == "quant": 
+            queriedCourses = queriedCourses.filter(qa__exact=1)
+        elif key == "lang": 
+            queriedCourses = queriedCourses.filter(la__exact=1)
+        elif key == "specialPerm": 
+            queriedCourses = queriedCourses.filter(sp__exact=1)
+        elif key == "courseFormat": 
+            queriedCourses = queriedCourses.filter(format__exact=value)
+        elif key == "day": 
+            queriedCourses = queriedCourses.filter(
+                Q(d1__contains=value) | Q(d2__contains=value))
+        elif key == "units": 
             queriedCourses = queriedCourses.filter(units__exact=value)
-    queriedCourses=queriedCourses.order_by('courseID')
-    # print(queriedCourses)
-    # serializer = CourseSerializer(queriedCourses, context={'request': request}, many=True)
-
-    # paginator = Paginator(queriedCourses, 20)
-    # page = request.QUERY_PARAMS.get('page')
-    # try:
-    #     courses = paginator.page(page)
-    # except PageNotAnInteger:
-    #     # If page is not an integer, deliver first page.
-    #     courses = paginator.page(1)
-    # except EmptyPage:
-    #     # If page is out of range (e.g. 9999),
-    #     # deliver last page of results.
-    #     courses = paginator.page(paginator.num_pages)
-
-    # serializer_context = {'request': request}
-    # serializer = PaginatedUserSerializer(courses,
-    #                                     context=serializer_context)
+    queriedCourses = queriedCourses.order_by('courseID')
     paginator = PageNumberPagination()
     context = paginator.paginate_queryset(queriedCourses, request)
     serializer = CourseSerializer(context, many=True)
     return paginator.get_paginated_response(serializer.data)
-    # return Response(serializer.data)
+
 
 class SavedCourses(APIView):
     attributes = False
     username=""
+
+    # Get the username
     def getAttributes(self, request):
-        if 'samlUserdata' in request.session:
-            if len(request.session['samlUserdata']) > 0:
+        # If user is logged in
+        if ('samlUserdata' in request.session):
+            if (len(request.session['samlUserdata']) > 0):
                 self.attributes = request.session['samlUserdata'].items()
-                self.username=request.session['samlUserdata']['UserName'][0]
+                self.username = request.session['samlUserdata']['UserName'][0]
+    
+    # Get saved courses
     def get(self, request, format=None):
         self.getAttributes(request)
-        if(self.attributes):
-            queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=self.username).values(
-                "courseID", 
-                "title", 
-                "units", 
-                "format", 
-                "d1",
-                "time1",
-                "starttime1",
-                "endtime1",
-                "duration1",
-                "d2",
-                "time2",
-                "starttime2",
-                "endtime2",
-                "duration2",
-                "instructor",
-                "description"
-            )
-            # print(queriedCourses)
-            serializer = SavedCoursesSerializer(queriedCourses, context={'request': request}, many=True)
+        if self.attributes:
+            queriedCourses = CourseInfo.objects.filter(
+                usercourses__userID__exact=self.username).values(
+                    "courseID", "title", "units", "format", "d1", "time1",
+                    "starttime1", "endtime1", "duration1", "d2", "time2",
+                    "starttime2", "endtime2", "duration2", "instructor",
+                    "description")
+            serializer = SavedCoursesSerializer(
+                queriedCourses, context={'request': request}, many=True)
             return Response(serializer.data)
         else:
             return HttpResponse('Unauthorised', status=401)
 
+    # Save new course to user profile
     def post(self, request, format=None):
         self.getAttributes(request)
-        if(self.attributes):
+        if self.attributes:
             if request.method=="POST":
                 selectedCourse = request.POST
-                # print(selectedCourse["course"])
-                course=CourseInfo.objects.get(courseID__exact=selectedCourse["course"])
-                # newCourse = UserCourses.objects.create(userID=selectedCourse["token"])
-                newPair = UserCourses.objects.create(userID=self.username, courseID=course)
+                course = CourseInfo.objects.get(
+                    courseID__exact=selectedCourse["course"])
+                UserCourses.objects.create(
+                    userID=self.username, courseID=course)
                 return HttpResponse("Success")
         else:
             return HttpResponse('Unauthorised', status=401)
 
+    # Delete course from user profile
     def delete(self, request, pk, format=None):
         self.getAttributes(request)
-        if(self.attributes):
+        if self.attributes:
             if request.method=="DELETE":
-                # print(request.body.decode("utf-8"))
-                # selectedCourse = request.POST
-                # print(selectedCourse["course"])
-                course=UserCourses.objects.filter(userID__exact=self.username).filter(courseID__exact=pk)
+                course=UserCourses.objects.filter(
+                    userID__exact=self.username).filter(courseID__exact=pk)
                 course.delete()
                 return HttpResponse("Success")
         else:
             return HttpResponse('Unauthorised', status=401)
 
-# @api_view(['GET'])
-# def getSavedCourses(request):
-#     # print("Request.GET", request.headers)
-#     queriedCourses = CourseInfo.objects.filter(usercourses__userID__exact=request.headers["Authorization"]).values(
-#         "courseID", 
-#         "title", 
-#         "units", 
-#         "format", 
-#         "d1",
-#         "time1",
-#         "starttime1",
-#         "endtime1",
-#         "duration1",
-#         "d2",
-#         "time2",
-#         "starttime2",
-#         "endtime2",
-#         "duration2",
-#         "instructor",
-#         "description"
-#         )
-#     # print(queriedCourses)
-#     serializer = SavedCoursesSerializer(queriedCourses, context={'request': request}, many=True)
-#     return Response(serializer.data)
 
-# @api_view(['POST'])
-# def saveCourse(request):
-#     print(request)
-#     if request.method=="POST":
-#         selectedCourse = request.POST
-#         # print(selectedCourse["course"])
-#         course=CourseInfo.objects.get(courseID__exact=selectedCourse["course"])
-#         # newCourse = UserCourses.objects.create(userID=selectedCourse["token"])
-#         newPair = UserCourses.objects.create(userID=request.headers["Authorization"], courseID=course)
-#         #         print("A", course)
-#         # newCourse.savedCourse.set(course)
-
-#     return HttpResponse("Success")
-
-# @api_view(['DELETE'])
-# def delCourse(request, pk):
-#     # print(request)
-#     if request.method=="DELETE":
-#         # print(request.body.decode("utf-8"))
-#         # selectedCourse = request.POST
-#         # print(selectedCourse["course"])
-#         course=UserCourses.objects.filter(userID__exact=request.headers["Authorization"]).filter(courseID__exact=pk)
-#         course.delete()
-#     return HttpResponse("Success")
-
+# Save a new csrf cookie to the client
 @ensure_csrf_cookie
 def getCSRFCookie(request):
     return JsonResponse({'Success': 'CSRF Cookie set'}, status=200)
+
 
 def init_saml_auth(req):
     auth = OneLogin_Saml2_Auth(req, custom_base_path=settings.SAML_FOLDER)
     return auth
 
+
+# SAML code from here to end of file
 def prepare_django_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     result = {
@@ -238,6 +206,7 @@ def prepare_django_request(request):
         'post_data': request.POST.copy()
     }
     return result
+
 
 @csrf_exempt
 def saml_index(request):
@@ -271,7 +240,6 @@ def saml_index(request):
             name_id_nq = request.session['samlNameIdNameQualifier']
         if 'samlNameIdSPNameQualifier' in request.session:
             name_id_spnq = request.session['samlNameIdSPNameQualifier']
-
         return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq, return_to='https://schedulebrewer.ml'))
         # If LogoutRequest ID need to be stored in order to later validate it, do instead
         # slo_built_url = auth.logout(name_id=name_id, session_index=session_index)
