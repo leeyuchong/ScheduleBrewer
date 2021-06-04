@@ -10,6 +10,10 @@ import { useMediaQuery, useTheme } from "@material-ui/core";
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 function SearchBar(props) {
+    // PROPS: 
+    //  setFormValues: Function to change the form values that is sent to the server
+    //  formValues: Current form values that the user has input
+
     const theme = useTheme()
     const useStyles = makeStyles((theme) => ({
         ...theme.spreadThis,
@@ -28,7 +32,7 @@ function SearchBar(props) {
               margin: theme.spacing(0.5),
             },
           },
-      }));
+    }));
       
     const courseCodes = ["AFRS", "AMCL", "AMST", "ANSO", "ANTH", "AFRS", "ART",
         "ARTH", "ARTS", "ASIA", "ASL", "ASTR", "BIOC", "BIOL", "BIPS", "CHEM", 
@@ -61,7 +65,6 @@ function SearchBar(props) {
             searchTerms: textField,
         });
     }
-    const xsScreen = useMediaQuery(theme.breakpoints.only('xs'));
     return (
         <div>
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -108,7 +111,11 @@ function SearchBar(props) {
                             type="submit" 
                             color="secondary"
                         >
-                            {xsScreen ? <DoubleArrowIcon/> : "Submit"}
+                            {useMediaQuery(theme.breakpoints.only('xs')) ? (
+                                <DoubleArrowIcon/>
+                            ) : (
+                                "Submit"
+                            )}
                         </Button>
                     </Box>
                 </Box>

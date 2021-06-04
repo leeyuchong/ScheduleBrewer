@@ -3,6 +3,9 @@ import SearchBar from './SearchBar';
 import SearchFilters from './SearchFilters';
 
 function SearchInputsContainer(props) {
+    // PROPS: 
+    //  setSearchURL: Function to set the url with the search information
+
     const defaultValues = {
         searchTerms: "",
         department: "",
@@ -21,8 +24,8 @@ function SearchInputsContainer(props) {
     useEffect(() => {
         let url = "https://schedulebrewer.ml/api/search/?";
         let searchParams = new URLSearchParams();
-        for(const [key, value] of Object.entries(formValues)){
-            if(value){
+        for (const [key, value] of Object.entries(formValues)){
+            if (value){
                 searchParams.append(key, value);
             }
         }

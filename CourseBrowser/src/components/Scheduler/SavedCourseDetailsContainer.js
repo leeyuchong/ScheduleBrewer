@@ -18,7 +18,7 @@ function SavedCourseDetailsContainer() {
             'authorization': Cookies.get('sessionid')
           },
         }).then(result =>{
-          if(result.status === 200){
+          if (result.status === 200){
             let prevSavedCourses = {...savedCourses}
             delete prevSavedCourses[courseID]
             setSavedCourses(prevSavedCourses)

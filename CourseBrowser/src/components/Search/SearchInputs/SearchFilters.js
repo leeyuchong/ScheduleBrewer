@@ -11,10 +11,11 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
 function SearchFilters(props) {
-    const [filterSelected, setFilterSelected] = useState(false);
+    // PROPS: 
+    //  setFormValues: Function to change the form values that is sent to the server
+    //  formValues: Current form values that the user has input
 
-    // const booleanFields = [["writingSem", "Writing Sem"], ["yearLong", "Year Long"], ["quant", "Quantitative"], ["lang", "Language"], ["specialPerm", "Special Permission"]]
-    // [value, label]
+    const [filterSelected, setFilterSelected] = useState(false);
     const useStyles = makeStyles((theme) => ({
         ...theme.spreadThis,
         heading: {

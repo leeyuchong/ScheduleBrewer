@@ -8,6 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 function SavedCourseDetail(props) {
+    // PROPS: 
+    //  course: Object of the course information 
+    //  deleteCourse: Function to delete a course from the UserCourses table
+
     const boxColor = props.course.blockColor;
     const threshold = ((boxColor[0] * 299) + (boxColor[1] * 587) + (boxColor[2] * 114)) / 1000;
     const useStyles = makeStyles((theme) => ({

@@ -16,7 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
-function SearchSection(props) {
+function SearchSection() {
     const [searchURL, setSearchURL] = useState("https://schedulebrewer.ml/api/search/?");
     const [open, setOpen] = useState(false);
     const [openAlert, setOpenAlert] = useState(true);

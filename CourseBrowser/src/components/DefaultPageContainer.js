@@ -12,7 +12,7 @@ function DefaultPageContainer() {
   return (
       <Grid container spacing={1} className="wrapper">
         <Grid item xs={12} sm={12} md={Object.keys(savedCourses).length!==0 ? 5 : 7}>
-          <SearchSection/>
+          <SearchSection />
         </Grid>
         <Box 
           component={Grid}
@@ -20,8 +20,8 @@ function DefaultPageContainer() {
           sm 
           display={{xs: 'none', sm: 'none', md: 'block'}}
           >
-          <SchedulerTable/>
-          <SavedCourseDetailsContainer/>
+          <SchedulerTable />
+          <SavedCourseDetailsContainer />
         </Box>
       </Grid>
   );

@@ -8,6 +8,11 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 function EventBlock(props) {
+    // PROPS: 
+    //  course: Object of the course information 
+    //  dayBlock: Array of blocks for that day
+    //  minTime: The time that the scheduler starts with. Default is 10am
+
     const [topOffset, setTopOffset] = useState(0);
     const elementRef = useRef(null);
     const boxColor = props.course.blockColor;

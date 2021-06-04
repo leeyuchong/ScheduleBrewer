@@ -6,9 +6,11 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core";
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-// const searchURL = "https://schedulebrewer.ml/api/search?searchTerm=CMPU"
-
 function SearchResultsContainer(props) {
+    // PROPS: 
+    //  searchURL: String of the current search url 
+    //  openLoginDialog: Function to open a dialogue and ask the user to login
+    
     const useStyles = makeStyles((theme) => ({
         root: {
             width: '100%',

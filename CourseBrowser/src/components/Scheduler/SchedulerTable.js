@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { SavedCourseContext } from '../Utils/SavedCourseContext';
 import DayColumn from './DayColumn';
 
-function SchedulerTable(props) {
+function SchedulerTable() {
     const useStyles = makeStyles((theme) => ({
         ...theme.spreadThis,
         tableBodyCells: {

@@ -21,6 +21,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Cookies from 'js-cookie';
 
 function Navbar(props) {
+  // PROPS: 
+  // currentPage: Whether the page was "default" or "scheduler". "default" 
+  //              is for both the scheduler and the search and "scheduler"
+  //              is for just the search section on the page
+  // handleChange: A function to handle change from one page to another
+  // toggleTheme: A function to toggle the theme between dark and light mode
+
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -48,6 +55,7 @@ function Navbar(props) {
       props.handleChange("default")
     }
   };
+  // For the side bar in mobile
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -56,6 +64,7 @@ function Navbar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
   const authLink = (event) => {
     window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid')===undefined ? "sso" : "slo"}`
   };
