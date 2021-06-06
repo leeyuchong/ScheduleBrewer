@@ -46,6 +46,11 @@ function SavedCourseDetail(props) {
                                         {props.course.d2 ? ` | ${props.course.d2} ${props.course.time2}` : null}
                                         {props.course.instructor ? ` | ${props.course.instructor}` : null}
                                         {` | ${props.course.format}`}
+                                        {` | ${props.course.units} ${props.course.units===1 ? (
+                                            "unit"
+                                        ) : (
+                                            "units"
+                                        )}`}
                                     </Typography>
                                 </Grid>
                             </Grid>

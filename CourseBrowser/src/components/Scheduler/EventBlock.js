@@ -11,7 +11,7 @@ function EventBlock(props) {
     // PROPS: 
     //  course: Object of the course information 
     //  dayBlock: Array of blocks for that day
-    //  minTime: The time that the scheduler starts with. Default is 10am
+    //  minTime: The time that the scheduler starts with. Default is 10 for 10am
 
     const [topOffset, setTopOffset] = useState(0);
     const elementRef = useRef(null);
@@ -47,7 +47,22 @@ function EventBlock(props) {
     const handleTooltipOpen = () => {
       setOpen(true);
     };
-    
+    const convertTo12HrTime = (time) => {
+        const hour = Math.floor(time/100)
+        let retval = ""
+        if (hour<12){
+            retval = time.toString().padStart(4, '0')+"AM"
+        }
+        else if (hour==12){
+            retval = time.toString()+"PM"
+        }
+        else{
+            retval = (hour-12).toString().padStart(2, '0')
+                        +time.toString().slice(2)
+                        +"PM"
+        }
+        return retval
+    }
     return (
         <Box ref={elementRef}>
             {savedCourses[props.course.courseID] ? (
@@ -59,11 +74,11 @@ function EventBlock(props) {
                                     {savedCourses[props.course.courseID].title}
                                 </Typography>
                                 <Typography variant="caption">
-                                    {`${savedCourses[props.course.courseID].instructor} | ${savedCourses[props.course.courseID].format}$`}
+                                    {`${savedCourses[props.course.courseID].instructor} | ${savedCourses[props.course.courseID].format}`}
                                 </Typography>
                                 <br></br>
                                 <Typography variant="caption">
-                                    {`${props.course.startTime} - ${props.course.endTime}`}
+                                    {`${convertTo12HrTime(props.course.startTime)} - ${convertTo12HrTime(props.course.endTime)}`}
                                 </Typography>
                             </React.Fragment>
                         }

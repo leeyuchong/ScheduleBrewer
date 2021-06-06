@@ -64,7 +64,7 @@ Install the Node dependencies from the `package-lock.json` file. In the same dir
     * `admin.py`: Django boilerplate file
     * `apps.py`: Django boilerplate file
     * `models.py`: Django file that contains the models (Database information)
-    * `serializers.py`: Django file that serializers for the Django REST framework
+    * `serializers.py`: Django file that serializers for the Django REST framework. Look here if you want to find out what course information (e.g. whether max_enr is sent) is sent to the front end. 
     * `tests.py`: Django boilerplate file
     * `views.py`: Django file for the logic
 * `/log`: Folder for the Django log files
