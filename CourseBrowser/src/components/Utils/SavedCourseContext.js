@@ -8,6 +8,7 @@ const hues = [
     'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'monochrome',
 ];
 const hues_length = hues.length;
+
 const SavedCourseProvider = (props) => {
     const [savedCourses, setSavedCourses] = useState({});
     useEffect(() => {

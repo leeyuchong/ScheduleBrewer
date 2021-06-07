@@ -89,7 +89,7 @@ Install the Node dependencies from the `package-lock.json` file. In the same dir
 1. Delete all courses in the UserCourses table
 2. Delete all courses in the CourseInfo table
 3. Change the semester label: 
-    * The label is at line 79 in the file `/ScheduleBrewer/CourseBrowser/src/components/Navbar/NavbarComponent.js`
+    * The label is at line 88 in the file `/ScheduleBrewer/CourseBrowser/src/components/Navbar/NavbarComponent.js`
 4. Recompile the files (Look at the section Recompile Files)
 5. Import the new courses
 
