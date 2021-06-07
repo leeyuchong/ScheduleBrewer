@@ -152,13 +152,21 @@ function SchedulerTable() {
         setTableRange(tempTableRange);
     }, [savedCourses]);
 
-    function insertBlock(
-        currClusters, 
-        newBlock, 
-        newBlockStartTime, 
-        newBlockDuration, 
-        newBlockEndTime) {
-        // Cluster, ie array of objects
+    // Insert an event block into the day
+    // ARGS: 
+    //  currClusters: Array of javascript objects. Each object is a cluster. A
+    //                cluster is a group of courses that overlap. A cluster has 
+    //                the keys: starttime, endtime, lanes. starttime is the 
+    //                starttime of the earliest course in the cluster. endtime
+    //                is the endtime of the latest course in the cluster. 
+    //                Lanes is an array of arrays. The inner arrays represent 
+    //                lanes, where each lane contains courses that do not overlap. 
+    //                If the courses overlap, then they are put in separate lanes. 
+    //                
+    //  newBlock: A javascript object containing the course details
+    //  newBlockStartTime, newBlockDuration, newBlockEndTime: integers, 24-hr format
+    function insertBlock(currClusters, newBlock, newBlockStartTime, 
+        newBlockDuration, newBlockEndTime) {
         let newClusters= JSON.parse(JSON.stringify(currClusters)); 
         const newBlockInfo = {
             courseID: newBlock.courseID,
@@ -169,83 +177,106 @@ function SchedulerTable() {
         };
         const insertAt = findInsertToClusterIdx(
             newClusters, newBlockStartTime, newBlockEndTime);
-        
+
+        // Course overlaps with another course in the day. 
         if(insertAt[0]){
-            // overlap
+            //only overlap with one cluster
             if(insertAt[1].length===1){
-                //only overlap with one cluster
-                if(newClusters[insertAt[1]].lanes.length===1){
-                    // only one lane in cluster
-                    newClusters[insertAt[1]].lanes.splice(
-                        findLaneInsertPos(
-                            newClusters[insertAt[1]].lanes, 
+                // only one lane in cluster
+                if(newClusters[[insertAt[1][0]]].lanes.length===1){
+                    // Insert the new block into a new lane. 
+                    newClusters[[insertAt[1][0]]].lanes.splice(
+                        findLaneInsertPos(newClusters[[insertAt[1][0]]].lanes, 
                             newBlockStartTime), 
-                            0, 
-                            [newBlockInfo]);
-                    newClusters[insertAt[1]].startTime = Math.min(
-                        newClusters[insertAt[1]].startTime, 
+                        0, 
+                        [newBlockInfo]);
+                    // Determine the new cluster start and end times
+                    newClusters[[insertAt[1][0]]].startTime = Math.min(
+                        newClusters[[insertAt[1][0]]].startTime, 
                         newBlockStartTime);
-                    newClusters[insertAt[1]].endTime = Math.max(
-                        newClusters[insertAt[1]].endTime, 
+                    newClusters[[insertAt[1][0]]].endTime = Math.max(
+                        newClusters[[insertAt[1][0]]].endTime, 
                         newBlockEndTime);
                 }
                 else{
-                    // more than one lane in cluster, decide which lane to put
-                    // it in
-                    const currentLanes = newClusters[insertAt[1]].lanes;
+                    // more than one lane in cluster, decide which lane it can
+                    // go in without overlap
+                    const currentLanes = newClusters[[insertAt[1][0]]].lanes;
+                    // Signal that indicates whether a place has been found
+                    // for the new course
                     let found = false;
                     for(let i=0;i<currentLanes.length;i++){
+                        // No overlap with any course in this lane. Insert the
+                        // new course in this lane
                         if(!(checkOverlap(
                                 currentLanes[i], 
                                 newBlockStartTime, 
-                                newBlockDuration, 
                                 newBlockEndTime)
                             )){
-                            newClusters[insertAt[1]].lanes[i].splice(
+                            newClusters[[insertAt[1][0]]].lanes[i].splice(
+                                // Find the position within the lane to insert
+                                // the course
                                 findCourseInsertPos(
-                                    newClusters[insertAt[1]].lanes[i],
+                                    newClusters[[insertAt[1][0]]].lanes[i],
                                     newBlockStartTime),
-                                    0,
-                                    newBlockInfo);
-                            newClusters[insertAt[1]].startTime = Math.min(
-                                newClusters[insertAt[1]].startTime, 
+                                0,
+                                newBlockInfo);
+                            // Determine the new cluster start and end times
+                            newClusters[[insertAt[1][0]]].startTime = Math.min(
+                                newClusters[[insertAt[1][0]]].startTime, 
                                 newBlockStartTime);
-                            newClusters[insertAt[1]].endTime = Math.max(
-                                newClusters[insertAt[1]].endTime, 
+                            newClusters[[insertAt[1][0]]].endTime = Math.max(
+                                newClusters[[insertAt[1][0]]].endTime, 
                                 newBlockEndTime);
                             found=true;
                             break;
                         }
                     }
+                    // Overlap with all lanes, insert a new lane. 
                     if(!found){
-                        // overlap with all lanes, insert a new lane. 
-                        newClusters[insertAt[1]].lanes.splice(
+                        newClusters[[insertAt[1][0]]].lanes.splice(
                             findLaneInsertPos(
-                                newClusters[insertAt[1]].lanes, 
+                                newClusters[[insertAt[1][0]]].lanes, 
                                 newBlockStartTime), 
-                                0, 
-                                [newBlockInfo]);
-                        newClusters[insertAt[1]].startTime = Math.min(
-                            newClusters[insertAt[1]].startTime, 
+                            0, 
+                            [newBlockInfo]);
+                        // Determine the new cluster start and end times
+                        newClusters[[insertAt[1][0]]].startTime = Math.min(
+                            newClusters[[insertAt[1][0]]].startTime, 
                             newBlockStartTime);
-                        newClusters[insertAt[1]].endTime = Math.max(
-                            newClusters[insertAt[1]].endTime, newBlockEndTime);
+                        newClusters[[insertAt[1][0]]].endTime = Math.max(
+                            newClusters[[insertAt[1][0]]].endTime, newBlockEndTime);
                     }
                 }
             }
+            // Overlap with multiple clusters. Merge these clusters together
             else{
-                // overlap with multiple clusters. Merge these clusters together
-                const clustersToMerge=insertAt[1]; // Array of stuff to merge e.g. [1,2]
+                // Array of indexes of the clusters to merge e.g. [1,2]
+                // NOTE: These clusters do not overlap
+                const clustersToMerge = insertAt[1];
+                // finalCluster is a cluster (object) that contains the first 
+                // cluster in the array of clusters to merge
                 let finalCluster = newClusters[clustersToMerge[0]];
+                // Splice to skip the first element since its already included 
+                // in finalCluster. For each cluster to merge
                 clustersToMerge.slice(1).forEach(clusterToMerge => {
+                    // For each lane in the cluster to merge
                     newClusters[clusterToMerge].lanes.forEach((lane, index) => {
+                        // For each course in each lane
                         lane.forEach(course => {
-                          if(index<finalCluster.lanes.length){
-                              finalCluster.lanes[index].push(course);
-                          }
-                          else{
-                              finalCluster.lanes.push([course]);
-                          }
+                            // Insert the course into the lane number that it 
+                            // had in its old cluster. Since the clusters did 
+                            // not overlap, courses in the same lane will not
+                            // overlap here. If the old lane number exceeds 
+                            // the lane numbers in finalCluster, make a new 
+                            // lane
+                            if (index<finalCluster.lanes.length){
+                                finalCluster.lanes[index].push(course);
+                            }
+                            else{
+                                finalCluster.lanes.push([course]);
+                            }
+                            // Determine the new cluster start and end times
                             finalCluster.startTime = Math.min(
                                 finalCluster.startTime, course.startTime);
                             finalCluster.endTime = Math.max(
@@ -253,18 +284,22 @@ function SchedulerTable() {
                         })
                     })
                 })
+                // Insert the new course in a new lane
                 finalCluster.lanes.push([newBlock]);
+                // Determine the new cluster start and end times
                 finalCluster.startTime = Math.min(
                     finalCluster.startTime, newBlockStartTime);
                 finalCluster.endTime = Math.max(
                     finalCluster.endTime, newBlock.endTime);
+                // Place the modified cluster back and remove the cluster that
+                // got merged
                 newClusters.splice(
                     clustersToMerge[0], clustersToMerge.length, finalCluster);
             }
         }
+        // No overlap, create a new cluster of 1 course
         else{
-            // No overlap, create a new cluster of 1 course
-            newClusters.splice(insertAt[1], 0, {
+            newClusters.splice(insertAt[1][0], 0, {
                 startTime: newBlockStartTime,
                 endTime: newBlockEndTime,
                 lanes: [[newBlockInfo]]
@@ -273,37 +308,52 @@ function SchedulerTable() {
         return newClusters;
     }
 
-    // look through all the clusters and find overlap
+    // Look through all the clusters and find overlap
+    // Returns a 2-element array of the form: 
+    //      [overlap?: boolean, insertAtIndex: array]
+    //          If no overlap, insertAtIndex is a one-element array with the 
+    //          index to insert the new block at. If overlap, insertAtIndex
+    //          is a multi-element array specifying which clusters the new block
+    //          overlaps with
     function findInsertToClusterIdx(clusters, newBlockStartTime, newBlockEndTime){
-        let retVal = [false, 0]; // [overlap?, insertAtIndex]
+        let retVal = [false, [0]]; // [overlap?, insertAtIndex]
         for (let i=0; i<clusters.length; i++){
+            // new block ends before current cluster start. Stop searching.
             if (newBlockEndTime < clusters[i].startTime){
-                // new block ends before cluster start. Stop searching.
+                // If there is overlap
                 if(retVal[0]){
                     break;
                 }
-                return [false, i];
+                // If there is no overlap
+                return [false, [i]];
             }
+            // new block starts after cluster end. Check next cluster
             else if (newBlockStartTime >= clusters[i].endTime){
-                // new block starts after cluster end. Check next cluster
-                retVal = [false, i];
+                retVal = [false, [i]];
                 continue;
             }
+            // new block starts before cluster end but after cluster start 
+            // OR new block ends after cluster starts but starts before
+            // cluster starts
             else if ((newBlockStartTime >= clusters[i].startTime) || 
                         (newBlockEndTime > clusters[i].startTime)){
-                // new block starts before cluster end but after cluster start 
-                // OR new block ends after cluster starts but but starts before
-                // cluster starts
+                // If already overlapped with another cluster, add the index of  
+                // the new cluster into the array of indexes of overlapped 
+                // clusters
                 if(retVal[0]){
                     retVal[1].push(i);
                 }
+                // If not already overlapped with another cluster, create the 
+                // array of indexes of overlapped clusters
                 else{
                     retVal=[true, [i]];
                 }
             }
         }
+        // If it reaches here, that means that a new cluster should be created
+        // at the end of the clusters array, after the last index. 
         if(!retVal[0]){
-            retVal[1]+=1;
+            retVal[1][0]+=1;
         }
         return retVal;
     }
@@ -311,13 +361,18 @@ function SchedulerTable() {
     function findLaneInsertPos(lanes, startTime){
         let i = 0;
         for(; i<lanes.length; i++){
+            // lanes[i] is the lane number. [0] indexes into the first course
+            // in the lane which is the earliest course in the lane. 
+            // If the lane's start time is after the current start time, 
+            // no overlap possible, break. Else keep searching. 
             if(lanes[i][0].startTime>startTime){
                 break;
             }
         }
         return i;
     }
-    
+
+    // Find the position within the lane to insert the course
     function findCourseInsertPos(courses, startTime){
         let i = 0;
         for(;i<courses.length;i++){
@@ -328,11 +383,12 @@ function SchedulerTable() {
         return i;
     }
     
-    function checkOverlap(lane, startTime, duration, endTime){
-        // const endTime = getEndTime(startTime, duration)
+    // Check if there is overlap with any course in the lane. True if overlap. 
+    // False if no overlap. 
+    function checkOverlap(lane, startTime, endTime){
         for(let i=0; i<lane.length; i++){
-            if((startTime >= lane[i].startTime && startTime < lane[i].endTime) || 
-                (endTime > lane[i].startTime && endTime <= lane[i].endTime)){
+            if((startTime>=lane[i].startTime && startTime<lane[i].endTime) 
+                || (endTime>lane[i].startTime && endTime<=lane[i].endTime)){
                 return true;
             }
         }
@@ -341,6 +397,7 @@ function SchedulerTable() {
 
     return (
         <Box mt={0.5}>
+            {/* The event blocks are positioned above (z-axis) the actual grid */}
             <div style={{position: "absolute", width: width}}>
                 <Grid container spacing={0}>
                     <Grid item xs={1}/>
@@ -361,6 +418,7 @@ function SchedulerTable() {
                     </Grid>
                 </Grid>
             </div>
+            {/* The actual grid with day and time labels: */}
             <div ref={timeTableRef} className={`${classes.componentBackground}`}>
                 <Grid container spacing={0} style={{textAlign:"center"}}>
                     <Grid 
