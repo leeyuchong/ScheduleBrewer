@@ -19,7 +19,7 @@ Install the python dependencies from the `requirements.txt` file. After activati
 Install the Node dependencies from the `package-lock.json` file. In the same directory as the `package-lock.json` file, run the command `npm install`
 
 ## Files
-The .env file, and /node_modules and /saml folders are necessary but are not in this repository. .env and /saml can be found in the AWS server. /node_modules can be installed following the instructions above. 
+The `.env` file, and `/node_modules` and `/saml` folders are necessary but are not in this repository. `.env` and `/saml` can be found in the AWS server. `/node_modules` can be installed following the instructions above. 
 * `/CourseBrowser/`: Folder for the CourseBrowser app
     * `migrations/`: Folder for the database migration files
     * `src/`: Folder for the front end React files
