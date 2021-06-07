@@ -94,7 +94,7 @@ Install the Node dependencies from the `package-lock.json` file. In the same dir
 5. Import the new courses
 
 ## Recompile Files
-1. In the folder `ScheduleBrewer/`, use the command `npm build`
+1. In the folder `ScheduleBrewer/`, use the command `npm run build`
 2. Copy the three files from `/ScheduleBrewer/CourseBrowser/static/CourseBrowser/` to `/ScheduleBrewer/static/CourseBrowser/`
 3. Run the following commands to restart the NGINX server: 
     sudo systemctl daemon-reload
