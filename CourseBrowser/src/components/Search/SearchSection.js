@@ -64,7 +64,7 @@ function SearchSection() {
                         </AlertTitle>
                         <Typography variant="caption">
                             Saving a class does not mean you have registered 
-                            for it. Remember to log in at 
+                            for it. Remember to log in at&nbsp;
                             <Link 
                                 href="https://aisapps.vassar.edu/prereg/" 
                                 onClick={redirectToPreregSite} 
@@ -72,7 +72,7 @@ function SearchSection() {
                             >
                                 https://aisapps.vassar.edu/prereg/
                             </Link> 
-                            and formally register for your classes before 
+                            &nbsp;and formally register for your classes before 
                             preregistration ends.
                         </Typography>
                     </Alert>

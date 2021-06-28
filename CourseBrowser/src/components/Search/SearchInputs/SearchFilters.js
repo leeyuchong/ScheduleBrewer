@@ -21,15 +21,15 @@ function SearchFilters(props) {
         heading: {
             fontSize: theme.typography.pxToRem(15),
             fontWeight: theme.typography.fontWeightRegular,
-          },
-      }));
+        },
+    }));
     const classes = useStyles();
     const fields = {
         gradeOption: [["NR", "NRO"], ["SU", "SU"]],
         courseFormat: [["CLS", "Class"], ["INT", "Intensive"], ["OTH", "Other"]],
         units: [[0.5, "0.5 units"], [1, "1 unit"], [1.5, "1.5 units"]],
         day: [["M", "Mon"], ["T", "Tue"], ["W", "Wed"], ["R", "Thur"], ["F", "Fri"]],
-        writingSem: [[true, "Writing Sem"]], 
+        writingSem: [[true, "Writing Sem"]],
         yearLong: [[true, "Year Long"]],
         quant: [[true, "Quantitative"]],
         lang: [[true, "Language"]],
@@ -39,28 +39,28 @@ function SearchFilters(props) {
     const handleChipClick = (fieldName, value) => {
         let newValue = props.formValues[fieldName] === "" ? value : "";
         props.setFormValues({
-            ...props.formValues, 
+            ...props.formValues,
             [fieldName]: newValue
         });
     };
 
     useEffect(() => {
         setFilterSelected(
-            props.formValues.writingSem || 
-            props.formValues.gradeOption !== "" || 
-            props.formValues.yearLong || 
+            props.formValues.writingSem ||
+            props.formValues.gradeOption !== "" ||
+            props.formValues.yearLong ||
             props.formValues.quant ||
-            props.formValues.lang || 
+            props.formValues.lang ||
             props.formValues.specialPerm ||
             props.formValues.courseFormat !== "" ||
-            props.formValues.units !== "" || 
+            props.formValues.units !== "" ||
             props.formValues.day !== ""
         );
     }, [props.formValues]);
-    
+
     const getLabel = (fieldName, fieldValue) => {
         const selected = fields[fieldName].filter((option) => {
-            return(option[0] === fieldValue)
+            return (option[0] === fieldValue)
         });
         return selected[0][1];
     };
@@ -73,10 +73,10 @@ function SearchFilters(props) {
                     aria-controls="filters"
                     id="search-filters"
                 >
-                    <Box 
-                        display="flex" 
-                        flexDirection="row" 
-                        flexWrap="wrap" 
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        flexWrap="wrap"
                         alignItems="center"
                     >
                         <Typography className={classes.heading}>
@@ -85,37 +85,38 @@ function SearchFilters(props) {
                         {filterSelected ? (
                             <Box display="flex" flexDirection="row" flexWrap="wrap">
                                 {Object.entries(fields).map(([fieldName, value]) => {
-                                    if (props.formValues[fieldName]!=""){
-                                        return(
+                                    if (props.formValues[fieldName] != "") {
+                                        return (
                                             <Box mx={0.1}>
-                                                <Chip 
+                                                <Chip
                                                     label={getLabel(
-                                                        fieldName, 
+                                                        fieldName,
                                                         props.formValues[fieldName])
-                                                    } 
-                                                    clickable 
+                                                    }
+                                                    clickable
                                                     variant="default"
-                                                    id={value} 
+                                                    id={value}
                                                     onClick={(event) => {
                                                         event.stopPropagation()
                                                         handleChipClick(
-                                                            fieldName, 
+                                                            fieldName,
                                                             props.formValues[fieldName])
                                                     }}
-                                                    onDelete = {(event) => {
+                                                    onDelete={(event) => {
                                                         event.stopPropagation()
-                                                        handleChipClick(fieldName, 
+                                                        handleChipClick(fieldName,
                                                             props.formValues[fieldName])
                                                     }}
                                                 />
                                             </Box>
                                         );
                                     }
-                                    else{
-                                        return(<div></div>);
-                                    }})
+                                    else {
+                                        return (<div></div>);
+                                    }
+                                })
                                 }
-                            </Box> 
+                            </Box>
                         ) : (
                             <Typography className={classes.heading}>
                                 <em>No filters selected</em>
@@ -126,22 +127,22 @@ function SearchFilters(props) {
                 <AccordionDetails>
                     <Box display="flex" flexDirection="row" flexWrap="wrap" >
                         {Object.entries(fields).map(([fieldName, options]) => {
-                            if (props.formValues[fieldName]===""){
+                            if (props.formValues[fieldName] === "") {
                                 return (
                                     <div>
                                         <Box mx={1} my={0.4}>
-                                            <ChipGroup 
+                                            <ChipGroup
                                                 field={fieldName}
                                                 options={options}
                                                 handleClick={handleChipClick}
-                                            /> 
+                                            />
                                         </Box>
-                                        <Divider orientation="vertical" flexItem/>
+                                        <Divider orientation="vertical" flexItem />
                                     </div>
                                 );
                             }
-                            else{
-                                return(<div></div>);
+                            else {
+                                return (<div></div>);
                             }
                         })}
                     </Box>

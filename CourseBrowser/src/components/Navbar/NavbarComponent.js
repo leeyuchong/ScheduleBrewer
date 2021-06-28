@@ -64,9 +64,9 @@ function Navbar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const authLink = (event) => {
-    window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid')===undefined ? "sso" : "slo"}`
+    window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid') === undefined ? "sso" : "slo"}`
   };
 
   return (
@@ -91,11 +91,11 @@ function Navbar(props) {
           <Box component={Grid} item display={{ xs: 'none', sm: 'block' }}>
             <Box display="flex">
               <Box>
-                <Tooltip 
-                  title={`Toggle ${props.prefersDarkMode ? "Light" : "Dark"} Mode`} 
+                <Tooltip
+                  title={`Toggle ${props.prefersDarkMode ? "Light" : "Dark"} Mode`}
                   arrow
                 >
-                  <Button 
+                  <Button
                     onClick={props.toggleTheme}
                     aria-haspopup="true"
                     color="inherit"
@@ -117,7 +117,7 @@ function Navbar(props) {
               </Box>
               <Box>
                 <Button color="inherit" onClick={authLink}>
-                  {Cookies.get('sessionid')===undefined ? "Login" : "Logout"}
+                  {Cookies.get('sessionid') === undefined ? "Login" : "Logout"}
                 </Button>
               </Box>
             </Box>
@@ -145,9 +145,9 @@ function Navbar(props) {
               }}>
                 {props.currentPage === "default" ? (
                   <Box display='flex'>
-                      <Box pr={1}>
-                        <CalendarTodayIcon color="secondary"/>
-                      </Box>
+                    <Box pr={1}>
+                      <CalendarTodayIcon color="secondary" />
+                    </Box>
                     <Box>
                       <Typography color="secondary">Scheduler</Typography>
                     </Box>
@@ -155,13 +155,13 @@ function Navbar(props) {
                 ) : (
                   <Box display='flex'>
                     <Box pr={1}>
-                      <SearchIcon color="secondary"/>
+                      <SearchIcon color="secondary" />
                     </Box>
-                  <Box>
-                    <Typography color="secondary">Search</Typography>
+                    <Box>
+                      <Typography color="secondary">Search</Typography>
+                    </Box>
                   </Box>
-                </Box>
-              )}
+                )}
               </MenuItem>
               <MenuItem onClick={() => {
                 handleClose()
@@ -169,34 +169,34 @@ function Navbar(props) {
               }}>
                 {props.prefersDarkMode ? (
                   <Box display='flex'>
-                      <Box pr={1}>
-                        <Brightness7Icon color="secondary"/> 
-                      </Box>
+                    <Box pr={1}>
+                      <Brightness7Icon color="secondary" />
+                    </Box>
                     <Box>
                       <Typography color="secondary">Light Mode</Typography>
                     </Box>
                   </Box>
-                ) : ( 
+                ) : (
                   <Box display='flex'>
-                      <Box pr={1}>
-                      <Brightness4Icon color="secondary"/>
-                      </Box>
+                    <Box pr={1}>
+                      <Brightness4Icon color="secondary" />
+                    </Box>
                     <Box>
                       <Typography color="secondary">Dark Mode</Typography>
                     </Box>
                   </Box>
-              )}
+                )}
               </MenuItem>
               <MenuItem onClick={() => {
                 authLink()
               }}>
                 <Box display='flex'>
                   <Box pr={1}>
-                    <ExitToAppIcon color="secondary"/>
+                    <ExitToAppIcon color="secondary" />
                   </Box>
                   <Box>
                     <Typography color="secondary">
-                      {Cookies.get('sessionid')===undefined ? "Login" : "Logout"}
+                      {Cookies.get('sessionid') === undefined ? "Login" : "Logout"}
                     </Typography>
                   </Box>
                 </Box>

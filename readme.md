@@ -82,8 +82,8 @@ Install the Node dependencies from the `package-lock.json` file. In the same dir
 * `package-lock.json`: Package information for Node
 * `package.json`: Package information for Node
 * `requirements.txt`: Package information for Python
-* `webpack-stats.json`: Webpack file
-* `webpack.config.js`: Webpack config file
+* `webpack-stats.json`: Webpack file. Tells where the HTML file should look for the javascript file 
+* `webpack.config.js`: Webpack config file. 
 
 ## Semester Transition
 1. Delete all courses in the UserCourses table
@@ -96,7 +96,8 @@ Install the Node dependencies from the `package-lock.json` file. In the same dir
 ## Recompile Files
 1. In the folder `ScheduleBrewer/`, use the command `npm build`
 2. Copy the three files from `/ScheduleBrewer/CourseBrowser/static/CourseBrowser/` to `/ScheduleBrewer/static/CourseBrowser/`
-3. Run the following commands to restart the NGINX server: 
+3. Ensure that the file `webpack-stats.json` is updated
+4. Run the following commands to restart the NGINX server: 
     sudo systemctl daemon-reload
     sudo systemctl restart gunicorn
     sudo systemctl restart nginx

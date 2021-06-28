@@ -10,12 +10,12 @@ function SearchResultsContainer(props) {
     // PROPS: 
     //  searchURL: String of the current search url 
     //  openLoginDialog: Function to open a dialogue and ask the user to login
-    
+
     const useStyles = makeStyles((theme) => ({
         root: {
             width: '100%',
             '& > * + *': {
-              marginTop: theme.spacing(2),
+                marginTop: theme.spacing(2),
             },
         },
     }));
@@ -47,7 +47,7 @@ function SearchResultsContainer(props) {
     }, [csrfToken]);
     const onPageChange = (event, value) => {
         setCurrPage(value);
-        fetch(props.searchURL+`&page=${value}`)
+        fetch(props.searchURL + `&page=${value}`)
             .then(response => response.json())
             .then(data => {
                 setResults(data.results);
@@ -57,26 +57,26 @@ function SearchResultsContainer(props) {
         <div>
             {isLoading ? (
                 <div>
-                    <LinearProgress 
-                        className={classes.root} 
+                    <LinearProgress
+                        className={classes.root}
                         color="secondary"
                     />
                 </div>
             ) : (
                 <div>
                     <Box borderRadius={4}>
-                        {results.map((course) => 
-                            <ResultItemComponent 
-                                course={course} 
-                                csrfToken={csrfToken} 
+                        {results.map((course) =>
+                            <ResultItemComponent
+                                course={course}
+                                csrfToken={csrfToken}
                                 openLoginDialog={props.openLoginDialog}
                             />
                         )}
                     </Box>
                     <Box display="flex" justifyContent="center" mt={1}>
-                        <Pagination 
-                            count={Math.ceil(numPages/pageSize)} 
-                            onChange={onPageChange} 
+                        <Pagination
+                            count={Math.ceil(numPages / pageSize)}
+                            onChange={onPageChange}
                             page={currPage}
                         />
                     </Box>

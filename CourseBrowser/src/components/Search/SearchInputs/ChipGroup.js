@@ -9,13 +9,13 @@ function ChipGroup(props) {
     //  handleClick: A function to handle the chip click and change the formValues. Takes in the value
     return (
         <Box display="flex">
-            {props.options.map(option => 
+            {props.options.map(option =>
                 <Box mx={0.1}>
-                    <Chip 
-                        label={option[1]} 
-                        clickable 
+                    <Chip
+                        label={option[1]}
+                        clickable
                         variant="outlined"
-                        id={option[0]} 
+                        id={option[0]}
                         onClick={() => props.handleClick(props.field, option[0])}
                     />
                 </Box>

@@ -24,7 +24,7 @@ function SchedulerPageContainer() {
                     md={11}
                 >
                     <SchedulerTable />
-                    <SavedCourseDetailsContainer/>
+                    <SavedCourseDetailsContainer />
                 </Grid>
             </Grid>
         </div>

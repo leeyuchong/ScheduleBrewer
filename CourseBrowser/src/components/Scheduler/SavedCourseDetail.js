@@ -19,7 +19,7 @@ function SavedCourseDetail(props) {
         detail: {
             backgroundColor: `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.8)`,
             color: threshold >= 128 ? '#000' : '#fff',
-            borderLeft: `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})`    
+            borderLeft: `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})`
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -27,7 +27,7 @@ function SavedCourseDetail(props) {
         },
     }));
     const classes = useStyles();
-    
+
     return (
         <Box my={1}>
             <Paper className={classes.detail}>
@@ -36,17 +36,17 @@ function SavedCourseDetail(props) {
                         <Grid item xs={9}>
                             <Grid container direction="column" spacing={0}>
                                 <Grid item xs>
-                                    <Typography className={classes.heading} align="left"> 
-                                        {props.course.courseID} - {props.course.title} 
+                                    <Typography className={classes.heading} align="left">
+                                        {props.course.courseID} - {props.course.title}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs>
                                     <Typography variant="subtitle2" align="left">
-                                        {props.course.d1} {props.course.time1} 
+                                        {props.course.d1} {props.course.time1}
                                         {props.course.d2 ? ` | ${props.course.d2} ${props.course.time2}` : null}
                                         {props.course.instructor ? ` | ${props.course.instructor}` : null}
                                         {` | ${props.course.format}`}
-                                        {` | ${props.course.units} ${props.course.units===1 ? (
+                                        {` | ${props.course.units} ${props.course.units === 1 ? (
                                             "unit"
                                         ) : (
                                             "units"
@@ -55,12 +55,12 @@ function SavedCourseDetail(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Box 
-                            display="flex" 
-                            component={Grid} 
-                            item 
-                            xs 
-                            justifyContent="flex-end" 
+                        <Box
+                            display="flex"
+                            component={Grid}
+                            item
+                            xs
+                            justifyContent="flex-end"
                             alignItems="center"
                         >
                             <Button

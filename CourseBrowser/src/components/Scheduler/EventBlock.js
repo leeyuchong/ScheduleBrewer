@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { SavedCourseContext } from '../Utils/SavedCourseContext'
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,13 +16,13 @@ function EventBlock(props) {
     const [topOffset, setTopOffset] = useState(0);
     const elementRef = useRef(null);
     const boxColor = props.course.blockColor;
-    const startTime = (Math.floor(props.course.startTime/100)+(props.course.startTime%100)/60);
-    const topValue = 43 + (startTime-props.minTime)*42 + ((startTime-props.minTime)) - topOffset;
+    const startTime = (Math.floor(props.course.startTime / 100) + (props.course.startTime % 100) / 60);
+    const topValue = 43 + (startTime - props.minTime) * 42 + ((startTime - props.minTime)) - topOffset;
     const useStyles = makeStyles((theme) => ({
         eventBlock: {
             position: 'relative',
             top: `${topValue}px`,
-            height: `${(props.course.duration/60)*43}px`,
+            height: `${(props.course.duration / 60) * 43}px`,
             backgroundColor: `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.85)`,
             color: (((boxColor[0] * 299) + (boxColor[1] * 587) + (boxColor[2] * 114)) / 1000) >= 128 ? '#000' : '#fff',
             borderLeft: `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})`
@@ -37,29 +37,29 @@ function EventBlock(props) {
     const classes = useStyles();
     useEffect(() => {
         setTopOffset(elementRef.current.offsetTop);
-      }, [props.dayBlock]);
+    }, [props.dayBlock]);
 
     const [savedCourses, setSavedCourses] = useContext(SavedCourseContext);
     const [open, setOpen] = React.useState(false);
     const handleTooltipClose = () => {
-      setOpen(false);
+        setOpen(false);
     };
     const handleTooltipOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
     const convertTo12HrTime = (time) => {
-        const hour = Math.floor(time/100)
+        const hour = Math.floor(time / 100)
         let retval = ""
-        if (hour<12){
-            retval = time.toString().padStart(4, '0')+"AM"
+        if (hour < 12) {
+            retval = time.toString().padStart(4, '0') + "AM"
         }
-        else if (hour==12){
-            retval = time.toString()+"PM"
+        else if (hour == 12) {
+            retval = time.toString() + "PM"
         }
-        else{
-            retval = (hour-12).toString().padStart(2, '0')
-                        +time.toString().slice(2)
-                        +"PM"
+        else {
+            retval = (hour - 12).toString().padStart(2, '0')
+                + time.toString().slice(2)
+                + "PM"
         }
         return retval
     }
@@ -86,12 +86,12 @@ function EventBlock(props) {
                         onClose={handleTooltipClose}
                         open={open}
                     >
-                        <Paper 
-                            className={classes.eventBlock} 
-                            align="left" 
-                            pl={1} 
-                            onClick={handleTooltipOpen} 
-                            onMouseEnter={handleTooltipOpen} 
+                        <Paper
+                            className={classes.eventBlock}
+                            align="left"
+                            pl={1}
+                            onClick={handleTooltipOpen}
+                            onMouseEnter={handleTooltipOpen}
                             onMouseLeave={handleTooltipClose}
                         >
                             <Box ml={0.5}>
@@ -102,7 +102,7 @@ function EventBlock(props) {
                         </Paper>
                     </Tooltip>
                 </ClickAwayListener>
-            ) : ( 
+            ) : (
                 null
             )}
         </Box>

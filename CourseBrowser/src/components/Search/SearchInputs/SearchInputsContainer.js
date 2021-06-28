@@ -20,22 +20,22 @@ function SearchInputsContainer(props) {
         day: "",
     };
     const [formValues, setFormValues] = useState(defaultValues);
-    
+
     useEffect(() => {
         let url = "https://schedulebrewer.ml/api/search/?";
         let searchParams = new URLSearchParams();
-        for (const [key, value] of Object.entries(formValues)){
-            if (value){
+        for (const [key, value] of Object.entries(formValues)) {
+            if (value) {
                 searchParams.append(key, value);
             }
         }
-        props.setSearchURL(""+ url + searchParams.toString());
+        props.setSearchURL("" + url + searchParams.toString());
     }, [formValues]);
-    
+
     return (
         <div>
-            <SearchBar formValues={formValues} setFormValues={setFormValues}/>
-            <SearchFilters formValues={formValues} setFormValues={setFormValues}/>
+            <SearchBar formValues={formValues} setFormValues={setFormValues} />
+            <SearchFilters formValues={formValues} setFormValues={setFormValues} />
         </div>
     );
 }
