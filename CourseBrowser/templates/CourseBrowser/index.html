@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+{% comment %}
 {% load render_bundle from webpack_loader %}
 {% load static %}
+{% endcomment %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -21,7 +23,11 @@
   </script>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <span>We apologize for the inconvenience. This application is under maintenance. We have indentified an issue with the displaying of Cancelled Courses. Until the issue is resolved, Please use the AskBanner Schedule of Classes to plan your Fall Schedule.</span>
+  </div>
+  {% comment %}
   {% render_bundle 'CourseBrowser' %}
+  {% endcomment %}
 </body>
 </html>
