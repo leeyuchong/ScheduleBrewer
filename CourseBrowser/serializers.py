@@ -38,6 +38,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "description",
             "limits",
             "requests",
+            "offered",
         )
 
 class SavedCoursesSerializer(serializers.ModelSerializer):
@@ -59,7 +60,8 @@ class SavedCoursesSerializer(serializers.ModelSerializer):
             "endtime2",
             "duration2",
             "instructor",
-            "description"
+            "description",
+            "offered",
         )
 
 

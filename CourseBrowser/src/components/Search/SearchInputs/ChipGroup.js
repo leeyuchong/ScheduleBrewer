@@ -10,12 +10,12 @@ function ChipGroup(props) {
     return (
         <Box display="flex">
             {props.options.map(option =>
-                <Box mx={0.1}>
+                <Box key={option[0]} mx={0.1}>
                     <Chip
                         label={option[1]}
                         clickable
                         variant="outlined"
-                        id={option[0]}
+                        id={option[0].toString()}
                         onClick={() => props.handleClick(props.field, option[0])}
                     />
                 </Box>

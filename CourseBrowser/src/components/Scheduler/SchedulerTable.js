@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { SavedCourseContext } from '../Utils/SavedCourseContext';
 import DayColumn from './DayColumn';
+import AlertDialog from '../Utils/AlertDialog';
 
 function SchedulerTable() {
     const useStyles = makeStyles((theme) => ({
@@ -39,7 +40,10 @@ function SchedulerTable() {
     const [thurBlocks, setThurBlocks] = useState([]);
     const [friBlocks, setFriBlocks] = useState([]);
     const [tableRange, setTableRange] = useState(minTableRange);
-
+    const [openAlert, setOpenAlert] = useState(false);
+    const handleClose = () => {
+        setOpenAlert(false);
+    }
     function createTimes(start, end) {
         let retArray = [];
         const end12 = end / 100;
@@ -84,6 +88,9 @@ function SchedulerTable() {
         let tempFriBlocks = [];
         let tempTableRange = [...minTableRange];
         for (const value of Object.values(savedCourses)) {
+            if (!value.offered) {
+                setOpenAlert(true);
+            }
             for (let i = 1; i < 3; i++) { //d1 and d2 
                 if (value[`d${i}`] != null && value[`d${i}`].length > 0) {
                     for (let day of value[`d${i}`]) {
@@ -174,6 +181,7 @@ function SchedulerTable() {
             endTime: newBlockEndTime,
             duration: newBlockDuration,
             blockColor: newBlock.blockColor,
+            offered: newBlock.offered
         };
         const insertAt = findInsertToClusterIdx(
             newClusters, newBlockStartTime, newBlockEndTime);
@@ -429,6 +437,7 @@ function SchedulerTable() {
                     </Grid>
                     {days.map((day) =>
                         <Grid
+                            key={day}
                             item
                             xs
                             className={`${day !== "Fri" ? null : classes.tableRightBorder} ${classes.tableHeaderCells} ${classes.tableAllCells}`}
@@ -439,18 +448,19 @@ function SchedulerTable() {
                     )}
                 </Grid>
                 {createTimes(tableRange[0], tableRange[1]).map((time, idx) =>
-                    <Grid container spacing={0}>
+                    <Grid key={idx} container spacing={0}>
                         <Grid item xs={1} className={`${classes.tableAllCells}`}>
                             <Typography variant="body2" align="center">
                                 {time}
                             </Typography>
                         </Grid>
                         {days.map((day) =>
-                            <Grid item xs className={`${day !== "Fri" ? null : classes.tableRightBorder} ${classes.tableAllCells}`}></Grid>
+                            <Grid key={day} item xs className={`${day !== "Fri" ? null : classes.tableRightBorder} ${classes.tableAllCells}`}></Grid>
                         )}
                     </Grid>
                 )}
             </div>
+            <AlertDialog open={openAlert} handleClose={handleClose}/>
         </Box>
     );
 }

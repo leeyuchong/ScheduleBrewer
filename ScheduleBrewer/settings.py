@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY'),
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['ec2-54-83-17-12.compute-1.amazonaws.com', '54.83.17.12', 'localhost', 'schedulebrewer.ml', 'www.schedulebrewer.ml', '127.0.0.1']
 

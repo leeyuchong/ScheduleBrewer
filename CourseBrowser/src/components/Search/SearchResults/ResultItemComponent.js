@@ -40,7 +40,7 @@ function ResultItemComponent(props) {
   const DOMPurify = createDOMPurify(window);
   const saveCourse = (courseID) => {
     if (Cookies.get('sessionid') !== undefined) {
-      const url = "https://schedulebrewer.ml/api/save-course";
+      const url = "http://127.0.0.1:8000/api/save-course";
       let selectedCourse = new FormData();
       selectedCourse.set("course", courseID);
       fetch(url, {
@@ -77,7 +77,7 @@ function ResultItemComponent(props) {
   }
 
   const deleteCourse = (courseID) => {
-    const url = `https://schedulebrewer.ml/api/delete-course/${courseID}/`;
+    const url = `http://127.0.0.1:8000/api/delete-course/${courseID}/`;
     fetch(url, {
       credentials: 'include',
       method: 'DELETE',

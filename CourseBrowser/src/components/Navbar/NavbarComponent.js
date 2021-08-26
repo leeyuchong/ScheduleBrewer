@@ -66,7 +66,7 @@ function Navbar(props) {
   };
 
   const authLink = (event) => {
-    window.location.href = `https://schedulebrewer.ml/saml/?${Cookies.get('sessionid') === undefined ? "sso" : "slo"}`
+    window.location.href = `http://127.0.0.1:8000/saml/?${Cookies.get('sessionid') === undefined ? "sso" : "slo"}`
   };
 
   return (
@@ -99,7 +99,6 @@ function Navbar(props) {
                     onClick={props.toggleTheme}
                     aria-haspopup="true"
                     color="inherit"
-                    title="Testing"
                   >
                     {props.prefersDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
                   </Button>

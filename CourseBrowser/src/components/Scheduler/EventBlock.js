@@ -23,9 +23,13 @@ function EventBlock(props) {
             position: 'relative',
             top: `${topValue}px`,
             height: `${(props.course.duration / 60) * 43}px`,
-            backgroundColor: `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.85)`,
+            background: props.course.offered ? 
+                        `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.85)`
+                         : 'repeating-linear-gradient(45deg,#bc6360,#bc6360 10px,#984646 10px,#984646 20px)',
+            // backgroundColor: `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.85)`,
             color: (((boxColor[0] * 299) + (boxColor[1] * 587) + (boxColor[2] * 114)) / 1000) >= 128 ? '#000' : '#fff',
-            borderLeft: `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})`
+            borderLeft: props.course.offered ? `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})` : '4px solid #bc6360',
+            textDecorationLine: props.course.offered ? 'none' : 'line-through'
         },
         paper: {
             position: 'relative',
@@ -69,7 +73,7 @@ function EventBlock(props) {
                 <ClickAwayListener onClickAway={handleTooltipClose}>
                     <Tooltip
                         title={
-                            <React.Fragment className={classes.paper}>
+                            <React.Fragment>
                                 <Typography color="inherit" variant="subtitle2">
                                     {savedCourses[props.course.courseID].title}
                                 </Typography>

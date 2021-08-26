@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 function SavedCourseDetailsContainer() {
   const [savedCourses, setSavedCourses] = useContext(SavedCourseContext);
   const deleteCourse = (courseID) => {
-    const url = `https://schedulebrewer.ml/api/delete-course/${courseID}/`;
+    const url = `http://127.0.0.1:8000/api/delete-course/${courseID}/`;
     fetch(url, {
       credentials: 'include',
       method: 'DELETE',
@@ -66,7 +66,7 @@ function SavedCourseDetailsContainer() {
         {otherUnits > 0 ? `Other - ${otherUnits}` : null}
       </Box>
       {savedCourses && Object.values(savedCourses).map(course =>
-        <SavedCourseDetail course={course} deleteCourse={deleteCourse} />
+        <SavedCourseDetail key={course.courseID} course={course} deleteCourse={deleteCourse} />
       )}
     </Box>
   );

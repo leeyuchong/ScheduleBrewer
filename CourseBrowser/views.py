@@ -37,8 +37,8 @@ def search(request):
         "MUSI", "NEUR", "PERS", "PHED", "PHIL", "PHYS", "POLI", "PORT", "PSYC",
         "PSYC", "RELI", "RUSS", "SOCI", "STS", "SWAH", "SWED", "TURK", "URBS", 
         "VICT", "WMST", "YIDD"
-    )    
-    queriedCourses = CourseInfo.objects.all()
+    )
+    queriedCourses = CourseInfo.objects.filter(offered__exact=True)
     # <QueryDict: {'searchTerms': ['CMPU 102']}>
     for key, value in request.GET.items():
         # Search term from the search box
@@ -140,19 +140,29 @@ class SavedCourses(APIView):
     
     # Get saved courses
     def get(self, request, format=None):
-        self.getAttributes(request)
-        if self.attributes:
-            queriedCourses = CourseInfo.objects.filter(
-                usercourses__userID__exact=self.username).values(
-                    "courseID", "title", "units", "format", "d1", "time1",
-                    "starttime1", "endtime1", "duration1", "d2", "time2",
-                    "starttime2", "endtime2", "duration2", "instructor",
-                    "description")
-            serializer = SavedCoursesSerializer(
-                queriedCourses, context={'request': request}, many=True)
-            return Response(serializer.data)
-        else:
-            return HttpResponse('Unauthorised', status=401)
+        queriedCourses = CourseInfo.objects.filter(
+            usercourses__userID__exact="test").values(
+                "courseID", "title", "units", "format", "d1", "time1",
+                "starttime1", "endtime1", "duration1", "d2", "time2",
+                "starttime2", "endtime2", "duration2", "instructor",
+                "description", "offered")
+        serializer = SavedCoursesSerializer(
+            queriedCourses, context={'request': request}, many=True)
+        return Response(serializer.data)
+
+        # self.getAttributes(request)
+        # if self.attributes:
+        #     queriedCourses = CourseInfo.objects.filter(
+        #         usercourses__userID__exact=self.username).values(
+        #             "courseID", "title", "units", "format", "d1", "time1",
+        #             "starttime1", "endtime1", "duration1", "d2", "time2",
+        #             "starttime2", "endtime2", "duration2", "instructor",
+        #             "description", "offered")
+        #     serializer = SavedCoursesSerializer(
+        #         queriedCourses, context={'request': request}, many=True)
+        #     return Response(serializer.data)
+        # else:
+        #     return HttpResponse('Unauthorised', status=401)
 
     # Save new course to user profile
     def post(self, request, format=None):
@@ -220,7 +230,7 @@ def saml_index(request):
     paint_logout = False
 
     if 'sso' in req['get_data']:
-        return HttpResponseRedirect(auth.login(return_to='https://schedulebrewer.ml'))
+        return HttpResponseRedirect(auth.login(return_to='http://127.0.0.1:8000'))
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
@@ -240,7 +250,7 @@ def saml_index(request):
             name_id_nq = request.session['samlNameIdNameQualifier']
         if 'samlNameIdSPNameQualifier' in request.session:
             name_id_spnq = request.session['samlNameIdSPNameQualifier']
-        return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq, return_to='https://schedulebrewer.ml'))
+        return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq, return_to='http://127.0.0.1:8000'))
         # If LogoutRequest ID need to be stored in order to later validate it, do instead
         # slo_built_url = auth.logout(name_id=name_id, session_index=session_index)
         # request.session['LogoutRequestID'] = auth.get_last_request_id()

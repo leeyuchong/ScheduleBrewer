@@ -27,6 +27,7 @@ const DarkTheme = {
             '&:hover': {
                 backgroundColor: "rgb(33,33,33, 0.2)",
             },
+            textDecorationLine: 'none',
         },
         whiteButton: {
             color: "#fafafa",
@@ -34,6 +35,7 @@ const DarkTheme = {
             '&:hover': {
                 backgroundColor: "rgb(245,245,245, 0.2)",
             },
+            textDecorationLine: 'none',
         }
     },
 };

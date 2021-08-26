@@ -87,7 +87,7 @@ function SearchFilters(props) {
                                 {Object.entries(fields).map(([fieldName, value]) => {
                                     if (props.formValues[fieldName] != "") {
                                         return (
-                                            <Box mx={0.1}>
+                                            <Box key={value} mx={0.1}>
                                                 <Chip
                                                     label={getLabel(
                                                         fieldName,
@@ -129,7 +129,7 @@ function SearchFilters(props) {
                         {Object.entries(fields).map(([fieldName, options]) => {
                             if (props.formValues[fieldName] === "") {
                                 return (
-                                    <div>
+                                    <div key={fieldName}>
                                         <Box mx={1} my={0.4}>
                                             <ChipGroup
                                                 field={fieldName}

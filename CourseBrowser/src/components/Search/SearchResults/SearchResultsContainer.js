@@ -38,7 +38,7 @@ function SearchResultsContainer(props) {
         })
     }, [props.searchURL]);
     useEffect(() => {
-        fetch("https://schedulebrewer.ml/getCSRF/", {
+        fetch("http://127.0.0.1:8000/getCSRF/", {
             method: 'GET',
             credentials: 'include'
         }).then(response => {
@@ -67,6 +67,7 @@ function SearchResultsContainer(props) {
                     <Box borderRadius={4}>
                         {results.map((course) =>
                             <ResultItemComponent
+                                key={course.courseID}
                                 course={course}
                                 csrfToken={csrfToken}
                                 openLoginDialog={props.openLoginDialog}

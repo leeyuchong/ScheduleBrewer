@@ -17,9 +17,12 @@ function SavedCourseDetail(props) {
     const useStyles = makeStyles((theme) => ({
         ...theme.spreadThis,
         detail: {
-            backgroundColor: `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.8)`,
+            background: props.course.offered ? 
+            `rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]}, 0.85)`
+             : 'repeating-linear-gradient(45deg,#bc6360,#bc6360 10px,#984646 10px,#984646 20px)',
             color: threshold >= 128 ? '#000' : '#fff',
-            borderLeft: `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})`
+            borderLeft: props.course.offered ? `4px solid rgb(${boxColor[0]}, ${boxColor[1]}, ${boxColor[2]})` : '4px solid #bc6360',
+            // textDecorationLine: props.course.offered ? 'none' : 'line-through'
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -33,7 +36,7 @@ function SavedCourseDetail(props) {
             <Paper className={classes.detail}>
                 <Box p={1}>
                     <Grid container justify="space-between" spacing={0}>
-                        <Grid item xs={9}>
+                        <Grid item xs={9} style={{textDecorationLine: props.course.offered ? 'none' : 'line-through'}}>
                             <Grid container direction="column" spacing={0}>
                                 <Grid item xs>
                                     <Typography className={classes.heading} align="left">
@@ -62,15 +65,21 @@ function SavedCourseDetail(props) {
                             xs
                             justifyContent="flex-end"
                             alignItems="center"
+                            style={{textDecorationLine: 'none'}}
                         >
                             <Button
                                 variant="outlined"
+                                // classes={{
+                                //     root: threshold >= 128 ? classes.blackButton : classes.whiteButton,
+                                //     label: classes.detailButton
+                                // }}
                                 className={threshold >= 128 ? classes.blackButton : classes.whiteButton}
                                 startIcon={<DeleteIcon />}
                                 onClick={(event) => {
                                     props.deleteCourse(props.course.courseID)
                                 }}
                                 align="right"
+                                // style={{textDecorationLine: 'none'}}
                             >
                                 Delete
                             </Button>

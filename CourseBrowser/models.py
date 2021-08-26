@@ -3,12 +3,13 @@ from django.db import models
 
 class CourseInfo(models.Model):
     courseID = models.CharField(max_length=12, primary_key=True) 
-    title = models.CharField(max_length=31)
+    title = models.CharField(max_length=50)
     units = models.DecimalField(max_digits=2, decimal_places=1)
     sp = models.IntegerField()
     requests = models.PositiveSmallIntegerField(blank=True, null=True)
     limits = models.CharField(max_length=20, blank=True, null=True)
-    max_enr = models.PositiveSmallIntegerField(db_column='Max')  
+    offered = models.BooleanField(default=True)
+    max_enr = models.PositiveSmallIntegerField(db_column='Max')
     enr = models.PositiveSmallIntegerField()
     avl = models.SmallIntegerField()
     wl = models.PositiveSmallIntegerField()
@@ -44,7 +45,7 @@ class UserCourses(models.Model):
     userID = models.CharField(max_length=12, db_index=True)
     courseID = models.ForeignKey(
         CourseInfo,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         db_column="courseID"
     )
 
@@ -53,5 +54,5 @@ class UserCourses(models.Model):
             models.UniqueConstraint(
                 fields=["userID", "courseID"], name="unique_pairing")
         ]
-        managed = False
+        managed = True
         db_table = "UserCourses"

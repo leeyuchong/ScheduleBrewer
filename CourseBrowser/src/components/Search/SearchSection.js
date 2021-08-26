@@ -17,7 +17,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 function SearchSection() {
-    const [searchURL, setSearchURL] = useState("https://schedulebrewer.ml/api/search/?");
+    const [searchURL, setSearchURL] = useState("http://127.0.0.1:8000/api/search/?");
     const [open, setOpen] = useState(false);
     const [openAlert, setOpenAlert] = useState(true);
     const handleClickOpen = () => {
@@ -27,7 +27,7 @@ function SearchSection() {
         setOpen(false);
     };
     const authLink = (event) => {
-        window.location.href = 'https://schedulebrewer.ml/saml/?sso';
+        window.location.href = 'http://127.0.0.1:8000/saml/?sso';
     };
     const redirectToPreregSite = (event) => {
         window.location.href = 'https://aisapps.vassar.edu/prereg/';
