@@ -27,11 +27,6 @@ from .serializers import *
 logger = logging.getLogger(__file__)
 
 
-def index(request):
-    context = {"course_codes": cache.get("course_codes")}
-    return render(request, "CourseBrowser/index.html", context)
-
-
 def get_subject_codes():
     courses = CourseInfo.objects.all()
     course_codes = list(sorted(set([x.courseID.split("-")[0] for x in courses])))
@@ -39,9 +34,14 @@ def get_subject_codes():
     return course_codes
 
 
+def index(request):
+    context = {"course_codes": cache.get_or_set("course_codes", get_subject_codes)}
+    return render(request, "CourseBrowser/index.html", context)
+
+
 @api_view(["GET"])
 def search(request):
-    courseCodes = cache.get_or_set("course_codes", get_subject_codes)
+    courseCodes = cache.get("course_codes")
     queriedCourses = CourseInfo.objects.filter(offered__exact=True)
     # <QueryDict: {'searchTerms': ['CMPU 102']}>
     for key, value in request.GET.items():
