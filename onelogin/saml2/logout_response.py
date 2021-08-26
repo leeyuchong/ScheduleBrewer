@@ -10,7 +10,8 @@ Logout Response class of OneLogin's Python Toolkit.
 """
 
 from onelogin.saml2 import compat
-from onelogin.saml2.utils import OneLogin_Saml2_Utils, OneLogin_Saml2_ValidationError
+from onelogin.saml2.utils import (OneLogin_Saml2_Utils,
+                                  OneLogin_Saml2_ValidationError)
 from onelogin.saml2.xml_templates import OneLogin_Saml2_Templates
 from onelogin.saml2.xml_utils import OneLogin_Saml2_XML
 
@@ -38,9 +39,13 @@ class OneLogin_Saml2_Logout_Response(object):
         self.id = None
 
         if response is not None:
-            self.__logout_response = compat.to_string(OneLogin_Saml2_Utils.decode_base64_and_inflate(response, ignore_zip=True))
+            self.__logout_response = compat.to_string(
+                OneLogin_Saml2_Utils.decode_base64_and_inflate(
+                    response, ignore_zip=True
+                )
+            )
             self.document = OneLogin_Saml2_XML.to_etree(self.__logout_response)
-            self.id = self.document.get('ID', None)
+            self.id = self.document.get("ID", None)
 
     def get_issuer(self):
         """
@@ -49,7 +54,7 @@ class OneLogin_Saml2_Logout_Response(object):
         :rtype: string
         """
         issuer = None
-        issuer_nodes = self.__query('/samlp:LogoutResponse/saml:Issuer')
+        issuer_nodes = self.__query("/samlp:LogoutResponse/saml:Issuer")
         if len(issuer_nodes) == 1:
             issuer = OneLogin_Saml2_XML.element_text(issuer_nodes[0])
         return issuer
@@ -60,10 +65,10 @@ class OneLogin_Saml2_Logout_Response(object):
         :return: The Status
         :rtype: string
         """
-        entries = self.__query('/samlp:LogoutResponse/samlp:Status/samlp:StatusCode')
+        entries = self.__query("/samlp:LogoutResponse/samlp:Status/samlp:StatusCode")
         if len(entries) == 0:
             return None
-        status = entries[0].attrib['Value']
+        status = entries[0].attrib["Value"]
         return status
 
     def is_valid(self, request_data, request_id=None, raise_exceptions=False):
@@ -81,55 +86,64 @@ class OneLogin_Saml2_Logout_Response(object):
         self.__error = None
         try:
             idp_data = self.__settings.get_idp_data()
-            idp_entity_id = idp_data['entityId']
-            get_data = request_data['get_data']
+            idp_entity_id = idp_data["entityId"]
+            get_data = request_data["get_data"]
 
             if self.__settings.is_strict():
-                res = OneLogin_Saml2_XML.validate_xml(self.document, 'saml-schema-protocol-2.0.xsd', self.__settings.is_debug_active())
+                res = OneLogin_Saml2_XML.validate_xml(
+                    self.document,
+                    "saml-schema-protocol-2.0.xsd",
+                    self.__settings.is_debug_active(),
+                )
                 if isinstance(res, str):
                     raise OneLogin_Saml2_ValidationError(
-                        'Invalid SAML Logout Request. Not match the saml-schema-protocol-2.0.xsd',
-                        OneLogin_Saml2_ValidationError.INVALID_XML_FORMAT
+                        "Invalid SAML Logout Request. Not match the saml-schema-protocol-2.0.xsd",
+                        OneLogin_Saml2_ValidationError.INVALID_XML_FORMAT,
                     )
 
                 security = self.__settings.get_security_data()
 
                 # Check if the InResponseTo of the Logout Response matches the ID of the Logout Request (requestId) if provided
                 in_response_to = self.get_in_response_to()
-                if request_id is not None and in_response_to and in_response_to != request_id:
+                if (
+                    request_id is not None
+                    and in_response_to
+                    and in_response_to != request_id
+                ):
                     raise OneLogin_Saml2_ValidationError(
-                        'The InResponseTo of the Logout Response: %s, does not match the ID of the Logout request sent by the SP: %s' % (in_response_to, request_id),
-                        OneLogin_Saml2_ValidationError.WRONG_INRESPONSETO
+                        "The InResponseTo of the Logout Response: %s, does not match the ID of the Logout request sent by the SP: %s"
+                        % (in_response_to, request_id),
+                        OneLogin_Saml2_ValidationError.WRONG_INRESPONSETO,
                     )
 
                 # Check issuer
                 issuer = self.get_issuer()
                 if issuer is not None and issuer != idp_entity_id:
                     raise OneLogin_Saml2_ValidationError(
-                        'Invalid issuer in the Logout Response (expected %(idpEntityId)s, got %(issuer)s)' %
-                        {
-                            'idpEntityId': idp_entity_id,
-                            'issuer': issuer
-                        },
-                        OneLogin_Saml2_ValidationError.WRONG_ISSUER
+                        "Invalid issuer in the Logout Response (expected %(idpEntityId)s, got %(issuer)s)"
+                        % {"idpEntityId": idp_entity_id, "issuer": issuer},
+                        OneLogin_Saml2_ValidationError.WRONG_ISSUER,
                     )
 
                 current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
 
                 # Check destination
-                destination = self.document.get('Destination', None)
+                destination = self.document.get("Destination", None)
                 if destination:
-                    if not OneLogin_Saml2_Utils.normalize_url(url=destination).startswith(OneLogin_Saml2_Utils.normalize_url(url=current_url)):
+                    if not OneLogin_Saml2_Utils.normalize_url(
+                        url=destination
+                    ).startswith(OneLogin_Saml2_Utils.normalize_url(url=current_url)):
                         raise OneLogin_Saml2_ValidationError(
-                            'The LogoutResponse was received at %s instead of %s' % (current_url, destination),
-                            OneLogin_Saml2_ValidationError.WRONG_DESTINATION
+                            "The LogoutResponse was received at %s instead of %s"
+                            % (current_url, destination),
+                            OneLogin_Saml2_ValidationError.WRONG_DESTINATION,
                         )
 
-                if security['wantMessagesSigned']:
-                    if 'Signature' not in get_data:
+                if security["wantMessagesSigned"]:
+                    if "Signature" not in get_data:
                         raise OneLogin_Saml2_ValidationError(
-                            'The Message of the Logout Response is not signed and the SP require it',
-                            OneLogin_Saml2_ValidationError.NO_SIGNED_MESSAGE
+                            "The Message of the Logout Response is not signed and the SP require it",
+                            OneLogin_Saml2_ValidationError.NO_SIGNED_MESSAGE,
                         )
             return True
         # pylint: disable=R0801
@@ -162,17 +176,18 @@ class OneLogin_Saml2_Logout_Response(object):
 
         self.id = self._generate_request_id()
 
-        issue_instant = OneLogin_Saml2_Utils.parse_time_to_SAML(OneLogin_Saml2_Utils.now())
+        issue_instant = OneLogin_Saml2_Utils.parse_time_to_SAML(
+            OneLogin_Saml2_Utils.now()
+        )
 
-        logout_response = OneLogin_Saml2_Templates.LOGOUT_RESPONSE % \
-            {
-                'id': self.id,
-                'issue_instant': issue_instant,
-                'destination': self.__settings.get_idp_slo_response_url(),
-                'in_response_to': in_response_to,
-                'entity_id': sp_data['entityId'],
-                'status': "urn:oasis:names:tc:SAML:2.0:status:Success"
-            }
+        logout_response = OneLogin_Saml2_Templates.LOGOUT_RESPONSE % {
+            "id": self.id,
+            "issue_instant": issue_instant,
+            "destination": self.__settings.get_idp_slo_response_url(),
+            "in_response_to": in_response_to,
+            "entity_id": sp_data["entityId"],
+            "status": "urn:oasis:names:tc:SAML:2.0:status:Success",
+        }
 
         self.__logout_response = logout_response
 
@@ -182,7 +197,7 @@ class OneLogin_Saml2_Logout_Response(object):
         :returns: ID of LogoutRequest this LogoutResponse is in response to or None if it is not present
         :rtype: str
         """
-        return self.document.get('InResponseTo')
+        return self.document.get("InResponseTo")
 
     def get_response(self, deflate=True):
         """
@@ -193,7 +208,9 @@ class OneLogin_Saml2_Logout_Response(object):
         :rtype: string
         """
         if deflate:
-            response = OneLogin_Saml2_Utils.deflate_and_base64_encode(self.__logout_response)
+            response = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+                self.__logout_response
+            )
         else:
             response = OneLogin_Saml2_Utils.b64encode(self.__logout_response)
         return response

@@ -1,28 +1,28 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Brightness7Icon from '@material-ui/icons/Brightness7';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import SearchIcon from '@material-ui/icons/Search';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Cookies from 'js-cookie';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import SearchIcon from "@material-ui/icons/Search";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Cookies from "js-cookie";
 
 function Navbar(props) {
-  // PROPS: 
-  // currentPage: Whether the page was "default" or "scheduler". "default" 
+  // PROPS:
+  // currentPage: Whether the page was "default" or "scheduler". "default"
   //              is for both the scheduler and the search and "scheduler"
   //              is for just the search section on the page
   // handleChange: A function to handle change from one page to another
@@ -37,22 +37,21 @@ function Navbar(props) {
     },
     title: {
       flexGrow: 1,
-      textAlign: "left"
+      textAlign: "left",
     },
     popover: {
-      pointerEvents: 'none',
+      pointerEvents: "none",
     },
     popoverText: {
       padding: theme.spacing(1),
-    }
+    },
   }));
   const classes = useStyles();
   const togglePage = () => {
     if (props.currentPage === "default") {
-      props.handleChange("scheduler")
-    }
-    else {
-      props.handleChange("default")
+      props.handleChange("scheduler");
+    } else {
+      props.handleChange("default");
     }
   };
   // For the side bar in mobile
@@ -66,18 +65,31 @@ function Navbar(props) {
   };
 
   const authLink = (event) => {
-    window.location.href = `http://127.0.0.1:8000/saml/?${Cookies.get('sessionid') === undefined ? "sso" : "slo"}`
+    window.location.href = `https://schedulebrewer.ml/saml/?${
+      Cookies.get("sessionid") === undefined ? "sso" : "slo"
+    }`;
   };
 
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        <Grid container display="flex" justify="space-between" alignItems="center">
-          <Box component={Grid} item display={{ xs: 'none', md: 'block' }}>
+        <Grid
+          container
+          display="flex"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Box component={Grid} item display={{ xs: "none", md: "block" }}>
             <Button
               color="inherit"
               onClick={togglePage}
-              startIcon={props.currentPage === "default" ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              startIcon={
+                props.currentPage === "default" ? (
+                  <VisibilityOffIcon />
+                ) : (
+                  <VisibilityIcon />
+                )
+              }
             >
               {props.currentPage === "default" ? "Hide Search" : "Show Search"}
             </Button>
@@ -88,11 +100,13 @@ function Navbar(props) {
               Schedule Brewer - Fall 2021
             </Typography>
           </Grid>
-          <Box component={Grid} item display={{ xs: 'none', sm: 'block' }}>
+          <Box component={Grid} item display={{ xs: "none", sm: "block" }}>
             <Box display="flex">
               <Box>
                 <Tooltip
-                  title={`Toggle ${props.prefersDarkMode ? "Light" : "Dark"} Mode`}
+                  title={`Toggle ${
+                    props.prefersDarkMode ? "Light" : "Dark"
+                  } Mode`}
                   arrow
                 >
                   <Button
@@ -100,14 +114,18 @@ function Navbar(props) {
                     aria-haspopup="true"
                     color="inherit"
                   >
-                    {props.prefersDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                    {props.prefersDarkMode ? (
+                      <Brightness7Icon />
+                    ) : (
+                      <Brightness4Icon />
+                    )}
                   </Button>
                 </Tooltip>
               </Box>
               <Box>
                 <Box
                   component={Button}
-                  display={{ sm: 'block', md: 'none' }}
+                  display={{ sm: "block", md: "none" }}
                   color="inherit"
                   onClick={togglePage}
                 >
@@ -116,12 +134,17 @@ function Navbar(props) {
               </Box>
               <Box>
                 <Button color="inherit" onClick={authLink}>
-                  {Cookies.get('sessionid') === undefined ? "Login" : "Logout"}
+                  {Cookies.get("sessionid") === undefined ? "Login" : "Logout"}
                 </Button>
               </Box>
             </Box>
           </Box>
-          <Box component={Grid} item display={{ xs: 'block', sm: 'none' }} color="secondary">
+          <Box
+            component={Grid}
+            item
+            display={{ xs: "block", sm: "none" }}
+            color="secondary"
+          >
             <IconButton
               aria-label="more"
               aria-controls="menu"
@@ -138,12 +161,14 @@ function Navbar(props) {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={() => {
-                handleClose()
-                togglePage()
-              }}>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  togglePage();
+                }}
+              >
                 {props.currentPage === "default" ? (
-                  <Box display='flex'>
+                  <Box display="flex">
                     <Box pr={1}>
                       <CalendarTodayIcon color="secondary" />
                     </Box>
@@ -152,7 +177,7 @@ function Navbar(props) {
                     </Box>
                   </Box>
                 ) : (
-                  <Box display='flex'>
+                  <Box display="flex">
                     <Box pr={1}>
                       <SearchIcon color="secondary" />
                     </Box>
@@ -162,12 +187,14 @@ function Navbar(props) {
                   </Box>
                 )}
               </MenuItem>
-              <MenuItem onClick={() => {
-                handleClose()
-                props.toggleTheme()
-              }}>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  props.toggleTheme();
+                }}
+              >
                 {props.prefersDarkMode ? (
-                  <Box display='flex'>
+                  <Box display="flex">
                     <Box pr={1}>
                       <Brightness7Icon color="secondary" />
                     </Box>
@@ -176,7 +203,7 @@ function Navbar(props) {
                     </Box>
                   </Box>
                 ) : (
-                  <Box display='flex'>
+                  <Box display="flex">
                     <Box pr={1}>
                       <Brightness4Icon color="secondary" />
                     </Box>
@@ -186,16 +213,20 @@ function Navbar(props) {
                   </Box>
                 )}
               </MenuItem>
-              <MenuItem onClick={() => {
-                authLink()
-              }}>
-                <Box display='flex'>
+              <MenuItem
+                onClick={() => {
+                  authLink();
+                }}
+              >
+                <Box display="flex">
                   <Box pr={1}>
                     <ExitToAppIcon color="secondary" />
                   </Box>
                   <Box>
                     <Typography color="secondary">
-                      {Cookies.get('sessionid') === undefined ? "Login" : "Logout"}
+                      {Cookies.get("sessionid") === undefined
+                        ? "Login"
+                        : "Logout"}
                     </Typography>
                   </Box>
                 </Box>
@@ -205,8 +236,7 @@ function Navbar(props) {
         </Grid>
       </Toolbar>
     </AppBar>
-  )
-};
-
+  );
+}
 
 export default Navbar;

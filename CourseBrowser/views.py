@@ -1,43 +1,36 @@
-from django.shortcuts import render
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.db.models import Q
-from rest_framework.pagination import PageNumberPagination
-from django.views.decorators.csrf import ensure_csrf_cookie
-from .models import CourseInfo, UserCourses
-from .serializers import *
+import logging
+
 from django.conf import settings
-from django.urls import reverse
+from django.core.cache import cache
+from django.db.models import Q
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseServerError, JsonResponse)
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 # from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
-import logging
+
+from .models import CourseInfo, UserCourses
+from .serializers import *
 
 logger = logging.getLogger(__file__)
 
 
 def index(request):
-    return render(request, 'CourseBrowser/index.html')
+    context = {"course_codes": cache.get("course_codes")}
+    return render(request, "CourseBrowser/index.html", context)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def search(request):
-    courseCodes = (
-        "AFRS", "AMCL", "AMST", "ANSO", "ANTH", "AFRS", "ART", "ARTH", "ARTS", 
-        "ASIA", "ASL", "ASTR", "BIOC", "BIOL", "BIPS", "CHEM", "CHIN", "CHJA", 
-        "CLAN", "CLAS", "CLGR", "CLLA", "CLCS", "CMPU", "COGS", "CREO", "DANC",
-        "DRAM", "ECON", "EDUC", "ENGL", "ENST", "ENVI", "ESCI", "ESSC", "FFS",
-        "FILM", "FREN", "GEAN", "GEOG", "GEOL", "GERM", "GREK", "GRST", "HEBR",
-        "HIND", "HISP", "HIST", "INDP", "INTD", "INTL", "IRSH", "ITAL", "JAPA",
-        "JWST", "ASIA", "LALS", "LAST", "LATI", "MATH", "MEDS", "MRST", "MSDP",
-        "MUSI", "NEUR", "PERS", "PHED", "PHIL", "PHYS", "POLI", "PORT", "PSYC",
-        "PSYC", "RELI", "RUSS", "SOCI", "STS", "SWAH", "SWED", "TURK", "URBS", 
-        "VICT", "WMST", "YIDD"
-    )
+    courseCodes = cache.get("course_codes")
     queriedCourses = CourseInfo.objects.filter(offered__exact=True)
     # <QueryDict: {'searchTerms': ['CMPU 102']}>
     for key, value in request.GET.items():
@@ -45,48 +38,52 @@ def search(request):
         if key == "searchTerms":
             terms = request.GET[key].upper().split()
             for term in terms:
-                if term in courseCodes: 
-                    queriedCourses = queriedCourses.filter(
-                        courseID__startswith=term)
-                elif term == "FR": 
+                if term in courseCodes:
+                    queriedCourses = queriedCourses.filter(courseID__startswith=term)
+                elif term == "FR":
                     queriedCourses = queriedCourses.filter(fr__exact=1)
-                elif term == "NR" or term == "NRO": 
+                elif term == "NR" or term == "NRO":
                     queriedCourses = queriedCourses.filter(gm__exact="NR")
-                elif term == "SU": 
+                elif term == "SU":
                     queriedCourses = queriedCourses.filter(gm__exact="SU")
-                elif term == "YL": 
+                elif term == "YL":
                     queriedCourses = queriedCourses.filter(yl__exact=1)
-                elif term == "QA": 
+                elif term == "QA":
                     queriedCourses = queriedCourses.filter(qa__exact=1)
-                elif term == "LA": 
+                elif term == "LA":
                     queriedCourses = queriedCourses.filter(la__exact=1)
-                elif term == "SP": 
+                elif term == "SP":
                     queriedCourses = queriedCourses.filter(sp__exact=1)
-                elif term == "CLS": 
+                elif term == "CLS":
                     queriedCourses = queriedCourses.filter(format__exact="CLS")
-                elif term == "INT": 
+                elif term == "INT":
                     queriedCourses = queriedCourses.filter(format__exact="INT")
-                elif term == "OTH": 
+                elif term == "OTH":
                     queriedCourses = queriedCourses.filter(format__exact="OTH")
                 elif term == "MON" or term == "MONDAY":
                     queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="M") | Q(d2__contains="M"))
+                        Q(d1__contains="M") | Q(d2__contains="M")
+                    )
                 elif term == "TUE" or term == "TUESDAY":
                     queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="T") | Q(d2__contains="T"))
+                        Q(d1__contains="T") | Q(d2__contains="T")
+                    )
                 elif term == "WED" or term == "WEDNESDAY":
                     queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="W") | Q(d2__contains="W"))
+                        Q(d1__contains="W") | Q(d2__contains="W")
+                    )
                 elif term == "THUR" or term == "THURS" or term == "THURSDAY":
                     queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="R") | Q(d2__contains="R"))
+                        Q(d1__contains="R") | Q(d2__contains="R")
+                    )
                 elif term == "FRI" or term == "FRIDAY":
                     queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="F") | Q(d2__contains="F"))
+                        Q(d1__contains="F") | Q(d2__contains="F")
+                    )
                 elif term == "0.5" or term == "1.0" or term == "1.5":
                     queriedCourses = queriedCourses.filter(units__exact=term)
                 else:
-                    if len(term)>0 and term[0]=="0":
+                    if len(term) > 0 and term[0] == "0":
                         term = term[1:]
                     queriedCourses = queriedCourses.filter(
                         Q(title__icontains=term)
@@ -95,31 +92,33 @@ def search(request):
                         | Q(starttime1__contains=term)
                         | Q(starttime2__contains=term)
                         | Q(description__icontains=term)
-                        | Q(courseID__icontains=term))
+                        | Q(courseID__icontains=term)
+                    )
         # Department select box
-        elif key=="department": 
+        elif key == "department":
             queriedCourses = queriedCourses.filter(courseID__startswith=value)
-        # Filters: 
-        elif key == "writingSem": 
+        # Filters:
+        elif key == "writingSem":
             queriedCourses = queriedCourses.filter(fr__exact=1)
-        elif key == "gradeOption": 
+        elif key == "gradeOption":
             queriedCourses = queriedCourses.filter(gm__exact=value)
-        elif key == "yearLong": 
+        elif key == "yearLong":
             queriedCourses = queriedCourses.filter(yl__exact=1)
-        elif key == "quant": 
+        elif key == "quant":
             queriedCourses = queriedCourses.filter(qa__exact=1)
-        elif key == "lang": 
+        elif key == "lang":
             queriedCourses = queriedCourses.filter(la__exact=1)
-        elif key == "specialPerm": 
+        elif key == "specialPerm":
             queriedCourses = queriedCourses.filter(sp__exact=1)
-        elif key == "courseFormat": 
+        elif key == "courseFormat":
             queriedCourses = queriedCourses.filter(format__exact=value)
-        elif key == "day": 
+        elif key == "day":
             queriedCourses = queriedCourses.filter(
-                Q(d1__contains=value) | Q(d2__contains=value))
-        elif key == "units": 
+                Q(d1__contains=value) | Q(d2__contains=value)
+            )
+        elif key == "units":
             queriedCourses = queriedCourses.filter(units__exact=value)
-    queriedCourses = queriedCourses.order_by('courseID')
+    queriedCourses = queriedCourses.order_by("courseID")
     paginator = PageNumberPagination()
     context = paginator.paginate_queryset(queriedCourses, request)
     serializer = CourseSerializer(context, many=True)
@@ -128,73 +127,80 @@ def search(request):
 
 class SavedCourses(APIView):
     attributes = False
-    username=""
+    username = ""
 
     # Get the username
     def getAttributes(self, request):
         # If user is logged in
-        if ('samlUserdata' in request.session):
-            if (len(request.session['samlUserdata']) > 0):
-                self.attributes = request.session['samlUserdata'].items()
-                self.username = request.session['samlUserdata']['UserName'][0]
-    
+        if "samlUserdata" in request.session:
+            if len(request.session["samlUserdata"]) > 0:
+                self.attributes = request.session["samlUserdata"].items()
+                self.username = request.session["samlUserdata"]["UserName"][0]
+
     # Get saved courses
     def get(self, request, format=None):
-        queriedCourses = CourseInfo.objects.filter(
-            usercourses__userID__exact="test").values(
-                "courseID", "title", "units", "format", "d1", "time1",
-                "starttime1", "endtime1", "duration1", "d2", "time2",
-                "starttime2", "endtime2", "duration2", "instructor",
-                "description", "offered")
-        serializer = SavedCoursesSerializer(
-            queriedCourses, context={'request': request}, many=True)
-        return Response(serializer.data)
-
-        # self.getAttributes(request)
-        # if self.attributes:
-        #     queriedCourses = CourseInfo.objects.filter(
-        #         usercourses__userID__exact=self.username).values(
-        #             "courseID", "title", "units", "format", "d1", "time1",
-        #             "starttime1", "endtime1", "duration1", "d2", "time2",
-        #             "starttime2", "endtime2", "duration2", "instructor",
-        #             "description", "offered")
-        #     serializer = SavedCoursesSerializer(
-        #         queriedCourses, context={'request': request}, many=True)
-        #     return Response(serializer.data)
-        # else:
-        #     return HttpResponse('Unauthorised', status=401)
+        self.getAttributes(request)
+        if self.attributes:
+            queriedCourses = CourseInfo.objects.filter(
+                usercourses__userID__exact=self.username
+            ).values(
+                "courseID",
+                "title",
+                "units",
+                "format",
+                "d1",
+                "time1",
+                "starttime1",
+                "endtime1",
+                "duration1",
+                "d2",
+                "time2",
+                "starttime2",
+                "endtime2",
+                "duration2",
+                "instructor",
+                "description",
+                "offered",
+            )
+            serializer = SavedCoursesSerializer(
+                queriedCourses, context={"request": request}, many=True
+            )
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Unauthorised", status=401)
 
     # Save new course to user profile
     def post(self, request, format=None):
         self.getAttributes(request)
         if self.attributes:
-            if request.method=="POST":
+            if request.method == "POST":
                 selectedCourse = request.POST
                 course = CourseInfo.objects.get(
-                    courseID__exact=selectedCourse["course"])
-                UserCourses.objects.create(
-                    userID=self.username, courseID=course)
+                    courseID__exact=selectedCourse["course"]
+                )
+                UserCourses.objects.create(userID=self.username, courseID=course)
                 return HttpResponse("Success")
         else:
-            return HttpResponse('Unauthorised', status=401)
+            return HttpResponse("Unauthorised", status=401)
 
     # Delete course from user profile
     def delete(self, request, pk, format=None):
         self.getAttributes(request)
         if self.attributes:
-            if request.method=="DELETE":
-                course=UserCourses.objects.filter(
-                    userID__exact=self.username).filter(courseID__exact=pk)
+            if request.method == "DELETE":
+                course = UserCourses.objects.filter(userID__exact=self.username).filter(
+                    courseID__exact=pk
+                )
                 course.delete()
                 return HttpResponse("Success")
         else:
-            return HttpResponse('Unauthorised', status=401)
+            return HttpResponse("Unauthorised", status=401)
 
 
 # Save a new csrf cookie to the client
 @ensure_csrf_cookie
 def getCSRFCookie(request):
-    return JsonResponse({'Success': 'CSRF Cookie set'}, status=200)
+    return JsonResponse({"Success": "CSRF Cookie set"}, status=200)
 
 
 def init_saml_auth(req):
@@ -206,14 +212,14 @@ def init_saml_auth(req):
 def prepare_django_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     result = {
-        'https': 'on',
-        'http_host': 'schedulebrewer.ml',
-        'script_name': request.META['PATH_INFO'],
-        'server_port': '443',
-        'get_data': request.GET.copy(),
+        "https": "on",
+        "http_host": "schedulebrewer.ml",
+        "script_name": request.META["PATH_INFO"],
+        "server_port": "443",
+        "get_data": request.GET.copy(),
         # Uncomment if using ADFS as IdP, https://github.com/onelogin/python-saml/pull/144
         # 'lowercase_urlencoding': True,
-        'post_data': request.POST.copy()
+        "post_data": request.POST.copy(),
     }
     return result
 
@@ -229,72 +235,95 @@ def saml_index(request):
     attributes = False
     paint_logout = False
 
-    if 'sso' in req['get_data']:
-        return HttpResponseRedirect(auth.login(return_to='http://127.0.0.1:8000'))
+    if "sso" in req["get_data"]:
+        return HttpResponseRedirect(auth.login(return_to="https://schedulebrewer.ml"))
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
         # return HttpResponseRedirect(sso_built_url)
-    elif 'sso2' in req['get_data']:
-        return_to = OneLogin_Saml2_Utils.get_self_url(req) + reverse('attrs')
+    elif "sso2" in req["get_data"]:
+        return_to = OneLogin_Saml2_Utils.get_self_url(req) + reverse("attrs")
         return HttpResponseRedirect(auth.login(return_to))
-    elif 'slo' in req['get_data']:
+    elif "slo" in req["get_data"]:
         name_id = session_index = name_id_format = name_id_nq = name_id_spnq = None
-        if 'samlNameId' in request.session:
-            name_id = request.session['samlNameId']
-        if 'samlSessionIndex' in request.session:
-            session_index = request.session['samlSessionIndex']
-        if 'samlNameIdFormat' in request.session:
-            name_id_format = request.session['samlNameIdFormat']
-        if 'samlNameIdNameQualifier' in request.session:
-            name_id_nq = request.session['samlNameIdNameQualifier']
-        if 'samlNameIdSPNameQualifier' in request.session:
-            name_id_spnq = request.session['samlNameIdSPNameQualifier']
-        return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index, nq=name_id_nq, name_id_format=name_id_format, spnq=name_id_spnq, return_to='http://127.0.0.1:8000'))
+        if "samlNameId" in request.session:
+            name_id = request.session["samlNameId"]
+        if "samlSessionIndex" in request.session:
+            session_index = request.session["samlSessionIndex"]
+        if "samlNameIdFormat" in request.session:
+            name_id_format = request.session["samlNameIdFormat"]
+        if "samlNameIdNameQualifier" in request.session:
+            name_id_nq = request.session["samlNameIdNameQualifier"]
+        if "samlNameIdSPNameQualifier" in request.session:
+            name_id_spnq = request.session["samlNameIdSPNameQualifier"]
+        return HttpResponseRedirect(
+            auth.logout(
+                name_id=name_id,
+                session_index=session_index,
+                nq=name_id_nq,
+                name_id_format=name_id_format,
+                spnq=name_id_spnq,
+                return_to="https://schedulebrewer.ml",
+            )
+        )
         # If LogoutRequest ID need to be stored in order to later validate it, do instead
         # slo_built_url = auth.logout(name_id=name_id, session_index=session_index)
         # request.session['LogoutRequestID'] = auth.get_last_request_id()
         # return HttpResponseRedirect(slo_built_url)
-    elif 'acs' in req['get_data']:
+    elif "acs" in req["get_data"]:
         request_id = None
-        if 'AuthNRequestID' in request.session:
-            request_id = request.session['AuthNRequestID']
+        if "AuthNRequestID" in request.session:
+            request_id = request.session["AuthNRequestID"]
 
         auth.process_response(request_id=request_id)
         errors = auth.get_errors()
         not_auth_warn = not auth.is_authenticated()
 
         if not errors:
-            if 'AuthNRequestID' in request.session:
-                del request.session['AuthNRequestID']
-            request.session['samlUserdata'] = auth.get_attributes()
-            request.session['samlNameId'] = auth.get_nameid()
-            request.session['samlNameIdFormat'] = auth.get_nameid_format()
-            request.session['samlNameIdNameQualifier'] = auth.get_nameid_nq()
-            request.session['samlNameIdSPNameQualifier'] = auth.get_nameid_spnq()
-            request.session['samlSessionIndex'] = auth.get_session_index()
-            if 'RelayState' in req['post_data']:
-                return HttpResponseRedirect(auth.redirect_to(req['post_data']['RelayState']))
+            if "AuthNRequestID" in request.session:
+                del request.session["AuthNRequestID"]
+            request.session["samlUserdata"] = auth.get_attributes()
+            request.session["samlNameId"] = auth.get_nameid()
+            request.session["samlNameIdFormat"] = auth.get_nameid_format()
+            request.session["samlNameIdNameQualifier"] = auth.get_nameid_nq()
+            request.session["samlNameIdSPNameQualifier"] = auth.get_nameid_spnq()
+            request.session["samlSessionIndex"] = auth.get_session_index()
+            if "RelayState" in req["post_data"]:
+                return HttpResponseRedirect(
+                    auth.redirect_to(req["post_data"]["RelayState"])
+                )
         elif auth.get_settings().is_debug_active():
             error_reason = auth.get_last_error_reason()
-    elif 'sls' in req['get_data']:
+    elif "sls" in req["get_data"]:
         request_id = None
-        if 'LogoutRequestID' in request.session:
-            request_id = request.session['LogoutRequestID']
+        if "LogoutRequestID" in request.session:
+            request_id = request.session["LogoutRequestID"]
         dscb = lambda: request.session.flush()
         url = auth.process_slo(request_id=request_id, delete_session_cb=dscb)
         errors = auth.get_errors()
         if len(errors) == 0:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect("/")
         elif auth.get_settings().is_debug_active():
             error_reason = auth.get_last_error_reason()
 
-    if 'samlUserdata' in request.session:
+    if "samlUserdata" in request.session:
         paint_logout = True
-        if len(request.session['samlUserdata']) > 0:
-            attributes = request.session['samlUserdata'].items()
+        if len(request.session["samlUserdata"]) > 0:
+            attributes = request.session["samlUserdata"].items()
 
-    return render(request, 'samlTemplate/index.html', {'errors': errors, 'error_reason': error_reason, 'not_auth_warn': not_auth_warn, 'success_slo': success_slo, 'attributes': attributes, 'paint_logout': paint_logout})
+    return render(
+        request,
+        "samlTemplate/index.html",
+        {
+            "errors": errors,
+            "error_reason": error_reason,
+            "not_auth_warn": not_auth_warn,
+            "success_slo": success_slo,
+            "attributes": attributes,
+            "paint_logout": paint_logout,
+        },
+    )
+
 
 # def attrs(request):
 #     paint_logout = False

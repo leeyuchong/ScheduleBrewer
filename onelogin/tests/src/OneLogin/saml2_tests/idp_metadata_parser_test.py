@@ -8,14 +8,15 @@ try:
 except ImportError:
     from urllib2 import URLError
 
-from copy import deepcopy
 import json
-from os.path import dirname, join, exists
-from lxml.etree import XMLSyntaxError
 import unittest
+from copy import deepcopy
+from os.path import dirname, exists, join
 
-from onelogin.saml2.idp_metadata_parser import OneLogin_Saml2_IdPMetadataParser
+from lxml.etree import XMLSyntaxError
+
 from onelogin.saml2.constants import OneLogin_Saml2_Constants
+from onelogin.saml2.idp_metadata_parser import OneLogin_Saml2_IdPMetadataParser
 
 
 class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
@@ -24,21 +25,21 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
     # Set self.maxDiff to None to see it." from showing up.
     maxDiff = None
 
-    data_path = join(dirname(dirname(dirname(dirname(__file__)))), 'data')
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), 'settings')
+    data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
+    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
 
-    def loadSettingsJSON(self, filename='settings1.json'):
+    def loadSettingsJSON(self, filename="settings1.json"):
         filename = join(self.settings_path, filename)
         if exists(filename):
-            stream = open(filename, 'r')
+            stream = open(filename, "r")
             settings = json.load(stream)
             stream.close()
             return settings
         else:
-            raise Exception('Settings json file does not exist')
+            raise Exception("Settings json file does not exist")
 
     def file_contents(self, filename):
-        f = open(filename, 'r')
+        f = open(filename, "r")
         content = f.read()
         f.close()
         return content
@@ -48,10 +49,12 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Tests the get_metadata method of the OneLogin_Saml2_IdPMetadataParser
         """
         with self.assertRaises(Exception):
-            data = OneLogin_Saml2_IdPMetadataParser.get_metadata('http://google.es')
+            data = OneLogin_Saml2_IdPMetadataParser.get_metadata("http://google.es")
 
         try:
-            data = OneLogin_Saml2_IdPMetadataParser.get_metadata('https://idp.testshib.org/idp/shibboleth')
+            data = OneLogin_Saml2_IdPMetadataParser.get_metadata(
+                "https://idp.testshib.org/idp/shibboleth"
+            )
             self.assertTrue(data is not None and data is not {})
         except URLError:
             pass
@@ -61,12 +64,16 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Tests the parse_remote method of the OneLogin_Saml2_IdPMetadataParser
         """
         with self.assertRaises(Exception):
-            data = OneLogin_Saml2_IdPMetadataParser.parse_remote('http://google.es')
+            data = OneLogin_Saml2_IdPMetadataParser.parse_remote("http://google.es")
 
         try:
-            data = OneLogin_Saml2_IdPMetadataParser.parse_remote('https://idp.testshib.org/idp/shibboleth')
+            data = OneLogin_Saml2_IdPMetadataParser.parse_remote(
+                "https://idp.testshib.org/idp/shibboleth"
+            )
         except URLError:
-            xml = self.file_contents(join(self.data_path, 'metadata', 'testshib-providers.xml'))
+            xml = self.file_contents(
+                join(self.data_path, "metadata", "testshib-providers.xml")
+            )
             data = OneLogin_Saml2_IdPMetadataParser.parse(xml)
 
         self.assertTrue(data is not None and data is not {})
@@ -93,13 +100,17 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Tests the parse method of the OneLogin_Saml2_IdPMetadataParser
         """
         with self.assertRaises(XMLSyntaxError):
-            data = OneLogin_Saml2_IdPMetadataParser.parse('')
+            data = OneLogin_Saml2_IdPMetadataParser.parse("")
 
-        xml_sp_metadata = self.file_contents(join(self.data_path, 'metadata', 'metadata_settings1.xml'))
+        xml_sp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "metadata_settings1.xml")
+        )
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_sp_metadata)
         self.assertEqual({}, data)
 
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata.xml")
+        )
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
 
         # W/o further specification, expect to get the redirect binding SSO
@@ -148,16 +159,18 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         """
         try:
             xmldoc = OneLogin_Saml2_IdPMetadataParser.get_metadata(
-                'https://idp.testshib.org/idp/shibboleth')
+                "https://idp.testshib.org/idp/shibboleth"
+            )
         except URLError:
-            xmldoc = self.file_contents(join(self.data_path, 'metadata', 'testshib-providers.xml'))
+            xmldoc = self.file_contents(
+                join(self.data_path, "metadata", "testshib-providers.xml")
+            )
 
         # Parse, require SSO REDIRECT binding, implicitly.
         settings1 = OneLogin_Saml2_IdPMetadataParser.parse(xmldoc)
         # Parse, require SSO REDIRECT binding, explicitly.
         settings2 = OneLogin_Saml2_IdPMetadataParser.parse(
-            xmldoc,
-            required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT
+            xmldoc, required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT
         )
         expected_settings = json.loads(expected_settings_json)
         self.assertEqual(expected_settings, settings1)
@@ -186,14 +199,16 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         """
         try:
             xmldoc = OneLogin_Saml2_IdPMetadataParser.get_metadata(
-                'https://idp.testshib.org/idp/shibboleth')
+                "https://idp.testshib.org/idp/shibboleth"
+            )
         except URLError:
-            xmldoc = self.file_contents(join(self.data_path, 'metadata', 'testshib-providers.xml'))
+            xmldoc = self.file_contents(
+                join(self.data_path, "metadata", "testshib-providers.xml")
+            )
 
         # Parse, require POST binding.
         settings = OneLogin_Saml2_IdPMetadataParser.parse(
-            xmldoc,
-            required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
+            xmldoc, required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
         )
         expected_settings = json.loads(expected_settings_json)
         self.assertEqual(expected_settings, settings)
@@ -225,7 +240,9 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
           }
         }
         """
-        xmldoc = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata2.xml'))
+        xmldoc = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata2.xml")
+        )
 
         expected_settings = json.loads(expected_settings_json)
 
@@ -236,7 +253,7 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         settings2 = OneLogin_Saml2_IdPMetadataParser.parse(
             xmldoc,
             required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT,
-            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT
+            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT,
         )
         expected_settings1_2 = deepcopy(expected_settings)
         self.assertEqual(expected_settings1_2, settings1)
@@ -245,39 +262,37 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         settings3 = OneLogin_Saml2_IdPMetadataParser.parse(
             xmldoc,
             required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST,
-            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
+            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST,
         )
 
         expected_settings3 = deepcopy(expected_settings)
-        del expected_settings3['idp']['singleLogoutService']
-        del expected_settings3['idp']['singleSignOnService']
+        del expected_settings3["idp"]["singleLogoutService"]
+        del expected_settings3["idp"]["singleSignOnService"]
         self.assertEqual(expected_settings3, settings3)
 
         settings4 = OneLogin_Saml2_IdPMetadataParser.parse(
             xmldoc,
             required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST,
-            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT
+            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT,
         )
         settings5 = OneLogin_Saml2_IdPMetadataParser.parse(
-            xmldoc,
-            required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
+            xmldoc, required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
         )
         expected_settings4_5 = deepcopy(expected_settings)
-        del expected_settings4_5['idp']['singleSignOnService']
+        del expected_settings4_5["idp"]["singleSignOnService"]
         self.assertEqual(expected_settings4_5, settings4)
         self.assertEqual(expected_settings4_5, settings5)
 
         settings6 = OneLogin_Saml2_IdPMetadataParser.parse(
             xmldoc,
             required_sso_binding=OneLogin_Saml2_Constants.BINDING_HTTP_REDIRECT,
-            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
+            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST,
         )
         settings7 = OneLogin_Saml2_IdPMetadataParser.parse(
-            xmldoc,
-            required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
+            xmldoc, required_slo_binding=OneLogin_Saml2_Constants.BINDING_HTTP_POST
         )
         expected_settings6_7 = deepcopy(expected_settings)
-        del expected_settings6_7['idp']['singleLogoutService']
+        del expected_settings6_7["idp"]["singleLogoutService"]
         self.assertEqual(expected_settings6_7, settings6)
         self.assertEqual(expected_settings6_7, settings7)
 
@@ -287,15 +302,23 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Case: Provide entity_id to identify the desired IdPDescriptor from
               EntitiesDescriptor
         """
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_multiple_descriptors.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "idp_multiple_descriptors.xml")
+        )
 
         # should find first descriptor
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
-        self.assertEqual("https://foo.example.com/access/saml/idp.xml", data["idp"]["entityId"])
+        self.assertEqual(
+            "https://foo.example.com/access/saml/idp.xml", data["idp"]["entityId"]
+        )
 
         # should find desired descriptor
-        data2 = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata, entity_id="https://bar.example.com/access/saml/idp.xml")
-        self.assertEqual("https://bar.example.com/access/saml/idp.xml", data2["idp"]["entityId"])
+        data2 = OneLogin_Saml2_IdPMetadataParser.parse(
+            xml_idp_metadata, entity_id="https://bar.example.com/access/saml/idp.xml"
+        )
+        self.assertEqual(
+            "https://bar.example.com/access/saml/idp.xml", data2["idp"]["entityId"]
+        )
 
         expected_settings_json = """
         {
@@ -324,7 +347,9 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Tests the parse method of the OneLogin_Saml2_IdPMetadataParser
         Case: IdP metadata contains multiple certs
         """
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata_multi_certs.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata_multi_certs.xml")
+        )
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
 
         expected_settings_json = """
@@ -362,7 +387,9 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Tests the parse method of the OneLogin_Saml2_IdPMetadataParser
         Case: IdP metadata contains multiple signing certs and no encryption certs
         """
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata_multi_signing_certs.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata_multi_signing_certs.xml")
+        )
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
 
         expected_settings_json = """
@@ -399,7 +426,13 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         Case: IdP metadata contains multiple signature cert and encrypt cert
               that is the same
         """
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata_same_sign_and_encrypt_cert.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(
+                self.data_path,
+                "metadata",
+                "idp_metadata_same_sign_and_encrypt_cert.xml",
+            )
+        )
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
 
         expected_settings_json = """
@@ -420,7 +453,13 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         expected_settings = json.loads(expected_settings_json)
         self.assertEqual(expected_settings, data)
 
-        xml_idp_metadata_2 = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata_different_sign_and_encrypt_cert.xml'))
+        xml_idp_metadata_2 = self.file_contents(
+            join(
+                self.data_path,
+                "metadata",
+                "idp_metadata_different_sign_and_encrypt_cert.xml",
+            )
+        )
         data_2 = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata_2)
         expected_settings_json_2 = """
         {
@@ -457,7 +496,9 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         with self.assertRaises(TypeError):
             settings_result = OneLogin_Saml2_IdPMetadataParser.merge_settings({}, None)
 
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata.xml")
+        )
 
         # Parse XML metadata.
         data = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
@@ -468,7 +509,9 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         # Merge settings from XML metadata into base settings,
         # let XML metadata have priority if there are conflicting
         # attributes.
-        settings_result = OneLogin_Saml2_IdPMetadataParser.merge_settings(settings, data)
+        settings_result = OneLogin_Saml2_IdPMetadataParser.merge_settings(
+            settings, data
+        )
 
         # Generate readable JSON representation:
         # print("%s" % json.dumps(settings_result, indent=2)
@@ -528,7 +571,9 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
 
         # Commute merge operation. As the order determines which settings
         # dictionary has priority, here we expect a different result.
-        settings_result2 = OneLogin_Saml2_IdPMetadataParser.merge_settings(data, settings)
+        settings_result2 = OneLogin_Saml2_IdPMetadataParser.merge_settings(
+            data, settings
+        )
         expected_settings2_json = """
         {
           "debug": false,
@@ -583,9 +628,13 @@ class OneLogin_Saml2_IdPMetadataParser_Test(unittest.TestCase):
         self.assertEqual(expected_settings2, settings_result2)
 
         # Test merging multiple certs
-        xml_idp_metadata = self.file_contents(join(self.data_path, 'metadata', 'idp_metadata_multi_certs.xml'))
+        xml_idp_metadata = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata_multi_certs.xml")
+        )
         data3 = OneLogin_Saml2_IdPMetadataParser.parse(xml_idp_metadata)
-        settings_result3 = OneLogin_Saml2_IdPMetadataParser.merge_settings(settings, data3)
+        settings_result3 = OneLogin_Saml2_IdPMetadataParser.merge_settings(
+            settings, data3
+        )
         expected_settings3_json = """
         {
           "debug": false,

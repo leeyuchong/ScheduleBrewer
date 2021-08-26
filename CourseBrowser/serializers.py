@@ -1,9 +1,9 @@
-from rest_framework import serializers
-from rest_framework import pagination
+from rest_framework import pagination, serializers
+
 from .models import CourseInfo
 
-class CourseSerializer(serializers.ModelSerializer):
 
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseInfo
         fields = (
@@ -41,18 +41,19 @@ class CourseSerializer(serializers.ModelSerializer):
             "offered",
         )
 
+
 class SavedCoursesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseInfo
         fields = (
-            "courseID", 
-            "title", 
-            "units", 
-            "format", 
+            "courseID",
+            "title",
+            "units",
+            "format",
             "d1",
             "time1",
             "starttime1",
-            "endtime1", 
+            "endtime1",
             "duration1",
             "d2",
             "time2",

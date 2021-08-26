@@ -4,6 +4,7 @@
 # MIT License
 
 import unittest
+
 from onelogin.saml2.errors import OneLogin_Saml2_Error
 
 
@@ -13,5 +14,5 @@ class OneLogin_Saml2_Error_Test(unittest.TestCase):
     """
 
     def runTest(self):
-        exception = OneLogin_Saml2_Error('test')
-        self.assertEqual(str(exception), 'test')
+        exception = OneLogin_Saml2_Error("test")
+        self.assertEqual(str(exception), "test")

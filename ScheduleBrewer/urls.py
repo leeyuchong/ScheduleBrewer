@@ -15,17 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+
 from CourseBrowser import views
 
 urlpatterns = [
-    path('', views.index),
-    path('admin/', admin.site.urls),
-    path('api/search/', views.search),
-    path('api/get-saved-courses', views.SavedCourses.as_view()),
-    path('api/save-course', views.SavedCourses.as_view()),
-    re_path(r'^api/delete-course/(?P<pk>[a-zA-Z]+-[0-9]+-[0-9]+)/$', views.SavedCourses.as_view()),
-    path('getCSRF/', views.getCSRFCookie),
-    re_path(r'^saml/$', views.saml_index, name='saml_index'),
+    path("", views.index),
+    path("admin/", admin.site.urls),
+    path("api/search/", views.search),
+    path("api/get-saved-courses", views.SavedCourses.as_view()),
+    path("api/save-course", views.SavedCourses.as_view()),
+    re_path(
+        r"^api/delete-course/(?P<pk>[a-zA-Z]+-[0-9]+-[0-9]+)/$",
+        views.SavedCourses.as_view(),
+    ),
+    path("getCSRF/", views.getCSRFCookie),
+    re_path(r"^saml/$", views.saml_index, name="saml_index"),
     # re_path(r'^attrs/$', views.attrs, name='attrs'),
     # re_path(r'^metadata/$', views.metadata, name='metadata')
 ]

@@ -13,9 +13,11 @@ ScheduleBrewer is a tool to help visualize various class schedules in preparatio
 ## Installation
 To run ScheduleBrewer, clone this repository and install the dependencies: 
 **Python Dependencies**
+This app was built and tested using Python 3.9.6.
 Install the python dependencies from the `requirements.txt` file. After activating your [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/), in the same directory as the `requirements.txt` file, run the command `pip install -r requirements.txt`
 
 **Node Dependencies**
+This app was built and tested using Node v16.5.0. 
 Install the Node dependencies from the `package-lock.json` file. In the same directory as the `package-lock.json` file, run the command `npm install`
 
 ## Files
@@ -99,7 +101,7 @@ The `.env` file, and `/node_modules` and `/saml` folders are necessary but are n
 2. Copy the three files from `/ScheduleBrewer/CourseBrowser/static/CourseBrowser/` to `/ScheduleBrewer/static/CourseBrowser/`
 3. Ensure that the file `webpack-stats.json` is updated
 4. Run the following commands to restart the NGINX server: 
-    sudo systemctl daemon-reload
-    sudo systemctl restart gunicorn
-    sudo systemctl restart nginx
+    `sudo systemctl daemon-reload`
+    `sudo systemctl restart gunicorn`
+    `sudo systemctl restart nginx`
 

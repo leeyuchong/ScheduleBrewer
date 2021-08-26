@@ -9,19 +9,20 @@ Auxiliary class of OneLogin's Python Toolkit.
 
 """
 
-from os.path import join, dirname
+from os.path import dirname, join
+
 from lxml import etree
+
 from onelogin.saml2 import compat
 from onelogin.saml2.constants import OneLogin_Saml2_Constants
-from onelogin.saml2.xmlparser import tostring, fromstring
-
+from onelogin.saml2.xmlparser import fromstring, tostring
 
 for prefix, url in OneLogin_Saml2_Constants.NSMAP.items():
     etree.register_namespace(prefix, url)
 
 
 class OneLogin_Saml2_XML(object):
-    _element_class = type(etree.Element('root'))
+    _element_class = type(etree.Element("root"))
     _parse_etree = staticmethod(fromstring)
     _schema_class = etree.XMLSchema
     _text_class = compat.text_types
@@ -63,11 +64,15 @@ class OneLogin_Saml2_XML(object):
         if isinstance(xml, OneLogin_Saml2_XML._element_class):
             return xml
         if isinstance(xml, OneLogin_Saml2_XML._bytes_class):
-            return OneLogin_Saml2_XML._parse_etree(xml, forbid_dtd=True, forbid_entities=True)
+            return OneLogin_Saml2_XML._parse_etree(
+                xml, forbid_dtd=True, forbid_entities=True
+            )
         if isinstance(xml, OneLogin_Saml2_XML._text_class):
-            return OneLogin_Saml2_XML._parse_etree(compat.to_bytes(xml), forbid_dtd=True, forbid_entities=True)
+            return OneLogin_Saml2_XML._parse_etree(
+                compat.to_bytes(xml), forbid_dtd=True, forbid_entities=True
+            )
 
-        raise ValueError('unsupported type %r' % type(xml))
+        raise ValueError("unsupported type %r" % type(xml))
 
     @staticmethod
     def validate_xml(xml, schema, debug=False):
@@ -89,18 +94,18 @@ class OneLogin_Saml2_XML(object):
         except Exception as e:
             if debug:
                 print(e)
-            return 'unloaded_xml'
+            return "unloaded_xml"
 
-        schema_file = join(dirname(__file__), 'schemas', schema)
-        with open(schema_file, 'r') as f_schema:
+        schema_file = join(dirname(__file__), "schemas", schema)
+        with open(schema_file, "r") as f_schema:
             xmlschema = OneLogin_Saml2_XML._schema_class(etree.parse(f_schema))
 
         if not xmlschema.validate(xml):
             if debug:
-                print('Errors validating the metadata: ')
+                print("Errors validating the metadata: ")
                 for error in xmlschema.error_log:
                     print(error.message)
-            return 'invalid_xml'
+            return "invalid_xml"
         return xml
 
     @staticmethod
@@ -131,7 +136,9 @@ class OneLogin_Saml2_XML(object):
         if tagid is None:
             return source.xpath(query, namespaces=OneLogin_Saml2_Constants.NSMAP)
         else:
-            return source.xpath(query, tagid=tagid, namespaces=OneLogin_Saml2_Constants.NSMAP)
+            return source.xpath(
+                query, tagid=tagid, namespaces=OneLogin_Saml2_Constants.NSMAP
+            )
 
     @staticmethod
     def cleanup_namespaces(tree_or_element, top_nsmap=None, keep_ns_prefixes=None):
@@ -149,13 +156,17 @@ class OneLogin_Saml2_XML(object):
         all_prefixes_to_keep = [
             OneLogin_Saml2_Constants.NS_PREFIX_XS,
             OneLogin_Saml2_Constants.NS_PREFIX_XSI,
-            OneLogin_Saml2_Constants.NS_PREFIX_XSD
+            OneLogin_Saml2_Constants.NS_PREFIX_XSD,
         ]
 
         if keep_ns_prefixes:
-            all_prefixes_to_keep = list(set(all_prefixes_to_keep.extend(keep_ns_prefixes)))
+            all_prefixes_to_keep = list(
+                set(all_prefixes_to_keep.extend(keep_ns_prefixes))
+            )
 
-        return etree.cleanup_namespaces(tree_or_element, keep_ns_prefixes=all_prefixes_to_keep)
+        return etree.cleanup_namespaces(
+            tree_or_element, keep_ns_prefixes=all_prefixes_to_keep
+        )
 
     @staticmethod
     def extract_tag_text(xml, tagname):

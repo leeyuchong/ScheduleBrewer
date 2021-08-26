@@ -20,26 +20,27 @@ except NameError:
     unicode = str
 
 
-if isinstance(b'', type('')):  # py 2.x
+if isinstance(b"", type("")):  # py 2.x
     text_types = (basestring,)  # noqa
     bytes_type = bytes
     str_type = basestring  # noqa
 
     def utf8(data):
-        """  return utf8-encoded string """
+        """return utf8-encoded string"""
         if isinstance(data, basestring):
             return data.decode("utf8")
         return unicode(data)
 
     def to_string(data):
-        """ return string """
+        """return string"""
         if isinstance(data, unicode):
             return data.encode("utf8")
         return str(data)
 
     def to_bytes(data):
-        """ return bytes """
+        """return bytes"""
         return str(data)
+
 
 else:  # py 3.x
     text_types = (bytes, str)
@@ -47,7 +48,7 @@ else:  # py 3.x
     str_type = str
 
     def utf8(data):
-        """ return utf8-encoded string """
+        """return utf8-encoded string"""
         if isinstance(data, bytes):
             return data.decode("utf8")
         return str(data)

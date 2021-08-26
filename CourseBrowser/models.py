@@ -2,14 +2,14 @@ from django.db import models
 
 
 class CourseInfo(models.Model):
-    courseID = models.CharField(max_length=12, primary_key=True) 
+    courseID = models.CharField(max_length=12, primary_key=True)
     title = models.CharField(max_length=50)
     units = models.DecimalField(max_digits=2, decimal_places=1)
     sp = models.IntegerField()
     requests = models.PositiveSmallIntegerField(blank=True, null=True)
     limits = models.CharField(max_length=20, blank=True, null=True)
     offered = models.BooleanField(default=True)
-    max_enr = models.PositiveSmallIntegerField(db_column='Max')
+    max_enr = models.PositiveSmallIntegerField(db_column="Max")
     enr = models.PositiveSmallIntegerField()
     avl = models.SmallIntegerField()
     wl = models.PositiveSmallIntegerField()
@@ -19,7 +19,7 @@ class CourseInfo(models.Model):
     fr = models.IntegerField()
     la = models.IntegerField()
     qa = models.IntegerField()
-    format = models.CharField(db_column='Format', max_length=3)  
+    format = models.CharField(db_column="Format", max_length=3)
     xlist = models.CharField(max_length=20)
     d1 = models.CharField(max_length=5)
     time1 = models.CharField(max_length=15)
@@ -44,15 +44,14 @@ class UserCourses(models.Model):
     id = models.AutoField(primary_key=True)
     userID = models.CharField(max_length=12, db_index=True)
     courseID = models.ForeignKey(
-        CourseInfo,
-        on_delete=models.CASCADE,
-        db_column="courseID"
+        CourseInfo, on_delete=models.CASCADE, db_column="courseID"
     )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["userID", "courseID"], name="unique_pairing")
+                fields=["userID", "courseID"], name="unique_pairing"
+            )
         ]
         managed = True
         db_table = "UserCourses"

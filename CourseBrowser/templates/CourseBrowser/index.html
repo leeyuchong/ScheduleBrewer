@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="http://127.0.0.1:8000" />
+  <meta property="og:url" content="https://schedulebrewer.ml" />
   <meta property="og:title" content="Schedule Brewer: Fall 2021" />
   <meta property="og:description" content="ScheduleBrewer is a tool to help visualize various class schedules in preparation for pre-registration." />
   <title>Schedule Brewer: Fall 2021</title>
@@ -19,11 +19,10 @@
     gtag('js', new Date());
     gtag('config', 'G-0GP7CHXF2W');
   </script>
+  {{ course_codes|json_script:"course_codes" }}
 </head>
 <body>
-  <div id="root">
-    <!-- <span>We apologize for the inconvenience. This application is under maintenance. We have indentified an issue with the displaying of Cancelled Courses. Until the issue is resolved, Please use the AskBanner Schedule of Classes to plan your Fall Schedule.</span> -->
-  </div>
+  <div id="root"></div>
   {% render_bundle 'CourseBrowser' %}
 </body>
 </html>

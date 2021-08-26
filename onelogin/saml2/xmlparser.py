@@ -7,13 +7,12 @@
 # See https://www.python.org/psf/license for licensing details.
 """lxml.etree protection"""
 
-from __future__ import print_function, absolute_import
+from __future__ import absolute_import, print_function
 
 import threading
 
-from lxml import etree as _etree
-
 from defusedxml.lxml import DTDForbidden, EntitiesForbidden, NotSupportedError
+from lxml import etree as _etree
 
 LXML3 = _etree.LXML_VERSION[0] >= 3
 
@@ -23,8 +22,7 @@ tostring = _etree.tostring
 
 
 class RestrictedElement(_etree.ElementBase):
-    """A restricted Element class that filters out instances of some classes
-    """
+    """A restricted Element class that filters out instances of some classes"""
 
     __slots__ = ()
     blacklist = (_etree._Entity, _etree._ProcessingInstruction, _etree._Comment)
@@ -41,7 +39,9 @@ class RestrictedElement(_etree.ElementBase):
         return self._filter(iterator)
 
     def iterchildren(self, tag=None, reversed=False):
-        iterator = super(RestrictedElement, self).iterchildren(tag=tag, reversed=reversed)
+        iterator = super(RestrictedElement, self).iterchildren(
+            tag=tag, reversed=reversed
+        )
         return self._filter(iterator)
 
     def iter(self, tag=None, *tags):
@@ -53,7 +53,9 @@ class RestrictedElement(_etree.ElementBase):
         return self._filter(iterator)
 
     def itersiblings(self, tag=None, preceding=False):
-        iterator = super(RestrictedElement, self).itersiblings(tag=tag, preceding=preceding)
+        iterator = super(RestrictedElement, self).itersiblings(
+            tag=tag, preceding=preceding
+        )
         return self._filter(iterator)
 
     def getchildren(self):
@@ -66,15 +68,14 @@ class RestrictedElement(_etree.ElementBase):
 
 
 class GlobalParserTLS(threading.local):
-    """Thread local context for custom parser instances
-    """
+    """Thread local context for custom parser instances"""
 
     parser_config = {
         "resolve_entities": False,
-        'remove_comments': True,
-        'no_network': True,
-        'remove_pis': True,
-        'huge_tree': False
+        "remove_comments": True,
+        "no_network": True,
+        "remove_pis": True,
+        "huge_tree": False,
     }
 
     element_class = RestrictedElement
@@ -113,14 +114,18 @@ def check_docinfo(elementtree, forbid_dtd=False, forbid_entities=True):
             raise DTDForbidden(docinfo.doctype, docinfo.system_url, docinfo.public_id)
         if forbid_entities and not LXML3:
             # lxml < 3 has no iterentities()
-            raise NotSupportedError("Unable to check for entity declarations " "in lxml 2.x")
+            raise NotSupportedError(
+                "Unable to check for entity declarations " "in lxml 2.x"
+            )
 
     if forbid_entities:
         for dtd in docinfo.internalDTD, docinfo.externalDTD:
             if dtd is None:
                 continue
             for entity in dtd.iterentities():
-                raise EntitiesForbidden(entity.name, entity.content, None, None, None, None)
+                raise EntitiesForbidden(
+                    entity.name, entity.content, None, None, None, None
+                )
 
 
 def parse(source, parser=None, base_url=None, forbid_dtd=True, forbid_entities=True):
