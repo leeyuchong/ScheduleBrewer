@@ -3,8 +3,11 @@ import logging
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import (HttpResponse, HttpResponseRedirect,
-                         HttpResponseServerError, JsonResponse)
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -14,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
+
 # from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
@@ -28,9 +32,16 @@ def index(request):
     return render(request, "CourseBrowser/index.html", context)
 
 
+def get_subject_codes():
+    courses = CourseInfo.objects.all()
+    course_codes = list(sorted(set([x.courseID.split("-")[0] for x in courses])))
+    course_codes.remove("NONE")
+    return course_codes
+
+
 @api_view(["GET"])
 def search(request):
-    courseCodes = cache.get("course_codes")
+    courseCodes = cache.get_or_set("course_codes", get_subject_codes)
     queriedCourses = CourseInfo.objects.filter(offered__exact=True)
     # <QueryDict: {'searchTerms': ['CMPU 102']}>
     for key, value in request.GET.items():
