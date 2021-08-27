@@ -5,7 +5,6 @@ import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core";
 
 function AlertDialog(props) {
-  console.log("A", props.open);
   const useStyles = makeStyles((theme) => ({
     alertDialog: {
       position: "absolute",
