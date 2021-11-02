@@ -97,7 +97,7 @@ function Navbar(props) {
           <Grid item>
             <Typography variant="h6" className={classes.title}>
               {/* Change the semester and year here */}
-              Schedule Brewer - Fall 2021
+              Schedule Brewer - Spring 2022
             </Typography>
           </Grid>
           <Box component={Grid} item display={{ xs: "none", sm: "block" }}>

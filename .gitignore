@@ -5,4 +5,4 @@ app.sock
 saml
 /venv
 /CourseBrowser/migrations/
-.vscode
+.vscode/
