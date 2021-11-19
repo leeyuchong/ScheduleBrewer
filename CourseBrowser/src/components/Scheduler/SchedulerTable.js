@@ -97,7 +97,11 @@ function SchedulerTable() {
       }
       for (let i = 1; i < 3; i++) {
         //d1 and d2
-        if (value[`d${i}`] != null && value[`d${i}`].length > 0) {
+        if (
+          value[`d${i}`] != null &&
+          value[`d${i}`].length > 0 &&
+          value[`time${i}`] != null
+        ) {
           for (let day of value[`d${i}`]) {
             tempTableRange = [
               Math.min(tempTableRange[0], value[`starttime${i}`]),
