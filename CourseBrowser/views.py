@@ -30,7 +30,6 @@ logger = logging.getLogger(__file__)
 def get_subject_codes():
     courses = CourseInfo.objects.all()
     course_codes = list(sorted(set([x.courseID.split("-")[0] for x in courses])))
-    course_codes.remove("NONE")
     return course_codes
 
 
