@@ -1,8 +1,9 @@
 .env
+.env.*
 .DS_Store
-node_modules
+node_modules/
 app.sock
-saml
-/venv
-/CourseBrowser/migrations/
+saml/
+venv/
+migrations/
 .vscode/
