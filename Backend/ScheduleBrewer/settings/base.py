@@ -128,7 +128,7 @@ REST_FRAMEWORK = {
 
 WEBPACK_LOADER = {
     "DEFAULT": {
-        "BUNDLE_DIR_NAME": "",
+        "BUNDLE_DIR_NAME": "course_browser_js",
         "STATS_FILE": FRONTEND_DIR / "webpack/webpack-stats.json"
     }
 }

@@ -9,9 +9,9 @@ module.exports = {
     CourseBrowser: "./src/index.js",
   },
   output: {
-    path: path.resolve("./static/"),
+    path: path.resolve("./static/course_browser_js/"),
     filename: "[name]-[hash].js",
-    publicPath: "./static/",
+    publicPath: "./static/course_browser_js/",
   },
   plugins: [
     new CleanWebpackPlugin(),
