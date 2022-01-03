@@ -19,7 +19,6 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 FRONTEND_DIR = BASE_DIR / "Frontend"
-print("Base directory: ", BASE_DIR)
 load_dotenv()
 
 # Quick-start development settings - unsuitable for production
@@ -153,7 +152,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = FRONTEND_DIR / "staticfiles"
 STATICFILES_DIRS = (FRONTEND_DIR / "static",)
-SAML_FOLDER = BASE_DIR / "saml"
+SAML_FOLDER = BASE_DIR / "Backend/saml"
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 
 # Default primary key field type
