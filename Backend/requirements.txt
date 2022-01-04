@@ -3,7 +3,7 @@ backports.entry-points-selectable==1.1.0
 certifi==2021.10.8
 defusedxml==0.7.1
 distlib==0.3.3
-Django==3.2.6
+Django==3.2.10
 django-cors-headers==3.7.0
 django-webpack-loader==0.7.0
 djangorestframework==3.12.4
