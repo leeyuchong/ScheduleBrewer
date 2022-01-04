@@ -17,7 +17,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new BundleTracker({
       path: __dirname,
-      filename: "./webpack-stats.json",
+      filename: "./webpack/webpack-stats.json",
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new Dotenv({

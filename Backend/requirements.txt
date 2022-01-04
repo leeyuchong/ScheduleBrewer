@@ -5,7 +5,7 @@ defusedxml==0.7.1
 distlib==0.3.3
 Django==3.2.10
 django-cors-headers==3.7.0
-django-webpack-loader==0.7.0
+django-webpack-loader==1.4.1
 djangorestframework==3.12.4
 filelock==3.3.2
 isodate==0.6.0
