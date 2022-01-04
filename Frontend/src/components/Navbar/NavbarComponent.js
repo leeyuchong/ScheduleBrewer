@@ -96,8 +96,7 @@ function Navbar(props) {
           </Box>
           <Grid item>
             <Typography variant="h6" className={classes.title}>
-              {/* Change the semester and year here */}
-              Schedule Brewer - Spring 2022
+              {JSON.parse(document.getElementById("site_title").textContent)}
             </Typography>
           </Grid>
           <Box component={Grid} item display={{ xs: "none", sm: "block" }}>
