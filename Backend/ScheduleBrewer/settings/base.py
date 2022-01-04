@@ -150,9 +150,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = FRONTEND_DIR / "staticfiles"
-STATICFILES_DIRS = (FRONTEND_DIR / "static",)
-SAML_FOLDER = BASE_DIR / "Backend/saml"
+STATIC_ROOT = str(FRONTEND_DIR / "staticfiles")
+STATICFILES_DIRS = (str(FRONTEND_DIR / "static"),)
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 
 # Default primary key field type

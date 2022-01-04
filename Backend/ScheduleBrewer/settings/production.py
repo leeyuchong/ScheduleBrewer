@@ -25,3 +25,5 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 # CORS_REPLACE_HTTPS_REFERER = False
+
+SAML_FOLDER = str(BASE_DIR / "Backend/saml")
