@@ -41,7 +41,6 @@ if isinstance(b"", type("")):  # py 2.x
         """return bytes"""
         return str(data)
 
-
 else:  # py 3.x
     text_types = (bytes, str)
     bytes_type = bytes

@@ -20,7 +20,9 @@ from onelogin.saml2.xmlparser import fromstring
 
 class OneLogin_Saml2_Utils_Test(unittest.TestCase):
     data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
+    settings_path = join(
+        dirname(dirname(dirname(dirname(__file__)))), "settings"
+    )
 
     # assertRegexpMatches deprecated on python3
     def assertRaisesRegex(self, exception, regexp, msg=None):
@@ -138,18 +140,28 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         # Review parameter prefix
         parameters1 = {"value1": "a"}
 
-        target_url5 = OneLogin_Saml2_Utils.redirect(url, parameters1, request_data)
+        target_url5 = OneLogin_Saml2_Utils.redirect(
+            url, parameters1, request_data
+        )
         self.assertEqual("http://%s/example?value1=a" % hostname, target_url5)
 
-        target_url6 = OneLogin_Saml2_Utils.redirect(url3, parameters1, request_data)
+        target_url6 = OneLogin_Saml2_Utils.redirect(
+            url3, parameters1, request_data
+        )
         self.assertEqual(
             "https://%s/example?test=true&value1=a" % hostname, target_url6
         )
 
         # Review parameters
-        parameters2 = {"alphavalue": "a", "numvaluelist": ["1", "2"], "testing": None}
+        parameters2 = {
+            "alphavalue": "a",
+            "numvaluelist": ["1", "2"],
+            "testing": None,
+        }
 
-        target_url7 = OneLogin_Saml2_Utils.redirect(url, parameters2, request_data)
+        target_url7 = OneLogin_Saml2_Utils.redirect(
+            url, parameters2, request_data
+        )
         parameters2_decoded = {
             "alphavalue": "alphavalue=a",
             "numvaluelist": "numvaluelist[]=1&numvaluelist[]=2",
@@ -176,7 +188,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
                 if x in parameters3_decoded
             )
         )
-        target_url8 = OneLogin_Saml2_Utils.redirect(url, parameters3, request_data)
+        target_url8 = OneLogin_Saml2_Utils.redirect(
+            url, parameters3, request_data
+        )
         self.assertEqual(
             "http://%s/example?%s" % (hostname, parameters3_str), target_url8
         )
@@ -233,12 +247,14 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         """
         request_data = {"http_host": "example.com"}
         self.assertEqual(
-            "http://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "http://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["server_port"] = "80"
         self.assertEqual(
-            "http://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "http://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["server_port"] = "81"
@@ -249,13 +265,15 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         request_data["server_port"] = "443"
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         del request_data["server_port"]
         request_data["https"] = "on"
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["server_port"] = "444"
@@ -267,27 +285,32 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         request_data["server_port"] = "443"
         request_data["request_uri"] = ""
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["request_uri"] = "/"
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["request_uri"] = "onelogin/"
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["request_uri"] = "/onelogin"
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data["request_uri"] = "https://example.com/onelogin/sso"
         self.assertEqual(
-            "https://example.com", OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            "https://example.com",
+            OneLogin_Saml2_Utils.get_self_url_host(request_data),
         )
 
         request_data2 = {"request_uri": "example.com/onelogin/sso"}
@@ -308,7 +331,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         self.assertEqual(url, OneLogin_Saml2_Utils.get_self_url(request_data))
 
         request_data["request_uri"] = "/"
-        self.assertEqual(url + "/", OneLogin_Saml2_Utils.get_self_url(request_data))
+        self.assertEqual(
+            url + "/", OneLogin_Saml2_Utils.get_self_url(request_data)
+        )
 
         request_data["request_uri"] = "index.html"
         self.assertEqual(
@@ -317,17 +342,20 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         request_data["request_uri"] = "?index.html"
         self.assertEqual(
-            url + "?index.html", OneLogin_Saml2_Utils.get_self_url(request_data)
+            url + "?index.html",
+            OneLogin_Saml2_Utils.get_self_url(request_data),
         )
 
         request_data["request_uri"] = "/index.html"
         self.assertEqual(
-            url + "/index.html", OneLogin_Saml2_Utils.get_self_url(request_data)
+            url + "/index.html",
+            OneLogin_Saml2_Utils.get_self_url(request_data),
         )
 
         request_data["request_uri"] = "/index.html?testing"
         self.assertEqual(
-            url + "/index.html?testing", OneLogin_Saml2_Utils.get_self_url(request_data)
+            url + "/index.html?testing",
+            OneLogin_Saml2_Utils.get_self_url(request_data),
         )
 
         request_data["request_uri"] = "/test/index.html?testing"
@@ -345,16 +373,22 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         """
         Tests the get_self_url_no_query method of the OneLogin_Saml2_Utils
         """
-        request_data = {"http_host": "example.com", "script_name": "/index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "/index.html",
+        }
         url = (
             OneLogin_Saml2_Utils.get_self_url_host(request_data)
             + request_data["script_name"]
         )
-        self.assertEqual(url, OneLogin_Saml2_Utils.get_self_url_no_query(request_data))
+        self.assertEqual(
+            url, OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
+        )
 
         request_data["path_info"] = "/test"
         self.assertEqual(
-            url + "/test", OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
+            url + "/test",
+            OneLogin_Saml2_Utils.get_self_url_no_query(request_data),
         )
 
     def testGetSelfRoutedURLNoQuery(self):
@@ -366,9 +400,13 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             "request_uri": "/example1/route?x=test",
             "query_string": "?x=test",
         }
-        url = OneLogin_Saml2_Utils.get_self_url_host(request_data) + "/example1/route"
+        url = (
+            OneLogin_Saml2_Utils.get_self_url_host(request_data)
+            + "/example1/route"
+        )
         self.assertEqual(
-            url, OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data)
+            url,
+            OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data),
         )
 
         request_data_2 = {
@@ -377,7 +415,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         }
         url_2 = OneLogin_Saml2_Utils.get_self_url_host(request_data_2)
         self.assertEqual(
-            url_2, OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_2)
+            url_2,
+            OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_2),
         )
 
         request_data_3 = {
@@ -385,7 +424,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         }
         url_3 = OneLogin_Saml2_Utils.get_self_url_host(request_data_3)
         self.assertEqual(
-            url_3, OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_3)
+            url_3,
+            OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_3),
         )
 
         request_data_4 = {
@@ -398,7 +438,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             + "/example1/route/test/"
         )
         self.assertEqual(
-            url_4, OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_4)
+            url_4,
+            OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_4),
         )
 
         request_data_5 = {
@@ -411,7 +452,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             + "/example1/route/test/"
         )
         self.assertEqual(
-            url_5, OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_5)
+            url_5,
+            OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_5),
         )
 
         request_data_6 = {
@@ -423,7 +465,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             + "/example1/route/test/"
         )
         self.assertEqual(
-            url_6, OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_6)
+            url_6,
+            OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data_6),
         )
 
     def testGetStatus(self):
@@ -437,7 +480,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         dom = etree.fromstring(xml)
 
         status = OneLogin_Saml2_Utils.get_status(dom)
-        self.assertEqual(OneLogin_Saml2_Constants.STATUS_SUCCESS, status["code"])
+        self.assertEqual(
+            OneLogin_Saml2_Constants.STATUS_SUCCESS, status["code"]
+        )
 
         xml2 = self.file_contents(
             join(
@@ -451,7 +496,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         dom2 = etree.fromstring(xml2)
 
         status2 = OneLogin_Saml2_Utils.get_status(dom2)
-        self.assertEqual(OneLogin_Saml2_Constants.STATUS_RESPONDER, status2["code"])
+        self.assertEqual(
+            OneLogin_Saml2_Constants.STATUS_RESPONDER, status2["code"]
+        )
         self.assertEqual("", status2["msg"])
 
         xml3 = self.file_contents(
@@ -466,11 +513,15 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         dom3 = etree.fromstring(xml3)
 
         status3 = OneLogin_Saml2_Utils.get_status(dom3)
-        self.assertEqual(OneLogin_Saml2_Constants.STATUS_RESPONDER, status3["code"])
+        self.assertEqual(
+            OneLogin_Saml2_Constants.STATUS_RESPONDER, status3["code"]
+        )
         self.assertEqual("something_is_wrong", status3["msg"])
 
         xml_inv = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_status.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_status.xml.base64"
+            )
         )
         xml_inv = b64decode(xml_inv)
         dom_inv = etree.fromstring(xml_inv)
@@ -479,12 +530,19 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             OneLogin_Saml2_Utils.get_status(dom_inv)
 
         xml_inv2 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_status_code.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "no_status_code.xml.base64",
+            )
         )
         xml_inv2 = b64decode(xml_inv2)
         dom_inv2 = etree.fromstring(xml_inv2)
 
-        with self.assertRaisesRegex(Exception, "Missing Status Code on response"):
+        with self.assertRaisesRegex(
+            Exception, "Missing Status Code on response"
+        ):
             OneLogin_Saml2_Utils.get_status(dom_inv2)
 
     def testParseDuration(self):
@@ -494,7 +552,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         duration = "PT1393462294S"
         timestamp = 1393876825
 
-        parsed_duration = OneLogin_Saml2_Utils.parse_duration(duration, timestamp)
+        parsed_duration = OneLogin_Saml2_Utils.parse_duration(
+            duration, timestamp
+        )
         self.assertEqual(2787339119, parsed_duration)
 
         parsed_duration_2 = OneLogin_Saml2_Utils.parse_duration(duration)
@@ -507,11 +567,15 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             self.assertIn("Unrecognised ISO 8601 date format", str(exception))
 
         new_duration = "P1Y1M"
-        parsed_duration_4 = OneLogin_Saml2_Utils.parse_duration(new_duration, timestamp)
+        parsed_duration_4 = OneLogin_Saml2_Utils.parse_duration(
+            new_duration, timestamp
+        )
         self.assertEqual(1428091225, parsed_duration_4)
 
         neg_duration = "-P14M"
-        parsed_duration_5 = OneLogin_Saml2_Utils.parse_duration(neg_duration, timestamp)
+        parsed_duration_5 = OneLogin_Saml2_Utils.parse_duration(
+            neg_duration, timestamp
+        )
         self.assertEqual(1357243225, parsed_duration_5)
 
     def testParseSAML2Time(self):
@@ -520,7 +584,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         """
         time = 1386650371
         saml_time = "2013-12-10T04:39:31Z"
-        self.assertEqual(time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time))
+        self.assertEqual(
+            time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time)
+        )
         with self.assertRaises(Exception) as context:
             OneLogin_Saml2_Utils.parse_SAML_to_time("invalidSAMLTime")
             exception = context.exception
@@ -528,15 +594,21 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         # Now test if toolkit supports miliseconds
         saml_time2 = "2013-12-10T04:39:31.120Z"
-        self.assertEqual(time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time2))
+        self.assertEqual(
+            time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time2)
+        )
 
         # Now test if toolkit supports microseconds
         saml_time3 = "2013-12-10T04:39:31.120240Z"
-        self.assertEqual(time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time3))
+        self.assertEqual(
+            time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time3)
+        )
 
         # Now test if toolkit supports nanoseconds
         saml_time4 = "2013-12-10T04:39:31.120240360Z"
-        self.assertEqual(time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time4))
+        self.assertEqual(
+            time, OneLogin_Saml2_Utils.parse_SAML_to_time(saml_time4)
+        )
 
     def testParseTime2SAML(self):
         """
@@ -544,7 +616,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         """
         time = 1386650371
         saml_time = "2013-12-10T04:39:31Z"
-        self.assertEqual(saml_time, OneLogin_Saml2_Utils.parse_time_to_SAML(time))
+        self.assertEqual(
+            saml_time, OneLogin_Saml2_Utils.parse_time_to_SAML(time)
+        )
         with self.assertRaises(Exception) as context:
             OneLogin_Saml2_Utils.parse_time_to_SAML("invalidtime")
             exception = context.exception
@@ -555,22 +629,30 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         Tests the get_expire_time method of the OneLogin_Saml2_Utils
         """
         self.assertEqual(None, OneLogin_Saml2_Utils.get_expire_time())
-        self.assertNotEqual(None, OneLogin_Saml2_Utils.get_expire_time("PT360000S"))
+        self.assertNotEqual(
+            None, OneLogin_Saml2_Utils.get_expire_time("PT360000S")
+        )
 
         self.assertEqual(
             "1291955971",
-            OneLogin_Saml2_Utils.get_expire_time("PT360000S", "2010-12-10T04:39:31Z"),
+            OneLogin_Saml2_Utils.get_expire_time(
+                "PT360000S", "2010-12-10T04:39:31Z"
+            ),
         )
         self.assertEqual(
-            "1291955971", OneLogin_Saml2_Utils.get_expire_time("PT360000S", 1291955971)
+            "1291955971",
+            OneLogin_Saml2_Utils.get_expire_time("PT360000S", 1291955971),
         )
 
         self.assertNotEqual(
             "3311642371",
-            OneLogin_Saml2_Utils.get_expire_time("PT360000S", "2074-12-10T04:39:31Z"),
+            OneLogin_Saml2_Utils.get_expire_time(
+                "PT360000S", "2074-12-10T04:39:31Z"
+            ),
         )
         self.assertNotEqual(
-            "3311642371", OneLogin_Saml2_Utils.get_expire_time("PT360000S", 1418186371)
+            "3311642371",
+            OneLogin_Saml2_Utils.get_expire_time("PT360000S", 1418186371),
         )
 
     def _generate_name_id_element(self, name_qualifier):
@@ -628,7 +710,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         """
         name_id_value = "ONELOGIN_ce998811003f4e60f8b07a311dc641621379cfde"
         entity_id = "http://stuff.com/endpoints/metadata.php"
-        name_id_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        name_id_format = (
+            "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        )
 
         name_id = OneLogin_Saml2_Utils.generate_name_id(
             name_id_value, entity_id, name_id_format
@@ -651,7 +735,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         Tests the generateNameId method of the OneLogin_Saml2_Utils
         """
         name_id_value = "ONELOGIN_ce998811003f4e60f8b07a311dc641621379cfde"
-        name_id_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        name_id_format = (
+            "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        )
 
         name_id = OneLogin_Saml2_Utils.generate_name_id(
             name_id_value, None, name_id_format
@@ -679,7 +765,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         key = self.file_contents(cert_path + "sp.key")
         cert = self.file_contents(cert_path + "sp.crt")
 
-        self.assertEqual(None, OneLogin_Saml2_Utils.calculate_x509_fingerprint(key))
+        self.assertEqual(
+            None, OneLogin_Saml2_Utils.calculate_x509_fingerprint(key)
+        )
         self.assertEqual(
             "afe71c28ef740bc87425be13a2263d37971da1f9",
             OneLogin_Saml2_Utils.calculate_x509_fingerprint(cert),
@@ -729,7 +817,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         """
         Tests the format_finger_print method of the OneLogin_Saml2_Utils
         """
-        finger_print_1 = "AF:E7:1C:28:EF:74:0B:C8:74:25:BE:13:A2:26:3D:37:97:1D:A1:F9"
+        finger_print_1 = (
+            "AF:E7:1C:28:EF:74:0B:C8:74:25:BE:13:A2:26:3D:37:97:1D:A1:F9"
+        )
         self.assertEqual(
             "afe71c28ef740bc87425be13a2263d37971da1f9",
             OneLogin_Saml2_Utils.format_finger_print(finger_print_1),
@@ -752,7 +842,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         xml_nameid_enc = b64decode(
             self.file_contents(
                 join(
-                    self.data_path, "responses", "response_encrypted_nameid.xml.base64"
+                    self.data_path,
+                    "responses",
+                    "response_encrypted_nameid.xml.base64",
                 )
             )
         )
@@ -761,7 +853,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             ".//saml:EncryptedID", namespaces=OneLogin_Saml2_Constants.NSMAP
         )
         encrypted_data = encrypted_nameid_nodes[0]
-        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(encrypted_data, key)
+        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(
+            encrypted_data, key
+        )
         self.assertEqual("saml:NameID", decrypted_nameid.tag)
         self.assertEqual(
             "2de11defd199f8d5bb63f9b7deb265ba5c675c10", decrypted_nameid.text
@@ -778,7 +872,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         )
         dom_assertion_enc = etree.fromstring(xml_assertion_enc)
         encrypted_assertion_enc_nodes = dom_assertion_enc.find(
-            ".//saml:EncryptedAssertion", namespaces=OneLogin_Saml2_Constants.NSMAP
+            ".//saml:EncryptedAssertion",
+            namespaces=OneLogin_Saml2_Constants.NSMAP,
         )
         encrypted_data_assert = encrypted_assertion_enc_nodes[0]
 
@@ -786,19 +881,25 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             encrypted_data_assert, key
         )
         self.assertEqual(
-            "{%s}Assertion" % OneLogin_Saml2_Constants.NS_SAML, decrypted_assertion.tag
+            "{%s}Assertion" % OneLogin_Saml2_Constants.NS_SAML,
+            decrypted_assertion.tag,
         )
         self.assertEqual(
-            "_6fe189b1c241827773902f2b1d3a843418206a5c97", decrypted_assertion.get("ID")
+            "_6fe189b1c241827773902f2b1d3a843418206a5c97",
+            decrypted_assertion.get("ID"),
         )
 
         encrypted_nameid_nodes = decrypted_assertion.xpath(
-            "./saml:Subject/saml:EncryptedID", namespaces=OneLogin_Saml2_Constants.NSMAP
+            "./saml:Subject/saml:EncryptedID",
+            namespaces=OneLogin_Saml2_Constants.NSMAP,
         )
         encrypted_data = encrypted_nameid_nodes[0][0]
-        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(encrypted_data, key)
+        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(
+            encrypted_data, key
+        )
         self.assertEqual(
-            "{%s}NameID" % OneLogin_Saml2_Constants.NS_SAML, decrypted_nameid.tag
+            "{%s}NameID" % OneLogin_Saml2_Constants.NS_SAML,
+            decrypted_nameid.tag,
         )
         self.assertEqual(
             "457bdb600de717891c77647b0806ce59c089d5b8", decrypted_nameid.text
@@ -810,9 +911,12 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         f.close()
 
         # sp.key and sp2.key are equivalent we should be able to decrypt the nameID again
-        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(encrypted_data, key2)
+        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(
+            encrypted_data, key2
+        )
         self.assertIn(
-            "{%s}NameID" % (OneLogin_Saml2_Constants.NS_SAML), decrypted_nameid.tag
+            "{%s}NameID" % (OneLogin_Saml2_Constants.NS_SAML),
+            decrypted_nameid.tag,
         )
         self.assertEqual(
             "457bdb600de717891c77647b0806ce59c089d5b8", decrypted_nameid.text
@@ -824,9 +928,12 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         f.close()
 
         # sp.key and sp3.key are equivalent we should be able to decrypt the nameID again
-        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(encrypted_data, key3)
+        decrypted_nameid = OneLogin_Saml2_Utils.decrypt_element(
+            encrypted_data, key3
+        )
         self.assertIn(
-            "{%s}NameID" % (OneLogin_Saml2_Constants.NS_SAML), decrypted_nameid.tag
+            "{%s}NameID" % (OneLogin_Saml2_Constants.NS_SAML),
+            decrypted_nameid.tag,
         )
         self.assertEqual(
             "457bdb600de717891c77647b0806ce59c089d5b8", decrypted_nameid.text
@@ -889,7 +996,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         xml_nameid_enc = b64decode(
             self.file_contents(
                 join(
-                    self.data_path, "responses", "response_encrypted_nameid.xml.base64"
+                    self.data_path,
+                    "responses",
+                    "response_encrypted_nameid.xml.base64",
                 )
             )
         )
@@ -906,7 +1015,8 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             )
             self.assertIn("NameID", decrypted_nameid.tag)
             self.assertEqual(
-                "2de11defd199f8d5bb63f9b7deb265ba5c675c10", decrypted_nameid.text
+                "2de11defd199f8d5bb63f9b7deb265ba5c675c10",
+                decrypted_nameid.text,
             )
 
         # can only be decrypted once in place
@@ -920,7 +1030,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         # can't be decrypted twice since it has been decrypted inplace
         with self.assertRaisesRegex(Exception, "(1, 'failed to decrypt')"):
-            OneLogin_Saml2_Utils.decrypt_element(encrypted_node, key, inplace=True)
+            OneLogin_Saml2_Utils.decrypt_element(
+                encrypted_node, key, inplace=True
+            )
 
     def testAddSign(self):
         """
@@ -954,7 +1066,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         self.assertIn("ds:Signature", ds_signature_2.tagName)
 
         xml_authn_signed_3 = compat.to_string(
-            OneLogin_Saml2_Utils.add_sign(xml_authn_dom.firstChild.toxml(), key, cert)
+            OneLogin_Saml2_Utils.add_sign(
+                xml_authn_dom.firstChild.toxml(), key, cert
+            )
         )
         self.assertIn("<ds:SignatureValue>", xml_authn_signed_3)
         res_3 = parseString(xml_authn_signed_3)
@@ -980,7 +1094,11 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         xml_logout_req = b64decode(
             self.file_contents(
-                join(self.data_path, "logout_requests", "logout_request.xml.base64")
+                join(
+                    self.data_path,
+                    "logout_requests",
+                    "logout_request.xml.base64",
+                )
             )
         )
         xml_logout_req_signed = compat.to_string(
@@ -993,7 +1111,11 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         xml_logout_res = b64decode(
             self.file_contents(
-                join(self.data_path, "logout_responses", "logout_response.xml.base64")
+                join(
+                    self.data_path,
+                    "logout_responses",
+                    "logout_response.xml.base64",
+                )
             )
         )
         xml_logout_res_signed = compat.to_string(
@@ -1090,7 +1212,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         idp_data = settings.get_idp_data()
         cert = idp_data["x509cert"]
 
-        settings_2 = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings2.json"))
+        settings_2 = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings2.json")
+        )
         idp_data2 = settings_2.get_idp_data()
         cert_2 = idp_data2["x509cert"]
         fingerprint_2 = OneLogin_Saml2_Utils.calculate_x509_fingerprint(cert_2)
@@ -1108,7 +1232,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             join(self.data_path, "metadata", "signed_metadata_settings1.xml")
         )
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_metadata_sign(xml_metadata_signed, cert)
+            OneLogin_Saml2_Utils.validate_metadata_sign(
+                xml_metadata_signed, cert
+            )
         )
         # expired cert, verified it
         self.assertFalse(
@@ -1121,7 +1247,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             join(self.data_path, "metadata", "signed_metadata_settings2.xml")
         )
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_metadata_sign(xml_metadata_signed_2, cert_2)
+            OneLogin_Saml2_Utils.validate_metadata_sign(
+                xml_metadata_signed_2, cert_2
+            )
         )
         self.assertTrue(
             OneLogin_Saml2_Utils.validate_metadata_sign(
@@ -1131,7 +1259,11 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         xml_response_msg_signed = b64decode(
             self.file_contents(
-                join(self.data_path, "responses", "signed_message_response.xml.base64")
+                join(
+                    self.data_path,
+                    "responses",
+                    "signed_message_response.xml.base64",
+                )
             )
         )
 
@@ -1162,11 +1294,17 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         xml_response_msg_signed_2 = b64decode(
             self.file_contents(
-                join(self.data_path, "responses", "signed_message_response2.xml.base64")
+                join(
+                    self.data_path,
+                    "responses",
+                    "signed_message_response2.xml.base64",
+                )
             )
         )
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_sign(xml_response_msg_signed_2, cert_2)
+            OneLogin_Saml2_Utils.validate_sign(
+                xml_response_msg_signed_2, cert_2
+            )
         )
         self.assertTrue(
             OneLogin_Saml2_Utils.validate_sign(
@@ -1187,14 +1325,18 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         xml_response_assert_signed = b64decode(
             self.file_contents(
                 join(
-                    self.data_path, "responses", "signed_assertion_response.xml.base64"
+                    self.data_path,
+                    "responses",
+                    "signed_assertion_response.xml.base64",
                 )
             )
         )
 
         # expired cert
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_sign(xml_response_assert_signed, cert)
+            OneLogin_Saml2_Utils.validate_sign(
+                xml_response_assert_signed, cert
+            )
         )
         # expired cert, verified it
         self.assertFalse(
@@ -1206,12 +1348,16 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         xml_response_assert_signed_2 = b64decode(
             self.file_contents(
                 join(
-                    self.data_path, "responses", "signed_assertion_response2.xml.base64"
+                    self.data_path,
+                    "responses",
+                    "signed_assertion_response2.xml.base64",
                 )
             )
         )
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_sign(xml_response_assert_signed_2, cert_2)
+            OneLogin_Saml2_Utils.validate_sign(
+                xml_response_assert_signed_2, cert_2
+            )
         )
         self.assertTrue(
             OneLogin_Saml2_Utils.validate_sign(
@@ -1221,13 +1367,19 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         xml_response_double_signed = b64decode(
             self.file_contents(
-                join(self.data_path, "responses", "double_signed_response.xml.base64")
+                join(
+                    self.data_path,
+                    "responses",
+                    "double_signed_response.xml.base64",
+                )
             )
         )
 
         # expired cert
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_sign(xml_response_double_signed, cert)
+            OneLogin_Saml2_Utils.validate_sign(
+                xml_response_double_signed, cert
+            )
         )
         # expired cert, verified it
         self.assertFalse(
@@ -1238,11 +1390,17 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
 
         xml_response_double_signed_2 = b64decode(
             self.file_contents(
-                join(self.data_path, "responses", "double_signed_response2.xml.base64")
+                join(
+                    self.data_path,
+                    "responses",
+                    "double_signed_response2.xml.base64",
+                )
             )
         )
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_sign(xml_response_double_signed_2, cert_2)
+            OneLogin_Saml2_Utils.validate_sign(
+                xml_response_double_signed_2, cert_2
+            )
         )
         self.assertTrue(
             OneLogin_Saml2_Utils.validate_sign(
@@ -1251,7 +1409,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         )
 
         dom = parseString(xml_response_msg_signed_2)
-        self.assertTrue(OneLogin_Saml2_Utils.validate_sign(dom.toxml(), cert_2))
+        self.assertTrue(
+            OneLogin_Saml2_Utils.validate_sign(dom.toxml(), cert_2)
+        )
 
         dom.firstChild.firstChild.firstChild.nodeValue = (
             "https://idp.example.com/simplesaml/saml2/idp/metadata.php"
@@ -1261,7 +1421,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
             "ID"
         ).nodeValue = u"_34fg27g212d63k1f923845324475802ac0fc24530b"
         # Reference validation failed
-        self.assertFalse(OneLogin_Saml2_Utils.validate_sign(dom.toxml(), cert_2))
+        self.assertFalse(
+            OneLogin_Saml2_Utils.validate_sign(dom.toxml(), cert_2)
+        )
 
         invalid_fingerprint = "afe71c34ef740bc87434be13a2263d31271da1f9"
         # Wrong fingerprint
@@ -1272,16 +1434,22 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         )
 
         dom_2 = parseString(xml_response_double_signed_2)
-        self.assertTrue(OneLogin_Saml2_Utils.validate_sign(dom_2.toxml(), cert_2))
+        self.assertTrue(
+            OneLogin_Saml2_Utils.validate_sign(dom_2.toxml(), cert_2)
+        )
         dom_2.firstChild.firstChild.firstChild.nodeValue = (
             "https://example.com/other-idp"
         )
         # Modified message
-        self.assertFalse(OneLogin_Saml2_Utils.validate_sign(dom_2.toxml(), cert_2))
+        self.assertFalse(
+            OneLogin_Saml2_Utils.validate_sign(dom_2.toxml(), cert_2)
+        )
 
         # Try to validate directly the Assertion
         dom_3 = parseString(xml_response_double_signed_2)
-        assert_elem_3 = dom_3.firstChild.firstChild.nextSibling.nextSibling.nextSibling
+        assert_elem_3 = (
+            dom_3.firstChild.firstChild.nextSibling.nextSibling.nextSibling
+        )
         assert_elem_3.setAttributeNS(
             OneLogin_Saml2_Constants.NS_SAML,
             "xmlns:saml",
@@ -1294,14 +1462,24 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         # Wrong scheme
         no_signed = b64decode(
             self.file_contents(
-                join(self.data_path, "responses", "invalids", "no_signature.xml.base64")
+                join(
+                    self.data_path,
+                    "responses",
+                    "invalids",
+                    "no_signature.xml.base64",
+                )
             )
         )
         self.assertFalse(OneLogin_Saml2_Utils.validate_sign(no_signed, cert))
 
         no_key = b64decode(
             self.file_contents(
-                join(self.data_path, "responses", "invalids", "no_key.xml.base64")
+                join(
+                    self.data_path,
+                    "responses",
+                    "invalids",
+                    "no_key.xml.base64",
+                )
             )
         )
         self.assertFalse(OneLogin_Saml2_Utils.validate_sign(no_key, cert))
@@ -1317,7 +1495,9 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
                 )
             )
         )
-        self.assertFalse(OneLogin_Saml2_Utils.validate_sign(wrapping_attack1, cert))
+        self.assertFalse(
+            OneLogin_Saml2_Utils.validate_sign(wrapping_attack1, cert)
+        )
 
     def testNormalizeUrl(self):
         base_url = "https://blah.com/path"
@@ -1326,7 +1506,15 @@ class OneLogin_Saml2_Utils_Test(unittest.TestCase):
         capital_path = "https://blah.com/PAth"
         capital_all = "HTTPS://BLAH.COM/PATH"
 
-        self.assertIn(base_url, OneLogin_Saml2_Utils.normalize_url(capital_scheme))
-        self.assertIn(base_url, OneLogin_Saml2_Utils.normalize_url(capital_domain))
-        self.assertNotIn(base_url, OneLogin_Saml2_Utils.normalize_url(capital_path))
-        self.assertNotIn(base_url, OneLogin_Saml2_Utils.normalize_url(capital_all))
+        self.assertIn(
+            base_url, OneLogin_Saml2_Utils.normalize_url(capital_scheme)
+        )
+        self.assertIn(
+            base_url, OneLogin_Saml2_Utils.normalize_url(capital_domain)
+        )
+        self.assertNotIn(
+            base_url, OneLogin_Saml2_Utils.normalize_url(capital_path)
+        )
+        self.assertNotIn(
+            base_url, OneLogin_Saml2_Utils.normalize_url(capital_all)
+        )

@@ -77,7 +77,8 @@ class OneLogin_Saml2_Authn_Request(object):
             if display_name:
                 provider_name_str = (
                     "\n"
-                    + '    ProviderName="%s"' % organization_data[lang]["displayname"]
+                    + '    ProviderName="%s"'
+                    % organization_data[lang]["displayname"]
                 )
 
         force_authn_str = ""
@@ -103,7 +104,9 @@ class OneLogin_Saml2_Authn_Request(object):
         if set_nameid_policy:
             name_id_policy_format = sp_data["NameIDFormat"]
             if security["wantNameIdEncrypted"]:
-                name_id_policy_format = OneLogin_Saml2_Constants.NAMEID_ENCRYPTED
+                name_id_policy_format = (
+                    OneLogin_Saml2_Constants.NAMEID_ENCRYPTED
+                )
 
             nameid_policy_str = (
                 """
@@ -134,14 +137,18 @@ class OneLogin_Saml2_Authn_Request(object):
                         "<saml:AuthnContextClassRef>%s</saml:AuthnContextClassRef>"
                         % authn_context
                     )
-                requested_authn_context_str += "    </samlp:RequestedAuthnContext>"
+                requested_authn_context_str += (
+                    "    </samlp:RequestedAuthnContext>"
+                )
 
         attr_consuming_service_str = ""
         if (
             "attributeConsumingService" in sp_data
             and sp_data["attributeConsumingService"]
         ):
-            attr_consuming_service_str = '\n    AttributeConsumingServiceIndex="1"'
+            attr_consuming_service_str = (
+                '\n    AttributeConsumingServiceIndex="1"'
+            )
 
         request = OneLogin_Saml2_Templates.AUTHN_REQUEST % {
             "id": self.__id,

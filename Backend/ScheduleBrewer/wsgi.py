@@ -13,6 +13,8 @@ from django.core.wsgi import get_wsgi_application
 from dotenv import load_dotenv
 
 load_dotenv()
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ScheduleBrewer.settings.local")
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE", "ScheduleBrewer.settings.local"
+)
 
 application = get_wsgi_application()

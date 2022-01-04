@@ -23,6 +23,22 @@ Install the python dependencies from the `requirements.txt` file. After activati
 This app was built and tested using Node v16.5.0.
 Install the Node dependencies from the `package-lock.json` file. In the same directory as the `Frontend/package-lock.json` file, run the command `npm install`
 
+## Usage
+
+**Run Django**
+
+1. Activate your virtual environment
+2. In the terminal, go to the folder `ScheduleBrewer/Backend` where the file `manage.py` is
+3. Run the following command: `python manage.py runserver`
+4. Go to 127.0.0.1:8000 to view the page
+
+**Compile the Frontend Files**
+
+1. In the terminal, go to the folder `ScheduleBrewer/Frontend` where the file `package.json` is
+2. Run the command `npm run build`
+
+To continuously compile the files, instead of `npm run build`, run the command `npm run dev`
+
 ## Files
 
 The `.env` file, and `/node_modules` and `/saml` folders are necessary but are not in this repository. `.env` and `/saml` can be found in the AWS server. `/node_modules` can be installed following the instructions above.
@@ -103,13 +119,13 @@ The `.env` file, and `/node_modules` and `/saml` folders are necessary but are n
 2. Delete all courses in the CourseInfo table
 3. Change the semester label:
    - The label is at line 88 in the file `/ScheduleBrewer/CourseBrowser/src/components/Navbar/NavbarComponent.js`
-4. Recompile the files (Look at the section Recompile Files)
-5. Import the new courses
+4. Recompile the files (Look at the section Usage - Compile the Frontend Files)
+5. Restart the NGINX server (see section below)
+6. Import the new courses
 
-## Recompile Files
+## Restart NGINX server
 
-1. In the project root/same folder as `Frontend/` and `Backend/`, use the command `npm run build --prefix ./Frontend`
-2. Run the following commands to restart the NGINX server:
+1. Run the following commands to restart the NGINX server:
    `sudo systemctl daemon-reload`
    `sudo systemctl restart gunicorn`
    `sudo systemctl restart nginx`

@@ -65,7 +65,9 @@ class OneLogin_Saml2_Logout_Response(object):
         :return: The Status
         :rtype: string
         """
-        entries = self.__query("/samlp:LogoutResponse/samlp:Status/samlp:StatusCode")
+        entries = self.__query(
+            "/samlp:LogoutResponse/samlp:Status/samlp:StatusCode"
+        )
         if len(entries) == 0:
             return None
         status = entries[0].attrib["Value"]
@@ -125,14 +127,18 @@ class OneLogin_Saml2_Logout_Response(object):
                         OneLogin_Saml2_ValidationError.WRONG_ISSUER,
                     )
 
-                current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
+                current_url = OneLogin_Saml2_Utils.get_self_url_no_query(
+                    request_data
+                )
 
                 # Check destination
                 destination = self.document.get("Destination", None)
                 if destination:
                     if not OneLogin_Saml2_Utils.normalize_url(
                         url=destination
-                    ).startswith(OneLogin_Saml2_Utils.normalize_url(url=current_url)):
+                    ).startswith(
+                        OneLogin_Saml2_Utils.normalize_url(url=current_url)
+                    ):
                         raise OneLogin_Saml2_ValidationError(
                             "The LogoutResponse was received at %s instead of %s"
                             % (current_url, destination),

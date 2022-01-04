@@ -23,7 +23,9 @@ except ImportError:
 
 class OneLogin_Saml2_Auth_Test(unittest.TestCase):
     data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
+    settings_path = join(
+        dirname(dirname(dirname(dirname(__file__)))), "settings"
+    )
 
     # assertRaisesRegexp deprecated on python3
     def assertRaisesRegex(self, exception, regexp, msg=None):
@@ -64,7 +66,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         """
         settings_info = self.loadSettingsJSON()
         settings = OneLogin_Saml2_Settings(settings_info)
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
 
         auth_settings = auth.get_settings()
         self.assertEqual(settings.get_sp_data(), auth_settings.get_sp_data())
@@ -74,7 +78,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         Tests the get_sso_url method of the OneLogin_Saml2_Auth class
         """
         settings_info = self.loadSettingsJSON()
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
 
         sso_url = settings_info["idp"]["singleSignOnService"]["url"]
         self.assertEqual(auth.get_sso_url(), sso_url)
@@ -84,7 +90,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         Tests the get_slo_url method of the OneLogin_Saml2_Auth class
         """
         settings_info = self.loadSettingsJSON()
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
 
         slo_url = settings_info["idp"]["singleLogoutService"]["url"]
         self.assertEqual(auth.get_slo_url(), slo_url)
@@ -97,12 +105,16 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         settings_info["idp"]["singleLogoutService"][
             "responseUrl"
         ] = "http://idp.example.com/SingleLogoutReturn.php"
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         slo_url = settings_info["idp"]["singleLogoutService"]["responseUrl"]
         self.assertEqual(auth.get_slo_response_url(), slo_url)
         # test that the function falls back to the url setting if responseUrl is not set
         settings_info["idp"]["singleLogoutService"].pop("responseUrl")
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         slo_url = settings_info["idp"]["singleLogoutService"]["url"]
         self.assertEqual(auth.get_slo_response_url(), slo_url)
 
@@ -111,7 +123,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         Tests the get_session_index method of the OneLogin_Saml2_Auth class
         """
         settings_info = self.loadSettingsJSON()
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         self.assertIsNone(auth.get_session_index())
 
         request_data = self.get_request()
@@ -120,12 +134,15 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {"SAMLResponse": message}
-        auth2 = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth2 = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         self.assertIsNone(auth2.get_session_index())
 
         auth2.process_response()
         self.assertEqual(
-            "_6273d77b8cde0c333ec79d22a9fa0003b9fe2d75cb", auth2.get_session_index()
+            "_6273d77b8cde0c333ec79d22a9fa0003b9fe2d75cb",
+            auth2.get_session_index(),
         )
 
     def testGetSessionExpiration(self):
@@ -133,7 +150,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         Tests the get_session_expiration method of the OneLogin_Saml2_Auth class
         """
         settings_info = self.loadSettingsJSON()
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         self.assertIsNone(auth.get_session_expiration())
 
         request_data = self.get_request()
@@ -142,7 +161,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {"SAMLResponse": message}
-        auth2 = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth2 = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         self.assertIsNone(auth2.get_session_expiration())
 
         auth2.process_response()
@@ -159,7 +180,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {"SAMLResponse": message}
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         auth.process_response()
 
         self.assertEqual(
@@ -175,7 +198,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(
             self.get_request(), old_settings=self.loadSettingsJSON()
         )
-        with self.assertRaisesRegex(OneLogin_Saml2_Error, "SAML Response not found"):
+        with self.assertRaisesRegex(
+            OneLogin_Saml2_Error, "SAML Response not found"
+        ):
             auth.process_response()
         self.assertEqual(auth.get_errors(), ["invalid_binding"])
 
@@ -192,7 +217,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {"SAMLResponse": message}
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         auth.process_response()
 
         self.assertFalse(auth.is_authenticated())
@@ -217,13 +244,18 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {
-            "SAMLResponse": compat.to_string(b64encode(compat.to_bytes(plain_message)))
+            "SAMLResponse": compat.to_string(
+                b64encode(compat.to_bytes(plain_message))
+            )
         }
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         request_id = "invalid"
         auth.process_response(request_id)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", auth.get_last_error_reason()
+            "No Signature found. SAML Response rejected",
+            auth.get_last_error_reason(),
         )
 
         auth.set_strict(True)
@@ -237,7 +269,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         valid_request_id = "_57bcbf70-7b1f-012e-c821-782bcb13bb38"
         auth.process_response(valid_request_id)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", auth.get_last_error_reason()
+            "No Signature found. SAML Response rejected",
+            auth.get_last_error_reason(),
         )
 
     def testProcessResponseValid(self):
@@ -253,19 +286,25 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {"SAMLResponse": message}
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         auth.process_response()
         self.assertTrue(auth.is_authenticated())
         self.assertEqual(len(auth.get_errors()), 0)
-        self.assertEqual("492882615acf31c8096b627245d76ae53036c090", auth.get_nameid())
+        self.assertEqual(
+            "492882615acf31c8096b627245d76ae53036c090", auth.get_nameid()
+        )
         attributes = auth.get_attributes()
         self.assertNotEqual(len(attributes), 0)
         self.assertEqual(auth.get_attribute("mail"), attributes["mail"])
         friendlyname_attributes = auth.get_friendlyname_attributes()
         self.assertEqual(len(friendlyname_attributes), 0)
         session_index = auth.get_session_index()
-        self.assertEqual("_6273d77b8cde0c333ec79d22a9fa0003b9fe2d75cb", session_index)
+        self.assertEqual(
+            "_6273d77b8cde0c333ec79d22a9fa0003b9fe2d75cb", session_index
+        )
         self.assertEqual(
             "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
             auth.get_nameid_format(),
@@ -285,7 +324,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         request_data = self.get_request()
         relay_state = "http://sp.example.com"
         request_data["get_data"]["RelayState"] = relay_state
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         target_url = auth.redirect_to()
         self.assertEqual(target_url, relay_state)
 
@@ -300,7 +341,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         relay_state = "http://sp.example.com"
         url_2 = "http://sp2.example.com"
         request_data["get_data"]["RelayState"] = relay_state
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         target_url = auth.redirect_to(url_2)
         self.assertEqual(target_url, url_2)
 
@@ -332,7 +375,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
             )
         )
         request_data["get_data"]["SAMLResponse"] = message
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         auth.process_slo(True)
         self.assertEqual(len(auth.get_errors()), 0)
@@ -370,7 +415,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         message = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
         request_data["get_data"]["SAMLResponse"] = message
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         auth.set_strict(True)
         auth.process_slo(True)
@@ -399,7 +446,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         message = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
         request_data["get_data"]["SAMLResponse"] = message
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         request_id = "wrongID"
         auth.set_strict(True)
@@ -433,7 +482,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         message = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
         request_data["get_data"]["SAMLResponse"] = message
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         # FIXME
         # if (!isset($_SESSION)) {
@@ -480,7 +531,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         message = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
         request_data["get_data"]["SAMLResponse"] = message
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         auth.set_strict(True)
         auth.process_slo(False)
@@ -499,7 +552,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         request_data = self.get_request()
         message = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_deflated.xml.base64"
+                self.data_path,
+                "logout_requests",
+                "logout_request_deflated.xml.base64",
             )
         )
         request_data["get_data"]["SAMLRequest"] = message
@@ -550,7 +605,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         message = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
         request_data["get_data"]["SAMLRequest"] = message
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
 
         auth.set_strict(True)
         auth.process_slo(True)
@@ -566,7 +623,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         request_data = self.get_request()
         message = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_deflated.xml.base64"
+                self.data_path,
+                "logout_requests",
+                "logout_request_deflated.xml.base64",
             )
         )
         # In order to avoid the destination problem
@@ -622,7 +681,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         request_data = self.get_request()
         message = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_deflated.xml.base64"
+                self.data_path,
+                "logout_requests",
+                "logout_request_deflated.xml.base64",
             )
         )
         # In order to avoid the destination problem
@@ -658,7 +719,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         request_data = self.get_request()
         message = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_deflated.xml.base64"
+                self.data_path,
+                "logout_requests",
+                "logout_request_deflated.xml.base64",
             )
         )
         # In order to avoid the destination problem
@@ -684,7 +747,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertIn("SigAlg", parsed_query)
         self.assertIn("Signature", parsed_query)
         self.assertIn("http://relaystate.com", parsed_query["RelayState"])
-        self.assertIn(OneLogin_Saml2_Constants.RSA_SHA1, parsed_query["SigAlg"])
+        self.assertIn(
+            OneLogin_Saml2_Constants.RSA_SHA1, parsed_query["SigAlg"]
+        )
 
     def testLogin(self):
         """
@@ -702,7 +767,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertIn("SAMLRequest", parsed_query)
         self.assertIn("RelayState", parsed_query)
         hostname = OneLogin_Saml2_Utils.get_self_host(request_data)
-        self.assertIn(u"http://%s/index.html" % hostname, parsed_query["RelayState"])
+        self.assertIn(
+            u"http://%s/index.html" % hostname, parsed_query["RelayState"]
+        )
 
     def testLoginWithRelayState(self):
         """
@@ -711,7 +778,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         RelayState in the assertion is built and redirect executed
         """
         settings_info = self.loadSettingsJSON()
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         relay_state = "http://sp.example.com"
 
         target_url = auth.login(relay_state)
@@ -729,7 +798,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         """
         settings_info = self.loadSettingsJSON()
         settings_info["security"]["authnRequestsSigned"] = True
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         return_to = u"http://example.com/returnto"
 
         target_url = auth.login(return_to)
@@ -741,7 +812,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertIn("SigAlg", parsed_query)
         self.assertIn("Signature", parsed_query)
         self.assertIn(return_to, parsed_query["RelayState"])
-        self.assertIn(OneLogin_Saml2_Constants.RSA_SHA1, parsed_query["SigAlg"])
+        self.assertIn(
+            OneLogin_Saml2_Constants.RSA_SHA1, parsed_query["SigAlg"]
+        )
 
     def testLoginForceAuthN(self):
         """
@@ -751,7 +824,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         settings_info = self.loadSettingsJSON()
         return_to = u"http://example.com/returnto"
 
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url = auth.login(return_to)
         parsed_query = parse_qs(urlparse(target_url)[4])
         sso_url = settings_info["idp"]["singleSignOnService"]["url"]
@@ -764,7 +839,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         self.assertNotIn('ForceAuthn="true"', request)
 
-        auth_2 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth_2 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url_2 = auth_2.login(return_to, False, False)
         parsed_query_2 = parse_qs(urlparse(target_url_2)[4])
         self.assertIn(sso_url, target_url_2)
@@ -776,7 +853,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         self.assertNotIn('ForceAuthn="true"', request_2)
 
-        auth_3 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth_3 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url_3 = auth_3.login(return_to, True, False)
         parsed_query_3 = parse_qs(urlparse(target_url_3)[4])
         self.assertIn(sso_url, target_url_3)
@@ -797,7 +876,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         return_to = u"http://example.com/returnto"
         settings_info["idp"]["singleSignOnService"]["url"]
 
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url = auth.login(return_to)
         parsed_query = parse_qs(urlparse(target_url)[4])
         sso_url = settings_info["idp"]["singleSignOnService"]["url"]
@@ -810,7 +891,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         self.assertNotIn('IsPassive="true"', request)
 
-        auth_2 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth_2 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url_2 = auth_2.login(return_to, False, False)
         parsed_query_2 = parse_qs(urlparse(target_url_2)[4])
         self.assertIn(sso_url, target_url_2)
@@ -822,7 +905,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         self.assertNotIn('IsPassive="true"', request_2)
 
-        auth_3 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth_3 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url_3 = auth_3.login(return_to, False, True)
         parsed_query_3 = parse_qs(urlparse(target_url_3)[4])
         self.assertIn(sso_url, target_url_3)
@@ -843,7 +928,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         return_to = u"http://example.com/returnto"
         settings_info["idp"]["singleSignOnService"]["url"]
 
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url = auth.login(return_to)
         parsed_query = parse_qs(urlparse(target_url)[4])
         sso_url = settings_info["idp"]["singleSignOnService"]["url"]
@@ -856,7 +943,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         self.assertIn("<samlp:NameIDPolicy", request)
 
-        auth_2 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth_2 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url_2 = auth_2.login(return_to, False, False, True)
         parsed_query_2 = parse_qs(urlparse(target_url_2)[4])
         self.assertIn(sso_url, target_url_2)
@@ -868,7 +957,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         self.assertIn("<samlp:NameIDPolicy", request_2)
 
-        auth_3 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth_3 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url_3 = auth_3.login(return_to, False, False, False)
         parsed_query_3 = parse_qs(urlparse(target_url_3)[4])
         self.assertIn(sso_url, target_url_3)
@@ -889,7 +980,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         return_to = u"http://example.com/returnto"
         sso_url = settings_info["idp"]["singleSignOnService"]["url"]
 
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         target_url = auth.login(return_to)
         parsed_query = parse_qs(urlparse(target_url)[4])
         self.assertIn(sso_url, target_url)
@@ -903,8 +996,12 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertNotIn("<saml:NameID", request)
         self.assertNotIn("<saml:saml:SubjectConfirmation", request)
 
-        auth_2 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
-        target_url_2 = auth_2.login(return_to, name_id_value_req="testuser@example.com")
+        auth_2 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
+        target_url_2 = auth_2.login(
+            return_to, name_id_value_req="testuser@example.com"
+        )
         parsed_query_2 = parse_qs(urlparse(target_url_2)[4])
         self.assertIn(sso_url, target_url_2)
         self.assertIn("SAMLRequest", parsed_query_2)
@@ -926,8 +1023,12 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         settings_info["sp"][
             "NameIDFormat"
         ] = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
-        auth_3 = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
-        target_url_3 = auth_3.login(return_to, name_id_value_req="testuser@example.com")
+        auth_3 = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
+        target_url_3 = auth_3.login(
+            return_to, name_id_value_req="testuser@example.com"
+        )
         parsed_query_3 = parse_qs(urlparse(target_url_3)[4])
         self.assertIn(sso_url, target_url_3)
         self.assertIn("SAMLRequest", parsed_query_3)
@@ -963,7 +1064,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertIn("SAMLRequest", parsed_query)
         self.assertIn("RelayState", parsed_query)
         hostname = OneLogin_Saml2_Utils.get_self_host(request_data)
-        self.assertIn(u"http://%s/index.html" % hostname, parsed_query["RelayState"])
+        self.assertIn(
+            u"http://%s/index.html" % hostname, parsed_query["RelayState"]
+        )
 
     def testLogoutWithRelayState(self):
         """
@@ -972,7 +1075,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         the assertion is built and redirect executed
         """
         settings_info = self.loadSettingsJSON()
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         relay_state = "http://sp.example.com"
 
         target_url = auth.logout(relay_state)
@@ -991,7 +1096,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         """
         settings_info = self.loadSettingsJSON()
         settings_info["security"]["logoutRequestSigned"] = True
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         return_to = u"http://example.com/returnto"
 
         target_url = auth.logout(return_to)
@@ -1003,7 +1110,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertIn("SigAlg", parsed_query)
         self.assertIn("Signature", parsed_query)
         self.assertIn(return_to, parsed_query["RelayState"])
-        self.assertIn(OneLogin_Saml2_Constants.RSA_SHA1, parsed_query["SigAlg"])
+        self.assertIn(
+            OneLogin_Saml2_Constants.RSA_SHA1, parsed_query["SigAlg"]
+        )
 
     def testLogoutNoSLO(self):
         """
@@ -1012,7 +1121,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         """
         settings_info = self.loadSettingsJSON()
         del settings_info["idp"]["singleLogoutService"]
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
         # The Header of the redirect produces an Exception
         with self.assertRaisesRegex(
             OneLogin_Saml2_Error, "The IdP does not support Single Log Out"
@@ -1039,9 +1150,11 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         logout_request = OneLogin_Saml2_Utils.decode_base64_and_inflate(
             parsed_query["SAMLRequest"][0]
         )
-        name_id_from_request = OneLogin_Saml2_Logout_Request.get_nameid(logout_request)
-        sessions_index_in_request = OneLogin_Saml2_Logout_Request.get_session_indexes(
+        name_id_from_request = OneLogin_Saml2_Logout_Request.get_nameid(
             logout_request
+        )
+        sessions_index_in_request = (
+            OneLogin_Saml2_Logout_Request.get_session_indexes(logout_request)
         )
         self.assertIn(session_index, sessions_index_in_request)
         self.assertEqual(name_id, name_id_from_request)
@@ -1057,7 +1170,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         )
         del request_data["get_data"]
         request_data["post_data"] = {"SAMLResponse": message}
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         auth.process_response()
 
         name_id_from_response = auth.get_nameid()
@@ -1070,15 +1185,21 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
             parsed_query["SAMLRequest"][0]
         )
 
-        name_id_from_request = OneLogin_Saml2_Logout_Request.get_nameid(logout_request)
-        name_id_format_from_request = OneLogin_Saml2_Logout_Request.get_nameid_format(
+        name_id_from_request = OneLogin_Saml2_Logout_Request.get_nameid(
             logout_request
         )
+        name_id_format_from_request = (
+            OneLogin_Saml2_Logout_Request.get_nameid_format(logout_request)
+        )
         self.assertEqual(name_id_from_response, name_id_from_request)
-        self.assertEqual(name_id_format_from_response, name_id_format_from_request)
+        self.assertEqual(
+            name_id_format_from_response, name_id_format_from_request
+        )
 
         new_name_id = "new_name_id"
-        new_name_id_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+        new_name_id_format = (
+            "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+        )
         target_url_2 = auth.logout(
             name_id=new_name_id, name_id_format=new_name_id_format
         )
@@ -1088,9 +1209,11 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
             parsed_query["SAMLRequest"][0]
         )
 
-        name_id_from_request = OneLogin_Saml2_Logout_Request.get_nameid(logout_request)
-        name_id_format_from_request = OneLogin_Saml2_Logout_Request.get_nameid_format(
+        name_id_from_request = OneLogin_Saml2_Logout_Request.get_nameid(
             logout_request
+        )
+        name_id_format_from_request = (
+            OneLogin_Saml2_Logout_Request.get_nameid_format(logout_request)
         )
         self.assertEqual(new_name_id, name_id_from_request)
         self.assertEqual(new_name_id_format, name_id_format_from_request)
@@ -1101,7 +1224,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         """
         settings_info = self.loadSettingsJSON()
         settings_info["strict"] = False
-        auth = OneLogin_Saml2_Auth(self.get_request(), old_settings=settings_info)
+        auth = OneLogin_Saml2_Auth(
+            self.get_request(), old_settings=settings_info
+        )
 
         settings = auth.get_settings()
         self.assertFalse(settings.is_strict())
@@ -1126,7 +1251,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
             join(self.data_path, "responses", "response1.xml.base64")
         )
         request_data["post_data"] = {"SAMLResponse": message}
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         auth.process_response()
         self.assertFalse(auth.is_authenticated())
 
@@ -1134,7 +1261,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
             join(self.data_path, "responses", "valid_response.xml.base64")
         )
         request_data["post_data"] = {"SAMLResponse": message}
-        auth = OneLogin_Saml2_Auth(request_data, old_settings=self.loadSettingsJSON())
+        auth = OneLogin_Saml2_Auth(
+            request_data, old_settings=self.loadSettingsJSON()
+        )
         auth.process_response()
         self.assertTrue(auth.is_authenticated())
 
@@ -1161,7 +1290,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings)
         auth.process_response()
         self.assertTrue(auth.is_authenticated())
-        self.assertEqual("492882615acf31c8096b627245d76ae53036c090", auth.get_nameid())
+        self.assertEqual(
+            "492882615acf31c8096b627245d76ae53036c090", auth.get_nameid()
+        )
 
         settings_2 = self.loadSettingsJSON("settings2.json")
         message = self.file_contents(
@@ -1175,7 +1306,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings_2)
         auth.process_response()
         self.assertTrue(auth.is_authenticated())
-        self.assertEqual("25ddd7d34a7d79db69167625cda56a320adf2876", auth.get_nameid())
+        self.assertEqual(
+            "25ddd7d34a7d79db69167625cda56a320adf2876", auth.get_nameid()
+        )
 
     def testGetNameIdFormat(self):
         """
@@ -1240,7 +1373,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         self.assertIsNone(auth.get_nameid_nq())
         auth.process_response()
         self.assertTrue(auth.is_authenticated())
-        self.assertEqual("https://test.example.com/saml/metadata", auth.get_nameid_nq())
+        self.assertEqual(
+            "https://test.example.com/saml/metadata", auth.get_nameid_nq()
+        )
 
     def testGetNameIdNameQualifier2(self):
         """
@@ -1303,7 +1438,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         settings = self.loadSettingsJSON()
         message = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_deflated.xml.base64"
+                self.data_path,
+                "logout_requests",
+                "logout_request_deflated.xml.base64",
             )
         )
         relay_state = "http://relaystate.com"
@@ -1404,7 +1541,9 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth.process_slo()
         self.assertEqual([], auth.get_errors())
 
-        request_data["get_data"]["RelayState"] = "http://example.com/relaystate"
+        request_data["get_data"][
+            "RelayState"
+        ] = "http://example.com/relaystate"
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings)
         auth.process_slo()
         self.assertIn("invalid_logout_response_signature", auth.get_errors())
@@ -1417,7 +1556,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
             )
         )
         plain_message_6 = plain_message_6.replace(
-            "https://pitbulk.no-ip.org/newonelogin/demo1/index.php?sls", current_url
+            "https://pitbulk.no-ip.org/newonelogin/demo1/index.php?sls",
+            current_url,
         )
         plain_message_6 = plain_message_6.replace(
             "https://pitbulk.no-ip.org/simplesaml/saml2/idp/metadata.php",
@@ -1457,7 +1597,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings)
         auth.process_slo()
         self.assertIn(
-            "Signature validation failed. Logout Response rejected", auth.get_errors()
+            "Signature validation failed. Logout Response rejected",
+            auth.get_errors(),
         )
 
         request_data["get_data"]["Signature"] = old_signature
@@ -1470,7 +1611,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings_2)
         auth.process_slo()
         self.assertIn(
-            "Signature validation failed. Logout Response rejected", auth.get_errors()
+            "Signature validation failed. Logout Response rejected",
+            auth.get_errors(),
         )
 
     def testIsValidLogoutRequestSign(self):
@@ -1532,7 +1674,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
 
         settings.set_strict(True)
         request_2 = request.replace(
-            "https://pitbulk.no-ip.org/newonelogin/demo1/index.php?sls", current_url
+            "https://pitbulk.no-ip.org/newonelogin/demo1/index.php?sls",
+            current_url,
         )
         request_2 = request_2.replace(
             "https://pitbulk.no-ip.org/simplesaml/saml2/idp/metadata.php",
@@ -1567,7 +1710,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings)
         auth.process_slo()
         self.assertIn(
-            "Signature validation failed. Logout Request rejected", auth.get_errors()
+            "Signature validation failed. Logout Request rejected",
+            auth.get_errors(),
         )
 
         request_data["get_data"]["Signature"] = old_signature
@@ -1579,7 +1723,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(request_data, old_settings=settings_2)
         auth.process_slo()
         self.assertIn(
-            "Signature validation failed. Logout Request rejected", auth.get_errors()
+            "Signature validation failed. Logout Request rejected",
+            auth.get_errors(),
         )
 
     def testGetLastRequestID(self):
@@ -1600,25 +1745,41 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
     def testGetLastSAMLResponse(self):
         settings = self.loadSettingsJSON()
         message = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response.xml.base64",
+            )
         )
         message_wrapper = {"post_data": {"SAMLResponse": message}}
         auth = OneLogin_Saml2_Auth(message_wrapper, old_settings=settings)
         auth.process_response()
         expected_message = self.file_contents(
-            join(self.data_path, "responses", "pretty_signed_message_response.xml")
+            join(
+                self.data_path,
+                "responses",
+                "pretty_signed_message_response.xml",
+            )
         )
         self.assertEqual(auth.get_last_response_xml(True), expected_message)
 
         # with encrypted assertion
         message = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         message_wrapper = {"post_data": {"SAMLResponse": message}}
         auth = OneLogin_Saml2_Auth(message_wrapper, old_settings=settings)
         auth.process_response()
         decrypted_response = self.file_contents(
-            join(self.data_path, "responses", "decrypted_valid_encrypted_assertion.xml")
+            join(
+                self.data_path,
+                "responses",
+                "decrypted_valid_encrypted_assertion.xml",
+            )
         )
         self.assertEqual(auth.get_last_response_xml(False), decrypted_response)
         pretty_decrypted_response = self.file_contents(
@@ -1628,12 +1789,15 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
                 "pretty_decrypted_valid_encrypted_assertion.xml",
             )
         )
-        self.assertEqual(auth.get_last_response_xml(True), pretty_decrypted_response)
+        self.assertEqual(
+            auth.get_last_response_xml(True), pretty_decrypted_response
+        )
 
     def testGetLastAuthnRequest(self):
         settings = self.loadSettingsJSON()
         auth = OneLogin_Saml2_Auth(
-            {"http_host": "localhost", "script_name": "thing"}, old_settings=settings
+            {"http_host": "localhost", "script_name": "thing"},
+            old_settings=settings,
         )
         auth.login()
         expectedFragment = (
@@ -1669,7 +1833,8 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
     def testGetLastLogoutRequest(self):
         settings = self.loadSettingsJSON()
         auth = OneLogin_Saml2_Auth(
-            {"http_host": "localhost", "script_name": "thing"}, old_settings=settings
+            {"http_host": "localhost", "script_name": "thing"},
+            old_settings=settings,
         )
         auth.logout()
         expectedFragment = (
@@ -1734,10 +1899,12 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
 
         auth.process_response()
         self.assertEqual(
-            auth.get_last_message_id(), "pfx42be40bf-39c3-77f0-c6ae-8bf2e23a1a2e"
+            auth.get_last_message_id(),
+            "pfx42be40bf-39c3-77f0-c6ae-8bf2e23a1a2e",
         )
         self.assertEqual(
-            auth.get_last_assertion_id(), "pfx57dfda60-b211-4cda-0f63-6d5deb69e5bb"
+            auth.get_last_assertion_id(),
+            "pfx57dfda60-b211-4cda-0f63-6d5deb69e5bb",
         )
         self.assertIsNone(auth.get_last_assertion_not_on_or_after())
 
@@ -1759,10 +1926,12 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth.process_response()
         self.assertEqual(len(auth.get_errors()), 0)
         self.assertEqual(
-            auth.get_last_message_id(), "pfx42be40bf-39c3-77f0-c6ae-8bf2e23a1a2e"
+            auth.get_last_message_id(),
+            "pfx42be40bf-39c3-77f0-c6ae-8bf2e23a1a2e",
         )
         self.assertEqual(
-            auth.get_last_assertion_id(), "pfx57dfda60-b211-4cda-0f63-6d5deb69e5bb"
+            auth.get_last_assertion_id(),
+            "pfx57dfda60-b211-4cda-0f63-6d5deb69e5bb",
         )
         self.assertEqual(auth.get_last_assertion_not_on_or_after(), 2671081021)
 
@@ -1798,5 +1967,6 @@ class OneLogin_Saml2_Auth_Test(unittest.TestCase):
         auth = OneLogin_Saml2_Auth(message_wrapper, old_settings=settings)
         auth.process_slo()
         self.assertIn(
-            auth.get_last_message_id(), "_f9ee61bd9dbf63606faa9ae3b10548d5b3656fb859"
+            auth.get_last_message_id(),
+            "_f9ee61bd9dbf63606faa9ae3b10548d5b3656fb859",
         )

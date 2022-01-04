@@ -15,7 +15,9 @@ from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 class OneLogin_Saml2_Settings_Test(unittest.TestCase):
     data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
+    settings_path = join(
+        dirname(dirname(dirname(dirname(__file__)))), "settings"
+    )
 
     def loadSettingsJSON(self, name="settings1.json"):
         filename = join(self.settings_path, name)
@@ -66,7 +68,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         except Exception as e:
             self.assertIn("Invalid dict settings: idp_sso_url_invalid", str(e))
 
-        settings_info["idp"]["singleSignOnService"]["url"] = "http://invalid_domain"
+        settings_info["idp"]["singleSignOnService"][
+            "url"
+        ] = "http://invalid_domain"
         try:
             settings_3 = OneLogin_Saml2_Settings(settings_info)
             self.assertNotEqual(len(settings_3.get_errors()), 0)
@@ -111,7 +115,8 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             self.assertNotEqual(len(settings_7.get_errors()), 0)
         except Exception as e:
             self.assertIn(
-                "Invalid dict settings: idp_cert_not_found_and_required", str(e)
+                "Invalid dict settings: idp_cert_not_found_and_required",
+                str(e),
             )
 
     def testLoadSettingsFromInvalidData(self):
@@ -135,7 +140,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         Tests the OneLogin_Saml2_Settings Constructor.
         Case load setting from file
         """
-        custom_base_path = join(dirname(__file__), "..", "..", "..", "settings")
+        custom_base_path = join(
+            dirname(__file__), "..", "..", "..", "settings"
+        )
         settings = OneLogin_Saml2_Settings(custom_base_path=custom_base_path)
         self.assertEqual(len(settings.get_errors()), 0)
 
@@ -205,7 +212,10 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             ),
         )
         self.assertEqual(
-            path, join(dirname(dirname(dirname(dirname(dirname(__file__))))), "src/")
+            path,
+            join(
+                dirname(dirname(dirname(dirname(dirname(__file__))))), "src/"
+            ),
         )
 
         settings = OneLogin_Saml2_Settings(custom_base_path=self.settings_path)
@@ -218,7 +228,8 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             ),
         )
         self.assertEqual(
-            path, join(dirname(dirname(dirname(dirname(__file__)))), "settings/")
+            path,
+            join(dirname(dirname(dirname(dirname(__file__)))), "settings/"),
         )
 
     def testGetSchemasPath(self):
@@ -254,7 +265,10 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             ),
         )
         self.assertEqual(
-            path, join(dirname(dirname(dirname(dirname(dirname(__file__))))), "src/")
+            path,
+            join(
+                dirname(dirname(dirname(dirname(dirname(__file__))))), "src/"
+            ),
         )
 
         settings = OneLogin_Saml2_Settings(custom_base_path=self.settings_path)
@@ -267,7 +281,8 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             ),
         )
         self.assertEqual(
-            path, join(dirname(dirname(dirname(dirname(__file__)))), "settings/")
+            path,
+            join(dirname(dirname(dirname(dirname(__file__)))), "settings/"),
         )
 
     def testGetIdPSSOurl(self):
@@ -340,7 +355,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         self.assertEqual(cert, settings.get_sp_cert())
         self.assertIsNone(settings.get_sp_cert_new())
 
-        settings = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings7.json"))
+        settings = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings7.json")
+        )
         cert_new = "-----BEGIN CERTIFICATE-----\nMIICVDCCAb2gAwIBAgIBADANBgkqhkiG9w0BAQ0FADBHMQswCQYDVQQGEwJ1czEQ\nMA4GA1UECAwHZXhhbXBsZTEQMA4GA1UECgwHZXhhbXBsZTEUMBIGA1UEAwwLZXhh\nbXBsZS5jb20wHhcNMTcwNDA3MDgzMDAzWhcNMjcwNDA1MDgzMDAzWjBHMQswCQYD\nVQQGEwJ1czEQMA4GA1UECAwHZXhhbXBsZTEQMA4GA1UECgwHZXhhbXBsZTEUMBIG\nA1UEAwwLZXhhbXBsZS5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKhP\nS4/0azxbQekHHewQGKD7Pivr3CDpsrKxY3xlVanxj427OwzOb5KUVzsDEazumt6s\nZFY8HfidsjXY4EYA4ZzyL7ciIAR5vlAsIYN9nJ4AwVDnN/RjVwj+TN6BqWPLpVIp\nHc6Dl005HyE0zJnk1DZDn2tQVrIzbD3FhCp7YeotAgMBAAGjUDBOMB0GA1UdDgQW\nBBRYZx4thASfNvR/E7NsCF2IaZ7wIDAfBgNVHSMEGDAWgBRYZx4thASfNvR/E7Ns\nCF2IaZ7wIDAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBDQUAA4GBACz4aobx9aG3\nkh+rNyrlgM3K6dYfnKG1/YH5sJCAOvg8kDr0fQAQifH8lFVWumKUMoAe0bFTfwWt\np/VJ8MprrEJth6PFeZdczpuv+fpLcNj2VmNVJqvQYvS4m36OnBFh1QFZW8UrbFIf\ndtm2nuZ+twSKqfKwjLdqcoX0p39h7Uw/\n-----END CERTIFICATE-----\n"
         self.assertEqual(cert, settings.get_sp_cert())
         self.assertEqual(cert_new, settings.get_sp_cert_new())
@@ -373,7 +390,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         Tests the get_idp_cert method of the OneLogin_Saml2_Settings
         """
 
-        settings = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings9.json"))
+        settings = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings9.json")
+        )
         cert = "-----BEGIN CERTIFICATE-----\nMIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMC\nTk8xGDAWBgNVBAgTD0FuZHJlYXMgU29sYmVyZzEMMAoGA1UEBxMDRm9vMRAwDgYD\nVQQKEwdVTklORVRUMRgwFgYDVQQDEw9mZWlkZS5lcmxhbmcubm8xITAfBgkqhkiG\n9w0BCQEWEmFuZHJlYXNAdW5pbmV0dC5ubzAeFw0wNzA2MTUxMjAxMzVaFw0wNzA4\nMTQxMjAxMzVaMIGEMQswCQYDVQQGEwJOTzEYMBYGA1UECBMPQW5kcmVhcyBTb2xi\nZXJnMQwwCgYDVQQHEwNGb28xEDAOBgNVBAoTB1VOSU5FVFQxGDAWBgNVBAMTD2Zl\naWRlLmVybGFuZy5ubzEhMB8GCSqGSIb3DQEJARYSYW5kcmVhc0B1bmluZXR0Lm5v\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDivbhR7P516x/S3BqKxupQe0LO\nNoliupiBOesCO3SHbDrl3+q9IbfnfmE04rNuMcPsIxB161TdDpIesLCn7c8aPHIS\nKOtPlAeTZSnb8QAu7aRjZq3+PbrP5uW3TcfCGPtKTytHOge/OlJbo078dVhXQ14d\n1EDwXJW1rRXuUt4C8QIDAQABMA0GCSqGSIb3DQEBBQUAA4GBACDVfp86HObqY+e8\nBUoWQ9+VMQx1ASDohBjwOsg2WykUqRXF+dLfcUH9dWR63CtZIKFDbStNomPnQz7n\nbK+onygwBspVEbnHuUihZq3ZUdmumQqCw4Uvs/1Uvq3orOo/WJVhTyvLgFVK2Qar\nQ4/67OZfHd7R+POBXhophSMv1ZOo\n-----END CERTIFICATE-----"
         self.assertEqual(cert, settings.get_idp_cert())
 
@@ -491,9 +510,12 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             OneLogin_Saml2_Settings(settings_info)
             self.assertTrue(False)
         except Exception as e:
-            self.assertIn("sp_attributeConsumingService_serviceName_not_found", str(e))
             self.assertIn(
-                "sp_attributeConsumingService_requestedAttributes_not_found", str(e)
+                "sp_attributeConsumingService_serviceName_not_found", str(e)
+            )
+            self.assertIn(
+                "sp_attributeConsumingService_requestedAttributes_not_found",
+                str(e),
             )
 
         # requestedAttributes/name is required
@@ -521,7 +543,8 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
                 str(e),
             )
             self.assertIn(
-                "sp_attributeConsumingService_serviceDescription_type_invalid", str(e)
+                "sp_attributeConsumingService_serviceDescription_type_invalid",
+                str(e),
             )
             self.assertIn(
                 "sp_attributeConsumingService_serviceName_type_invalid", str(e)
@@ -533,7 +556,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         settings_info["idp"]["singleLogoutService"] = {}
         settings_info["idp"]["singleLogoutService"]["url"] = "invalid_value"
         settings_info["sp"]["assertionConsumerService"] = {}
-        settings_info["sp"]["assertionConsumerService"]["url"] = "invalid_value"
+        settings_info["sp"]["assertionConsumerService"][
+            "url"
+        ] = "invalid_value"
         settings_info["sp"]["singleLogoutService"] = {}
         settings_info["sp"]["singleLogoutService"]["url"] = "invalid_value"
         try:
@@ -550,11 +575,15 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             OneLogin_Saml2_Settings(settings_info)
             self.assertTrue(False)
         except Exception as e:
-            self.assertIn("idp_cert_or_fingerprint_not_found_and_required", str(e))
+            self.assertIn(
+                "idp_cert_or_fingerprint_not_found_and_required", str(e)
+            )
 
         settings_info = self.loadSettingsJSON()
         settings_info["security"]["signMetadata"] = {}
-        settings_info["security"]["signMetadata"]["keyFileName"] = "metadata.key"
+        settings_info["security"]["signMetadata"][
+            "keyFileName"
+        ] = "metadata.key"
         settings_info["organization"] = {"en-US": {"name": "miss_information"}}
         settings_info["contactPerson"] = {
             "support": {"givenName": "support_name"},
@@ -584,7 +613,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
 
         self.assertNotEqual(len(metadata), 0)
         self.assertIn("<md:SPSSODescriptor", metadata)
-        self.assertIn('entityID="http://stuff.com/endpoints/metadata.php"', metadata)
+        self.assertIn(
+            'entityID="http://stuff.com/endpoints/metadata.php"', metadata
+        )
         self.assertIn('AuthnRequestsSigned="false"', metadata)
         self.assertIn('WantAssertionsSigned="false"', metadata)
         self.assertIn(
@@ -601,7 +632,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         )
         self.assertEqual(1, metadata.count("<md:KeyDescriptor"))
         self.assertEqual(1, metadata.count('<md:KeyDescriptor use="signing"'))
-        self.assertEqual(0, metadata.count('<md:KeyDescriptor use="encryption"'))
+        self.assertEqual(
+            0, metadata.count('<md:KeyDescriptor use="encryption"')
+        )
 
         settings_info["security"]["wantNameIdEncrypted"] = False
         settings_info["security"]["wantAssertionsEncrypted"] = True
@@ -609,7 +642,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         metadata = compat.to_string(settings.get_sp_metadata())
         self.assertEqual(2, metadata.count("<md:KeyDescriptor"))
         self.assertEqual(1, metadata.count('<md:KeyDescriptor use="signing"'))
-        self.assertEqual(1, metadata.count('<md:KeyDescriptor use="encryption"'))
+        self.assertEqual(
+            1, metadata.count('<md:KeyDescriptor use="encryption"')
+        )
 
     def testGetSPMetadataWithx509certNew(self):
         """
@@ -625,7 +660,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         self.assertIn("<md:SPSSODescriptor", metadata)
         self.assertEqual(2, metadata.count("<md:KeyDescriptor"))
         self.assertEqual(2, metadata.count('<md:KeyDescriptor use="signing"'))
-        self.assertEqual(0, metadata.count('<md:KeyDescriptor use="encryption"'))
+        self.assertEqual(
+            0, metadata.count('<md:KeyDescriptor use="encryption"')
+        )
 
         settings_info["security"]["wantNameIdEncrypted"] = True
         settings_info["security"]["wantAssertionsEncrypted"] = False
@@ -633,7 +670,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         metadata = compat.to_string(settings.get_sp_metadata())
         self.assertEqual(4, metadata.count("<md:KeyDescriptor"))
         self.assertEqual(2, metadata.count('<md:KeyDescriptor use="signing"'))
-        self.assertEqual(2, metadata.count('<md:KeyDescriptor use="encryption"'))
+        self.assertEqual(
+            2, metadata.count('<md:KeyDescriptor use="encryption"')
+        )
 
     def testGetSPMetadataSigned(self):
         """
@@ -684,7 +723,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
 
         metadata = compat.to_string(settings.get_sp_metadata())
         self.assertIn("<md:SPSSODescriptor", metadata)
-        self.assertIn('entityID="http://stuff.com/endpoints/metadata.php"', metadata)
+        self.assertIn(
+            'entityID="http://stuff.com/endpoints/metadata.php"', metadata
+        )
         self.assertIn('AuthnRequestsSigned="false"', metadata)
         self.assertIn('WantAssertionsSigned="false"', metadata)
         self.assertIn(
@@ -708,7 +749,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
             metadata,
         )
         self.assertIn("<ds:Reference", metadata)
-        self.assertIn("<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>", metadata)
+        self.assertIn(
+            "<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>", metadata
+        )
 
     def testGetSPMetadataSignedNoMetadataCert(self):
         """
@@ -775,11 +818,16 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         xml_3 = self.file_contents(
             join(self.data_path, "metadata", "entities_metadata.xml")
         )
-        self.assertIn("noEntityDescriptor_xml", settings.validate_metadata(xml_3))
-
-        xml_4 = self.file_contents(join(self.data_path, "metadata", "idp_metadata.xml"))
         self.assertIn(
-            "onlySPSSODescriptor_allowed_xml", settings.validate_metadata(xml_4)
+            "noEntityDescriptor_xml", settings.validate_metadata(xml_3)
+        )
+
+        xml_4 = self.file_contents(
+            join(self.data_path, "metadata", "idp_metadata.xml")
+        )
+        self.assertIn(
+            "onlySPSSODescriptor_allowed_xml",
+            settings.validate_metadata(xml_4),
         )
 
         xml_5 = self.file_contents(
@@ -870,7 +918,9 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         self.assertIn("singleLogoutService", sp_data)
         self.assertIn("NameIDFormat", sp_data)
 
-        self.assertEqual("http://stuff.com/endpoints/metadata.php", sp_data["entityId"])
+        self.assertEqual(
+            "http://stuff.com/endpoints/metadata.php", sp_data["entityId"]
+        )
         self.assertEqual(
             "http://stuff.com/endpoints/endpoints/acs.php",
             sp_data["assertionConsumerService"]["url"],
@@ -951,9 +1001,13 @@ class OneLogin_Saml2_Settings_Test(unittest.TestCase):
         contacts = settings.get_contacts()
         self.assertNotEqual(len(contacts), 0)
         self.assertEqual("technical_name", contacts["technical"]["givenName"])
-        self.assertEqual("technical@example.com", contacts["technical"]["emailAddress"])
+        self.assertEqual(
+            "technical@example.com", contacts["technical"]["emailAddress"]
+        )
         self.assertEqual("support_name", contacts["support"]["givenName"])
-        self.assertEqual("support@example.com", contacts["support"]["emailAddress"])
+        self.assertEqual(
+            "support@example.com", contacts["support"]["emailAddress"]
+        )
 
     def testGetOrganization(self):
         """

@@ -25,7 +25,11 @@ class RestrictedElement(_etree.ElementBase):
     """A restricted Element class that filters out instances of some classes"""
 
     __slots__ = ()
-    blacklist = (_etree._Entity, _etree._ProcessingInstruction, _etree._Comment)
+    blacklist = (
+        _etree._Entity,
+        _etree._ProcessingInstruction,
+        _etree._Comment,
+    )
 
     def _filter(self, iterator):
         blacklist = self.blacklist
@@ -49,7 +53,9 @@ class RestrictedElement(_etree.ElementBase):
         return self._filter(iterator)
 
     def iterdescendants(self, tag=None, *tags):
-        iterator = super(RestrictedElement, self).iterdescendants(tag=tag, *tags)
+        iterator = super(RestrictedElement, self).iterdescendants(
+            tag=tag, *tags
+        )
         return self._filter(iterator)
 
     def itersiblings(self, tag=None, preceding=False):
@@ -111,7 +117,9 @@ def check_docinfo(elementtree, forbid_dtd=False, forbid_entities=True):
     docinfo = elementtree.docinfo
     if docinfo.doctype:
         if forbid_dtd:
-            raise DTDForbidden(docinfo.doctype, docinfo.system_url, docinfo.public_id)
+            raise DTDForbidden(
+                docinfo.doctype, docinfo.system_url, docinfo.public_id
+            )
         if forbid_entities and not LXML3:
             # lxml < 3 has no iterentities()
             raise NotSupportedError(
@@ -128,7 +136,9 @@ def check_docinfo(elementtree, forbid_dtd=False, forbid_entities=True):
                 )
 
 
-def parse(source, parser=None, base_url=None, forbid_dtd=True, forbid_entities=True):
+def parse(
+    source, parser=None, base_url=None, forbid_dtd=True, forbid_entities=True
+):
     if parser is None:
         parser = getDefaultParser()
     elementtree = _etree.parse(source, parser, base_url=base_url)
@@ -136,7 +146,9 @@ def parse(source, parser=None, base_url=None, forbid_dtd=True, forbid_entities=T
     return elementtree
 
 
-def fromstring(text, parser=None, base_url=None, forbid_dtd=True, forbid_entities=True):
+def fromstring(
+    text, parser=None, base_url=None, forbid_dtd=True, forbid_entities=True
+):
     if parser is None:
         parser = getDefaultParser()
     rootelement = _etree.fromstring(text, parser, base_url=base_url)

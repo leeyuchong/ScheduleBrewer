@@ -15,7 +15,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 FRONTEND_DIR = BASE_DIR / "Frontend"
@@ -59,14 +58,13 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [FRONTEND_DIR / "templates"],
-        "APP_DIRS": False,
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # 'django.core.context_processors.static',
             ],
         },
     },
@@ -86,7 +84,7 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv(
             "DB_HOST"
-        ),  # Empty for localhost through domain sockets or   '127.0.0.1' for localhost through TCP.
+        ),  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         "PORT": os.getenv("DB_PORT"),  # Set to empty string for default.
         "OPTIONS": {
             "autocommit": True,
@@ -129,7 +127,7 @@ REST_FRAMEWORK = {
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "course_browser_js",
-        "STATS_FILE": FRONTEND_DIR / "webpack/webpack-stats.json"
+        "STATS_FILE": FRONTEND_DIR / "webpack/webpack-stats.json",
     }
 }
 

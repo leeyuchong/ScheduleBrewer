@@ -51,7 +51,9 @@ class OneLogin_Saml2_Response(object):
         if encrypted_assertion_nodes:
             decrypted_document = deepcopy(self.document)
             self.encrypted = True
-            self.decrypted_document = self.__decrypt_assertion(decrypted_document)
+            self.decrypted_document = self.__decrypt_assertion(
+                decrypted_document
+            )
 
     def is_valid(self, request_data, request_id=None, raise_exceptions=False):
         """
@@ -103,16 +105,16 @@ class OneLogin_Saml2_Response(object):
             signed_elements = self.process_signed_elements()
 
             has_signed_response = (
-                "{%s}Response" % OneLogin_Saml2_Constants.NS_SAMLP in signed_elements
+                "{%s}Response" % OneLogin_Saml2_Constants.NS_SAMLP
+                in signed_elements
             )
             has_signed_assertion = (
-                "{%s}Assertion" % OneLogin_Saml2_Constants.NS_SAML in signed_elements
+                "{%s}Assertion" % OneLogin_Saml2_Constants.NS_SAML
+                in signed_elements
             )
 
             if self.__settings.is_strict():
-                no_valid_xml_msg = (
-                    "Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd"
-                )
+                no_valid_xml_msg = "Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd"
                 res = OneLogin_Saml2_XML.validate_xml(
                     self.document,
                     "saml-schema-protocol-2.0.xsd",
@@ -138,7 +140,9 @@ class OneLogin_Saml2_Response(object):
                         )
 
                 security = self.__settings.get_security_data()
-                current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
+                current_url = OneLogin_Saml2_Utils.get_self_url_no_query(
+                    request_data
+                )
 
                 # Check if the InResponseTo of the Response matchs the ID of the AuthNRequest (requestId) if provided
                 in_response_to = self.get_in_response_to()
@@ -232,7 +236,9 @@ class OneLogin_Saml2_Response(object):
                 if destination:
                     if not OneLogin_Saml2_Utils.normalize_url(
                         url=destination
-                    ).startswith(OneLogin_Saml2_Utils.normalize_url(url=current_url)):
+                    ).startswith(
+                        OneLogin_Saml2_Utils.normalize_url(url=current_url)
+                    ):
                         # TODO: Review if following lines are required, since we can control the
                         # request_data
                         #  current_url_routed = OneLogin_Saml2_Utils.get_self_routed_url_no_query(request_data)
@@ -251,7 +257,8 @@ class OneLogin_Saml2_Response(object):
                 valid_audiences = self.get_audiences()
                 if valid_audiences and sp_entity_id not in valid_audiences:
                     raise OneLogin_Saml2_ValidationError(
-                        "%s is not a valid audience for this Response" % sp_entity_id,
+                        "%s is not a valid audience for this Response"
+                        % sp_entity_id,
                         OneLogin_Saml2_ValidationError.WRONG_AUDIENCE,
                     )
 
@@ -301,12 +308,16 @@ class OneLogin_Saml2_Response(object):
                             continue
                         nooa = sc_data.get("NotOnOrAfter", None)
                         if nooa:
-                            parsed_nooa = OneLogin_Saml2_Utils.parse_SAML_to_time(nooa)
+                            parsed_nooa = (
+                                OneLogin_Saml2_Utils.parse_SAML_to_time(nooa)
+                            )
                             if parsed_nooa <= OneLogin_Saml2_Utils.now():
                                 continue
                         nb = sc_data.get("NotBefore", None)
                         if nb:
-                            parsed_nb = OneLogin_Saml2_Utils.parse_SAML_to_time(nb)
+                            parsed_nb = (
+                                OneLogin_Saml2_Utils.parse_SAML_to_time(nb)
+                            )
                             if parsed_nb > OneLogin_Saml2_Utils.now():
                                 continue
 
@@ -324,7 +335,10 @@ class OneLogin_Saml2_Response(object):
                         OneLogin_Saml2_ValidationError.WRONG_SUBJECTCONFIRMATION,
                     )
 
-                if security["wantAssertionsSigned"] and not has_signed_assertion:
+                if (
+                    security["wantAssertionsSigned"]
+                    and not has_signed_assertion
+                ):
                     raise OneLogin_Saml2_ValidationError(
                         "The Assertion of the Response is not signed and the SP require it",
                         OneLogin_Saml2_ValidationError.NO_SIGNED_ASSERTION,
@@ -347,7 +361,9 @@ class OneLogin_Saml2_Response(object):
                 cert = self.__settings.get_idp_cert()
                 fingerprint = idp_data.get("certFingerprint", None)
                 if fingerprint:
-                    fingerprint = OneLogin_Saml2_Utils.format_finger_print(fingerprint)
+                    fingerprint = OneLogin_Saml2_Utils.format_finger_print(
+                        fingerprint
+                    )
                 fingerprintalg = idp_data.get("certFingerprintAlgorithm", None)
 
                 multicerts = None
@@ -359,14 +375,17 @@ class OneLogin_Saml2_Response(object):
                     multicerts = idp_data["x509certMulti"]["signing"]
 
                 # If find a Signature on the Response, validates it checking the original response
-                if has_signed_response and not OneLogin_Saml2_Utils.validate_sign(
-                    self.document,
-                    cert,
-                    fingerprint,
-                    fingerprintalg,
-                    xpath=OneLogin_Saml2_Utils.RESPONSE_SIGNATURE_XPATH,
-                    multicerts=multicerts,
-                    raise_exceptions=False,
+                if (
+                    has_signed_response
+                    and not OneLogin_Saml2_Utils.validate_sign(
+                        self.document,
+                        cert,
+                        fingerprint,
+                        fingerprintalg,
+                        xpath=OneLogin_Saml2_Utils.RESPONSE_SIGNATURE_XPATH,
+                        multicerts=multicerts,
+                        raise_exceptions=False,
+                    )
                 ):
                     raise OneLogin_Saml2_ValidationError(
                         "Signature validation failed. SAML Response rejected",
@@ -374,16 +393,21 @@ class OneLogin_Saml2_Response(object):
                     )
 
                 document_check_assertion = (
-                    self.decrypted_document if self.encrypted else self.document
+                    self.decrypted_document
+                    if self.encrypted
+                    else self.document
                 )
-                if has_signed_assertion and not OneLogin_Saml2_Utils.validate_sign(
-                    document_check_assertion,
-                    cert,
-                    fingerprint,
-                    fingerprintalg,
-                    xpath=OneLogin_Saml2_Utils.ASSERTION_SIGNATURE_XPATH,
-                    multicerts=multicerts,
-                    raise_exceptions=False,
+                if (
+                    has_signed_assertion
+                    and not OneLogin_Saml2_Utils.validate_sign(
+                        document_check_assertion,
+                        cert,
+                        fingerprint,
+                        fingerprintalg,
+                        xpath=OneLogin_Saml2_Utils.ASSERTION_SIGNATURE_XPATH,
+                        multicerts=multicerts,
+                        raise_exceptions=False,
+                    )
                 ):
                     raise OneLogin_Saml2_ValidationError(
                         "Signature validation failed. SAML Response rejected",
@@ -469,7 +493,10 @@ class OneLogin_Saml2_Response(object):
         authn_context_nodes = self.__query_assertion(
             "/saml:AuthnStatement/saml:AuthnContext/saml:AuthnContextClassRef"
         )
-        return [OneLogin_Saml2_XML.element_text(node) for node in authn_context_nodes]
+        return [
+            OneLogin_Saml2_XML.element_text(node)
+            for node in authn_context_nodes
+        ]
 
     def get_in_response_to(self):
         """
@@ -493,7 +520,9 @@ class OneLogin_Saml2_Response(object):
         )
         if len(message_issuer_nodes) > 0:
             if len(message_issuer_nodes) == 1:
-                issuer_value = OneLogin_Saml2_XML.element_text(message_issuer_nodes[0])
+                issuer_value = OneLogin_Saml2_XML.element_text(
+                    message_issuer_nodes[0]
+                )
                 if issuer_value:
                     issuers.add(issuer_value)
             else:
@@ -504,7 +533,9 @@ class OneLogin_Saml2_Response(object):
 
         assertion_issuer_nodes = self.__query_assertion("/saml:Issuer")
         if len(assertion_issuer_nodes) == 1:
-            issuer_value = OneLogin_Saml2_XML.element_text(assertion_issuer_nodes[0])
+            issuer_value = OneLogin_Saml2_XML.element_text(
+                assertion_issuer_nodes[0]
+            )
             if issuer_value:
                 issuers.add(issuer_value)
         else:
@@ -538,7 +569,9 @@ class OneLogin_Saml2_Response(object):
                 nameid = nameid_nodes[0]
 
         is_strict = self.__settings.is_strict()
-        want_nameid = self.__settings.get_security_data().get("wantNameId", True)
+        want_nameid = self.__settings.get_security_data().get(
+            "wantNameId", True
+        )
         if nameid is None:
             if is_strict and want_nameid:
                 raise OneLogin_Saml2_ValidationError(
@@ -729,7 +762,8 @@ class OneLogin_Saml2_Response(object):
 
                 values = []
                 for attr in attribute_node.iterchildren(
-                    "{%s}AttributeValue" % OneLogin_Saml2_Constants.NSMAP["saml"]
+                    "{%s}AttributeValue"
+                    % OneLogin_Saml2_Constants.NSMAP["saml"]
                 ):
                     attr_text = OneLogin_Saml2_XML.element_text(attr)
                     if attr_text:
@@ -745,7 +779,9 @@ class OneLogin_Saml2_Response(object):
                             {
                                 "NameID": {
                                     "Format": nameid.get("Format"),
-                                    "NameQualifier": nameid.get("NameQualifier"),
+                                    "NameQualifier": nameid.get(
+                                        "NameQualifier"
+                                    ),
                                     "value": nameid.text,
                                 }
                             }
@@ -763,7 +799,9 @@ class OneLogin_Saml2_Response(object):
         encrypted_assertion_nodes = OneLogin_Saml2_XML.query(
             self.document, "//saml:EncryptedAssertion"
         )
-        assertion_nodes = OneLogin_Saml2_XML.query(self.document, "//saml:Assertion")
+        assertion_nodes = OneLogin_Saml2_XML.query(
+            self.document, "//saml:Assertion"
+        )
 
         valid = len(encrypted_assertion_nodes) + len(assertion_nodes) == 1
 
@@ -794,7 +832,10 @@ class OneLogin_Saml2_Response(object):
 
         for sign_node in sign_nodes:
             signed_element = sign_node.getparent().tag
-            if signed_element != response_tag and signed_element != assertion_tag:
+            if (
+                signed_element != response_tag
+                and signed_element != assertion_tag
+            ):
                 raise OneLogin_Saml2_ValidationError(
                     "Invalid Signature Element %s SAML Response rejected"
                     % signed_element,
@@ -951,7 +992,9 @@ class OneLogin_Saml2_Response(object):
 
         assertion_expr = "/saml:Assertion"
         signature_expr = "/ds:Signature/ds:SignedInfo/ds:Reference"
-        signed_assertion_query = "/samlp:Response" + assertion_expr + signature_expr
+        signed_assertion_query = (
+            "/samlp:Response" + assertion_expr + signature_expr
+        )
         assertion_reference_nodes = self.__query(signed_assertion_query)
         tagid = None
 

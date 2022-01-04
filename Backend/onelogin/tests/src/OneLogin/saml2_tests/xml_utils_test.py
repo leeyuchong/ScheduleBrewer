@@ -18,10 +18,17 @@ class TestOneLoginSaml2Xml(unittest.TestCase):
 
     def loadSettingsJSON(self, filename=None):
         if filename:
-            filename = join(dirname(__file__), "..", "..", "..", "settings", filename)
+            filename = join(
+                dirname(__file__), "..", "..", "..", "settings", filename
+            )
         else:
             filename = join(
-                dirname(__file__), "..", "..", "..", "settings", "settings1.json"
+                dirname(__file__),
+                "..",
+                "..",
+                "..",
+                "settings",
+                "settings1.json",
             )
         if exists(filename):
             stream = open(filename, "r")
@@ -84,7 +91,9 @@ class TestOneLoginSaml2Xml(unittest.TestCase):
 
         self.assertIs(xml, OneLogin_Saml2_XML.to_string(xml))
         self.assertIs(bxml, OneLogin_Saml2_XML.to_string(bxml))
-        self.assertEqual(etree.tostring(elem), OneLogin_Saml2_XML.to_string(elem))
+        self.assertEqual(
+            etree.tostring(elem), OneLogin_Saml2_XML.to_string(elem)
+        )
         with self.assertRaises(ValueError) as context:
             OneLogin_Saml2_XML.to_string(1)
             exception = context.exception
@@ -162,7 +171,9 @@ class TestOneLoginSaml2Xml(unittest.TestCase):
         signature = signature_nodes[0]
         self.assertIn("Signature", signature.tag)
 
-        signature_nodes_2 = OneLogin_Saml2_XML.query(dom, "./ds:Signature", assertion)
+        signature_nodes_2 = OneLogin_Saml2_XML.query(
+            dom, "./ds:Signature", assertion
+        )
         self.assertEqual(1, len(signature_nodes_2))
         signature2 = signature_nodes_2[0]
         self.assertNotEqual(signature_res, signature2)

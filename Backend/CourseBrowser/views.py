@@ -1,16 +1,15 @@
 import logging
+from os import getenv
 
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import (
-    HttpResponse,
-    HttpResponseRedirect,
-    JsonResponse,
-)
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from dotenv import load_dotenv
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -23,22 +22,25 @@ from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 from .models import CourseInfo, UserCourses
 from .serializers import CourseSerializer, SavedCoursesSerializer
-from dotenv import load_dotenv
-from os import getenv
 
 logger = logging.getLogger(__file__)
 
 # For development
 load_dotenv()
 
+
 def get_subject_codes():
     courses = CourseInfo.objects.all()
-    course_codes = list(sorted(set([x.courseID.split("-")[0] for x in courses])))
+    course_codes = list(
+        sorted(set([x.courseID.split("-")[0] for x in courses]))
+    )
     return course_codes
 
 
 def index(request):
-    context = {"course_codes": cache.get_or_set("course_codes", get_subject_codes)}
+    context = {
+        "course_codes": cache.get_or_set("course_codes", get_subject_codes)
+    }
     return render(request, "CourseBrowser/index.html", context)
 
 
@@ -53,7 +55,9 @@ def search(request):
             terms = request.GET[key].upper().split()
             for term in terms:
                 if term in courseCodes:
-                    queriedCourses = queriedCourses.filter(courseID__startswith=term)
+                    queriedCourses = queriedCourses.filter(
+                        courseID__startswith=term
+                    )
                 elif term == "FR":
                     queriedCourses = queriedCourses.filter(fr__exact=1)
                 elif term == "NR" or term == "NRO":
@@ -139,6 +143,100 @@ def search(request):
     return paginator.get_paginated_response(serializer.data)
 
 
+# class CourseViewSet(viewsets.ModelViewSet):
+#     courseCodes = cache.get("course_codes")
+#     queryset = CourseInfo.objects.filter(offered__exact=True)
+#     # <QueryDict: {'searchTerms': ['CMPU 102']}>
+#     for key, value in request.GET.items():
+#         # Search term from the search box
+#         if key == "searchTerms":
+#             terms = request.GET[key].upper().split()
+#             for term in terms:
+#                 if term in courseCodes:
+#                     queryset = queryset.filter(
+#                         courseID__startswith=term
+#                     )
+#                 elif term == "FR":
+#                     queryset = queryset.filter(fr__exact=1)
+#                 elif term == "NR" or term == "NRO":
+#                     queryset = queryset.filter(gm__exact="NR")
+#                 elif term == "SU":
+#                     queryset = queryset.filter(gm__exact="SU")
+#                 elif term == "YL":
+#                     queryset = queryset.filter(yl__exact=1)
+#                 elif term == "QA":
+#                     queryset = queryset.filter(qa__exact=1)
+#                 elif term == "LA":
+#                     queryset = queryset.filter(la__exact=1)
+#                 elif term == "SP":
+#                     queryset = queryset.filter(sp__exact=1)
+#                 elif term == "CLS":
+#                     queryset = queryset.filter(format__exact="CLS")
+#                 elif term == "INT":
+#                     queryset = queryset.filter(format__exact="INT")
+#                 elif term == "OTH":
+#                     queryset = queryset.filter(format__exact="OTH")
+#                 elif term == "MON" or term == "MONDAY":
+#                     queryset = queryset.filter(
+#                         Q(d1__contains="M") | Q(d2__contains="M")
+#                     )
+#                 elif term == "TUE" or term == "TUESDAY":
+#                     queryset = queryset.filter(
+#                         Q(d1__contains="T") | Q(d2__contains="T")
+#                     )
+#                 elif term == "WED" or term == "WEDNESDAY":
+#                     queryset = queryset.filter(
+#                         Q(d1__contains="W") | Q(d2__contains="W")
+#                     )
+#                 elif term == "THUR" or term == "THURS" or term == "THURSDAY":
+#                     queryset = queryset.filter(
+#                         Q(d1__contains="R") | Q(d2__contains="R")
+#                     )
+#                 elif term == "FRI" or term == "FRIDAY":
+#                     queryset = queryset.filter(
+#                         Q(d1__contains="F") | Q(d2__contains="F")
+#                     )
+#                 elif term == "0.5" or term == "1.0" or term == "1.5":
+#                     queryset = queryset.filter(units__exact=term)
+#                 else:
+#                     if len(term) > 0 and term[0] == "0":
+#                         term = term[1:]
+#                     queryset = queryset.filter(
+#                         Q(title__icontains=term)
+#                         | Q(loc__icontains=term)
+#                         | Q(instructor__icontains=term)
+#                         | Q(starttime1__contains=term)
+#                         | Q(starttime2__contains=term)
+#                         | Q(description__icontains=term)
+#                         | Q(courseID__icontains=term)
+#                     )
+#         # Department select box
+#         elif key == "department":
+#             queryset = queryset.filter(courseID__startswith=value)
+#         # Filters:
+#         elif key == "writingSem":
+#             queryset = queryset.filter(fr__exact=1)
+#         elif key == "gradeOption":
+#             queryset = queryset.filter(gm__exact=value)
+#         elif key == "yearLong":
+#             queryset = queryset.filter(yl__exact=1)
+#         elif key == "quant":
+#             queryset = queryset.filter(qa__exact=1)
+#         elif key == "lang":
+#             queryset = queryset.filter(la__exact=1)
+#         elif key == "specialPerm":
+#             queryset = queryset.filter(sp__exact=1)
+#         elif key == "courseFormat":
+#             queryset = queryset.filter(format__exact=value)
+#         elif key == "day":
+#             queryset = queryset.filter(
+#                 Q(d1__contains=value) | Q(d2__contains=value)
+#             )
+#         elif key == "units":
+#             queryset = queryset.filter(units__exact=value)
+#     queryset = queryset.order_by("courseID")
+#     serializer_class = CourseSerializer
+
 class SavedCourses(APIView):
     attributes = False
     username = ""
@@ -154,7 +252,9 @@ class SavedCourses(APIView):
             if "samlUserdata" in request.session:
                 if len(request.session["samlUserdata"]) > 0:
                     self.attributes = request.session["samlUserdata"].items()
-                    self.username = request.session["samlUserdata"]["UserName"][0]
+                    self.username = request.session["samlUserdata"][
+                        "UserName"
+                    ][0]
 
     # Get saved courses
     def get(self, request, format=None):
@@ -205,9 +305,9 @@ class SavedCourses(APIView):
     def delete(self, request, pk, format=None):
         self.getAttributes(request)
         if self.attributes:
-            course = UserCourses.objects.filter(userID__exact=self.username).filter(
-                courseID__exact=pk
-            )
+            course = UserCourses.objects.filter(
+                userID__exact=self.username
+            ).filter(courseID__exact=pk)
             course.delete()
             return HttpResponse("Success")
         else:
@@ -253,7 +353,9 @@ def saml_index(request):
     paint_logout = False
 
     if "sso" in req["get_data"]:
-        return HttpResponseRedirect(auth.login(return_to="https://schedulebrewer.ml"))
+        return HttpResponseRedirect(
+            auth.login(return_to="https://schedulebrewer.ml")
+        )
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
@@ -262,7 +364,9 @@ def saml_index(request):
         return_to = OneLogin_Saml2_Utils.get_self_url(req) + reverse("attrs")
         return HttpResponseRedirect(auth.login(return_to))
     elif "slo" in req["get_data"]:
-        name_id = session_index = name_id_format = name_id_nq = name_id_spnq = None
+        name_id = (
+            session_index
+        ) = name_id_format = name_id_nq = name_id_spnq = None
         if "samlNameId" in request.session:
             name_id = request.session["samlNameId"]
         if "samlSessionIndex" in request.session:
@@ -303,7 +407,9 @@ def saml_index(request):
             request.session["samlNameId"] = auth.get_nameid()
             request.session["samlNameIdFormat"] = auth.get_nameid_format()
             request.session["samlNameIdNameQualifier"] = auth.get_nameid_nq()
-            request.session["samlNameIdSPNameQualifier"] = auth.get_nameid_spnq()
+            request.session[
+                "samlNameIdSPNameQualifier"
+            ] = auth.get_nameid_spnq()
             request.session["samlSessionIndex"] = auth.get_session_index()
             if "RelayState" in req["post_data"]:
                 return HttpResponseRedirect(

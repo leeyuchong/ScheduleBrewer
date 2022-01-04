@@ -19,7 +19,9 @@ from onelogin.saml2.xml_utils import OneLogin_Saml2_XML
 
 class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
     def loadSettingsJSON(self, filename="settings1.json"):
-        filename = join(dirname(__file__), "..", "..", "..", "settings", filename)
+        filename = join(
+            dirname(__file__), "..", "..", "..", "settings", filename
+        )
         if exists(filename):
             stream = open(filename, "r")
             settings = json.load(stream)
@@ -57,7 +59,9 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         self.assertIsNotNone(metadata)
 
         self.assertIn("<md:SPSSODescriptor", metadata)
-        self.assertIn('entityID="http://stuff.com/endpoints/metadata.php"', metadata)
+        self.assertIn(
+            'entityID="http://stuff.com/endpoints/metadata.php"', metadata
+        )
         self.assertIn('AuthnRequestsSigned="false"', metadata)
         self.assertIn('WantAssertionsSigned="false"', metadata)
 
@@ -93,7 +97,9 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         del sp_data["singleLogoutService"]["url"]
 
         metadata2 = OneLogin_Saml2_Metadata.builder(
-            sp_data, security["authnRequestsSigned"], security["wantAssertionsSigned"]
+            sp_data,
+            security["authnRequestsSigned"],
+            security["wantAssertionsSigned"],
         )
 
         self.assertIsNotNone(metadata2)
@@ -107,7 +113,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
             metadata2,
         )
         self.assertNotIn(
-            ' Location="http://stuff.com/endpoints/endpoints/sls.php"/>', metadata2
+            ' Location="http://stuff.com/endpoints/endpoints/sls.php"/>',
+            metadata2,
         )
 
         metadata3 = OneLogin_Saml2_Metadata.builder(
@@ -167,11 +174,15 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         self.assertIsNotNone(metadata5)
         self.assertIn("<md:SPSSODescriptor", metadata6)
         self.assertIn('cacheDuration="P1Y"', metadata6)
-        parsed_datetime = strftime(r"%Y-%m-%dT%H:%M:%SZ", datetime_value.timetuple())
+        parsed_datetime = strftime(
+            r"%Y-%m-%dT%H:%M:%SZ", datetime_value.timetuple()
+        )
         self.assertIn('validUntil="%s"' % parsed_datetime, metadata6)
 
     def testBuilderAttributeConsumingService(self):
-        settings = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings4.json"))
+        settings = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings4.json")
+        )
         sp_data = settings.get_sp_data()
         security = settings.get_security_data()
         organization = settings.get_organization()
@@ -200,7 +211,9 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         )
 
     def testBuilderAttributeConsumingServiceWithMultipleAttributeValue(self):
-        settings = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings5.json"))
+        settings = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings5.json")
+        )
         sp_data = settings.get_sp_data()
         security = settings.get_security_data()
         organization = settings.get_organization()
@@ -237,7 +250,9 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         security = settings.get_security_data()
 
         metadata = OneLogin_Saml2_Metadata.builder(
-            sp_data, security["authnRequestsSigned"], security["wantAssertionsSigned"]
+            sp_data,
+            security["authnRequestsSigned"],
+            security["wantAssertionsSigned"],
         )
 
         self.assertIsNotNone(metadata)
@@ -255,7 +270,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
 
         self.assertIn("<md:SPSSODescriptor", signed_metadata)
         self.assertIn(
-            'entityID="http://stuff.com/endpoints/metadata.php"', signed_metadata
+            'entityID="http://stuff.com/endpoints/metadata.php"',
+            signed_metadata,
         )
         self.assertIn('ID="ONELOGIN_', signed_metadata)
         self.assertIn('AuthnRequestsSigned="false"', signed_metadata)
@@ -266,7 +282,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
             signed_metadata,
         )
         self.assertIn(
-            'Location="http://stuff.com/endpoints/endpoints/acs.php"', signed_metadata
+            'Location="http://stuff.com/endpoints/endpoints/acs.php"',
+            signed_metadata,
         )
         self.assertIn(
             '<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"',
@@ -296,7 +313,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         )
         self.assertIn("<ds:Reference", signed_metadata)
         self.assertIn(
-            "<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>", signed_metadata
+            "<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>",
+            signed_metadata,
         )
 
         with self.assertRaises(Exception) as context:
@@ -314,12 +332,15 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
             )
         )
         self.assertTrue(
-            OneLogin_Saml2_Utils.validate_metadata_sign(signed_metadata_2, cert)
+            OneLogin_Saml2_Utils.validate_metadata_sign(
+                signed_metadata_2, cert
+            )
         )
 
         self.assertIn("<md:SPSSODescriptor", signed_metadata_2)
         self.assertIn(
-            'entityID="http://stuff.com/endpoints/metadata.php"', signed_metadata_2
+            'entityID="http://stuff.com/endpoints/metadata.php"',
+            signed_metadata_2,
         )
         self.assertIn('ID="ONELOGIN_', signed_metadata_2)
         self.assertIn('AuthnRequestsSigned="false"', signed_metadata_2)
@@ -330,7 +351,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
             signed_metadata_2,
         )
         self.assertIn(
-            'Location="http://stuff.com/endpoints/endpoints/acs.php"', signed_metadata_2
+            'Location="http://stuff.com/endpoints/endpoints/acs.php"',
+            signed_metadata_2,
         )
         self.assertIn(
             '<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"',
@@ -360,11 +382,14 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         )
         self.assertIn("<ds:Reference", signed_metadata_2)
         self.assertIn(
-            "<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>", signed_metadata_2
+            "<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>",
+            signed_metadata_2,
         )
 
         root = OneLogin_Saml2_XML.to_etree(signed_metadata_2)
-        first_child = OneLogin_Saml2_XML.query(root, "/md:EntityDescriptor/*[1]")[0]
+        first_child = OneLogin_Saml2_XML.query(
+            root, "/md:EntityDescriptor/*[1]"
+        )[0]
         self.assertEqual(
             "{http://www.w3.org/2000/09/xmldsig#}Signature", first_child.tag
         )
@@ -380,8 +405,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         self.assertNotIn('<md:KeyDescriptor use="signing"', metadata)
         self.assertNotIn('<md:KeyDescriptor use="encryption"', metadata)
 
-        metadata_without_descriptors = OneLogin_Saml2_Metadata.add_x509_key_descriptors(
-            metadata, None
+        metadata_without_descriptors = (
+            OneLogin_Saml2_Metadata.add_x509_key_descriptors(metadata, None)
         )
         self.assertNotIn(
             '<md:KeyDescriptor use="signing"', metadata_without_descriptors
@@ -390,8 +415,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
             '<md:KeyDescriptor use="encryption"', metadata_without_descriptors
         )
 
-        metadata_without_descriptors = OneLogin_Saml2_Metadata.add_x509_key_descriptors(
-            metadata, ""
+        metadata_without_descriptors = (
+            OneLogin_Saml2_Metadata.add_x509_key_descriptors(metadata, "")
         )
         self.assertNotIn(
             '<md:KeyDescriptor use="signing"', metadata_without_descriptors
@@ -406,8 +431,12 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         metadata_with_descriptors = compat.to_string(
             OneLogin_Saml2_Metadata.add_x509_key_descriptors(metadata, cert)
         )
-        self.assertIn('<md:KeyDescriptor use="signing"', metadata_with_descriptors)
-        self.assertIn('<md:KeyDescriptor use="encryption"', metadata_with_descriptors)
+        self.assertIn(
+            '<md:KeyDescriptor use="signing"', metadata_with_descriptors
+        )
+        self.assertIn(
+            '<md:KeyDescriptor use="encryption"', metadata_with_descriptors
+        )
 
         with self.assertRaises(Exception) as context:
             OneLogin_Saml2_Metadata.add_x509_key_descriptors("", cert)
@@ -420,6 +449,8 @@ class OneLogin_Saml2_Metadata_Test(unittest.TestCase):
         )
 
         with self.assertRaises(Exception) as context:
-            OneLogin_Saml2_Metadata.add_x509_key_descriptors(unparsed_metadata, cert)
+            OneLogin_Saml2_Metadata.add_x509_key_descriptors(
+                unparsed_metadata, cert
+            )
             exception = context.exception
             self.assertIn("Error parsing metadata", str(exception))

@@ -189,8 +189,12 @@ class OneLogin_Saml2_Utils(object):
         private_key = private_key.replace("\n", "")
         if len(private_key) > 0:
             if private_key.find("-----BEGIN PRIVATE KEY-----") != -1:
-                private_key = private_key.replace("-----BEGIN PRIVATE KEY-----", "")
-                private_key = private_key.replace("-----END PRIVATE KEY-----", "")
+                private_key = private_key.replace(
+                    "-----BEGIN PRIVATE KEY-----", ""
+                )
+                private_key = private_key.replace(
+                    "-----END PRIVATE KEY-----", ""
+                )
                 private_key = private_key.replace(" ", "")
                 if heads:
                     private_key = (
@@ -199,8 +203,12 @@ class OneLogin_Saml2_Utils(object):
                         + "\n-----END PRIVATE KEY-----\n"
                     )
             else:
-                private_key = private_key.replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                private_key = private_key.replace("-----END RSA PRIVATE KEY-----", "")
+                private_key = private_key.replace(
+                    "-----BEGIN RSA PRIVATE KEY-----", ""
+                )
+                private_key = private_key.replace(
+                    "-----END RSA PRIVATE KEY-----", ""
+                )
                 private_key = private_key.replace(" ", "")
                 if heads:
                     private_key = (
@@ -231,7 +239,10 @@ class OneLogin_Saml2_Utils(object):
         assert isinstance(parameters, dict)
 
         if url.startswith("/"):
-            url = "%s%s" % (OneLogin_Saml2_Utils.get_self_url_host(request_data), url)
+            url = "%s%s" % (
+                OneLogin_Saml2_Utils.get_self_url_host(request_data),
+                url,
+            )
 
         # Verify that the URL is to a http or https site.
         if re.search("^https?://", url) is None:
@@ -293,7 +304,10 @@ class OneLogin_Saml2_Utils(object):
         else:
             protocol = "http"
 
-        if "server_port" in request_data and request_data["server_port"] is not None:
+        if (
+            "server_port" in request_data
+            and request_data["server_port"] is not None
+        ):
             port_number = str(request_data["server_port"])
             port = ":" + port_number
 
@@ -346,7 +360,8 @@ class OneLogin_Saml2_Utils(object):
         """
         is_https = "https" in request_data and request_data["https"] != "off"
         is_https = is_https or (
-            "server_port" in request_data and str(request_data["server_port"]) == "443"
+            "server_port" in request_data
+            and str(request_data["server_port"]) == "443"
         )
         return is_https
 
@@ -458,9 +473,13 @@ class OneLogin_Saml2_Utils(object):
             data = datetime.strptime(timestr, OneLogin_Saml2_Utils.TIME_FORMAT)
         except ValueError:
             try:
-                data = datetime.strptime(timestr, OneLogin_Saml2_Utils.TIME_FORMAT_2)
+                data = datetime.strptime(
+                    timestr, OneLogin_Saml2_Utils.TIME_FORMAT_2
+                )
             except ValueError:
-                elem = OneLogin_Saml2_Utils.TIME_FORMAT_WITH_FRAGMENT.match(timestr)
+                elem = OneLogin_Saml2_Utils.TIME_FORMAT_WITH_FRAGMENT.match(
+                    timestr
+                )
                 if not elem:
                     raise Exception(
                         "time data %s does not match format %s"
@@ -528,7 +547,9 @@ class OneLogin_Saml2_Utils(object):
             if isinstance(valid_until, int):
                 valid_until_time = valid_until
             else:
-                valid_until_time = OneLogin_Saml2_Utils.parse_SAML_to_time(valid_until)
+                valid_until_time = OneLogin_Saml2_Utils.parse_SAML_to_time(
+                    valid_until
+                )
             if expire_time is None or expire_time > valid_until_time:
                 expire_time = valid_until_time
 
@@ -615,7 +636,9 @@ class OneLogin_Saml2_Utils(object):
         return formatted_fingerprint.lower()
 
     @staticmethod
-    def generate_name_id(value, sp_nq, sp_format=None, cert=None, debug=False, nq=None):
+    def generate_name_id(
+        value, sp_nq, sp_format=None, cert=None, debug=False, nq=None
+    ):
         """
         Generates a nameID.
 
@@ -708,7 +731,9 @@ class OneLogin_Saml2_Utils(object):
         """
         status = {}
 
-        status_entry = OneLogin_Saml2_XML.query(dom, "/samlp:Response/samlp:Status")
+        status_entry = OneLogin_Saml2_XML.query(
+            dom, "/samlp:Response/samlp:Status"
+        )
         if len(status_entry) != 1:
             raise OneLogin_Saml2_ValidationError(
                 "Missing Status on response",
@@ -716,7 +741,9 @@ class OneLogin_Saml2_Utils(object):
             )
 
         code_entry = OneLogin_Saml2_XML.query(
-            dom, "/samlp:Response/samlp:Status/samlp:StatusCode", status_entry[0]
+            dom,
+            "/samlp:Response/samlp:Status/samlp:StatusCode",
+            status_entry[0],
         )
         if len(code_entry) != 1:
             raise OneLogin_Saml2_ValidationError(
@@ -728,7 +755,9 @@ class OneLogin_Saml2_Utils(object):
 
         status["msg"] = ""
         message_entry = OneLogin_Saml2_XML.query(
-            dom, "/samlp:Response/samlp:Status/samlp:StatusMessage", status_entry[0]
+            dom,
+            "/samlp:Response/samlp:Status/samlp:StatusMessage",
+            status_entry[0],
         )
         if len(message_entry) == 0:
             subcode_entry = OneLogin_Saml2_XML.query(
@@ -765,7 +794,9 @@ class OneLogin_Saml2_Utils(object):
         """
 
         if isinstance(encrypted_data, Element):
-            encrypted_data = OneLogin_Saml2_XML.to_etree(str(encrypted_data.toxml()))
+            encrypted_data = OneLogin_Saml2_XML.to_etree(
+                str(encrypted_data.toxml())
+            )
         if not inplace and isinstance(
             encrypted_data, OneLogin_Saml2_XML._element_class
         ):
@@ -776,7 +807,9 @@ class OneLogin_Saml2_Utils(object):
         xmlsec.enable_debug_trace(debug)
         manager = xmlsec.KeysManager()
 
-        manager.add_key(xmlsec.Key.from_memory(key, xmlsec.KeyFormat.PEM, None))
+        manager.add_key(
+            xmlsec.Key.from_memory(key, xmlsec.KeyFormat.PEM, None)
+        )
         enc_ctx = xmlsec.EncryptionContext(manager)
         return enc_ctx.decrypt(encrypted_data)
 
@@ -840,7 +873,9 @@ class OneLogin_Saml2_Utils(object):
             issuer.addnext(signature)
             elem_to_sign = issuer.getparent()
         else:
-            entity_descriptor = OneLogin_Saml2_XML.query(elem, "//md:EntityDescriptor")
+            entity_descriptor = OneLogin_Saml2_XML.query(
+                elem, "//md:EntityDescriptor"
+            )
             if len(entity_descriptor) > 0:
                 elem.insert(0, signature)
             else:
@@ -852,7 +887,9 @@ class OneLogin_Saml2_Utils(object):
             if elem_id:
                 elem_id = "#" + elem_id
         else:
-            generated_id = generated_id = OneLogin_Saml2_Utils.generate_unique_id()
+            generated_id = (
+                generated_id
+            ) = OneLogin_Saml2_Utils.generate_unique_id()
             elem_id = "#" + generated_id
             elem_to_sign.attrib["ID"] = generated_id
 
@@ -1042,10 +1079,12 @@ class OneLogin_Saml2_Utils(object):
 
             if len(signature_nodes) == 0:
                 signature_nodes += OneLogin_Saml2_XML.query(
-                    elem, "/md:EntityDescriptor/md:SPSSODescriptor/ds:Signature"
+                    elem,
+                    "/md:EntityDescriptor/md:SPSSODescriptor/ds:Signature",
                 )
                 signature_nodes += OneLogin_Saml2_XML.query(
-                    elem, "/md:EntityDescriptor/md:IDPSSODescriptor/ds:Signature"
+                    elem,
+                    "/md:EntityDescriptor/md:IDPSSODescriptor/ds:Signature",
                 )
 
         if len(signature_nodes) > 0:
@@ -1112,7 +1151,9 @@ class OneLogin_Saml2_Utils(object):
             )
             if len(x509_certificate_nodes) > 0:
                 x509_certificate_node = x509_certificate_nodes[0]
-                x509_cert_value = OneLogin_Saml2_XML.element_text(x509_certificate_node)
+                x509_cert_value = OneLogin_Saml2_XML.element_text(
+                    x509_certificate_node
+                )
                 x509_cert_value_formatted = OneLogin_Saml2_Utils.format_cert(
                     x509_cert_value
                 )
@@ -1144,7 +1185,9 @@ class OneLogin_Saml2_Utils(object):
             dsig_ctx = xmlsec.SignatureContext(manager)
         else:
             dsig_ctx = xmlsec.SignatureContext()
-            dsig_ctx.key = xmlsec.Key.from_memory(cert, xmlsec.KeyFormat.CERT_PEM, None)
+            dsig_ctx.key = xmlsec.Key.from_memory(
+                cert, xmlsec.KeyFormat.CERT_PEM, None
+            )
 
         dsig_ctx.set_enabled_key_data([xmlsec.KeyData.X509])
 
@@ -1160,7 +1203,9 @@ class OneLogin_Saml2_Utils(object):
         return True
 
     @staticmethod
-    def sign_binary(msg, key, algorithm=xmlsec.Transform.RSA_SHA1, debug=False):
+    def sign_binary(
+        msg, key, algorithm=xmlsec.Transform.RSA_SHA1, debug=False
+    ):
         """
         Sign binary message
 
@@ -1215,7 +1260,9 @@ class OneLogin_Saml2_Utils(object):
         try:
             xmlsec.enable_debug_trace(debug)
             dsig_ctx = xmlsec.SignatureContext()
-            dsig_ctx.key = xmlsec.Key.from_memory(cert, xmlsec.KeyFormat.CERT_PEM, None)
+            dsig_ctx.key = xmlsec.Key.from_memory(
+                cert, xmlsec.KeyFormat.CERT_PEM, None
+            )
 
             sign_algorithm_transform_map = {
                 OneLogin_Saml2_Constants.DSA_SHA1: xmlsec.Transform.DSA_SHA1,

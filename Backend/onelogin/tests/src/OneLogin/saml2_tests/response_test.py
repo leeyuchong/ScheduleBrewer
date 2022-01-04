@@ -21,7 +21,9 @@ from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 class OneLogin_Saml2_Response_Test(unittest.TestCase):
     data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
+    settings_path = join(
+        dirname(dirname(dirname(dirname(__file__)))), "settings"
+    )
 
     # assertRaisesRegexp deprecated on python3
     def assertRaisesRegex(self, exception, regexp, msg=None):
@@ -50,13 +52,22 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         return {"http_host": "example.com", "script_name": "index.html"}
 
     def get_request_data_domain_capitalized(self):
-        return {"http_host": "StuFF.Com", "script_name": "endpoints/endpoints/acs.php"}
+        return {
+            "http_host": "StuFF.Com",
+            "script_name": "endpoints/endpoints/acs.php",
+        }
 
     def get_request_data_path_capitalized(self):
-        return {"http_host": "stuff.com", "script_name": "Endpoints/endPoints/acs.php"}
+        return {
+            "http_host": "stuff.com",
+            "script_name": "Endpoints/endPoints/acs.php",
+        }
 
     def get_request_data_both_capitalized(self):
-        return {"http_host": "StuFF.Com", "script_name": "Endpoints/endPoints/aCs.php"}
+        return {
+            "http_host": "StuFF.Com",
+            "script_name": "Endpoints/endPoints/aCs.php",
+        }
 
     def testConstruct(self):
         """
@@ -71,7 +82,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertIsInstance(response, OneLogin_Saml2_Response)
 
         xml_enc = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_enc = OneLogin_Saml2_Response(settings, xml_enc)
 
@@ -86,28 +101,47 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         pretty_xml = self.file_contents(
-            join(self.data_path, "responses", "pretty_signed_message_response.xml")
+            join(
+                self.data_path,
+                "responses",
+                "pretty_signed_message_response.xml",
+            )
         )
         self.assertEqual(
             etree.tostring(
-                response.get_xml_document(), encoding="unicode", pretty_print=True
+                response.get_xml_document(),
+                encoding="unicode",
+                pretty_print=True,
             ),
             pretty_xml,
         )
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         decrypted = self.file_contents(
-            join(self.data_path, "responses", "decrypted_valid_encrypted_assertion.xml")
+            join(
+                self.data_path,
+                "responses",
+                "decrypted_valid_encrypted_assertion.xml",
+            )
         )
         self.assertEqual(
-            etree.tostring(response_2.get_xml_document(), encoding="unicode"), decrypted
+            etree.tostring(response_2.get_xml_document(), encoding="unicode"),
+            decrypted,
         )
 
     def testReturnNameId(self):
@@ -124,7 +158,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertEqual("support@onelogin.com", response.get_nameid())
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "response_encrypted_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response_encrypted_nameid.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertEqual(
@@ -132,11 +170,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual(
-            "_68392312d490db6d355555cfbbd8ec95d746516f60", response_3.get_nameid()
+            "_68392312d490db6d355555cfbbd8ec95d746516f60",
+            response_3.get_nameid(),
         )
 
         json_settings["strict"] = True
@@ -144,7 +187,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_nameid.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_nameid.xml.base64"
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         with self.assertRaisesRegex(
@@ -207,7 +252,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response_11 = OneLogin_Saml2_Response(settings, xml_5)
         with self.assertRaisesRegex(
-            Exception, "The SPNameQualifier value mistmatch the SP entityID value."
+            Exception,
+            "The SPNameQualifier value mistmatch the SP entityID value.",
         ):
             response_11.get_nameid()
 
@@ -216,7 +262,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "empty_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "empty_nameid.xml.base64",
+            )
         )
         response_12 = OneLogin_Saml2_Response(settings, xml_6)
         with self.assertRaisesRegex(Exception, "An empty NameID value found"):
@@ -266,7 +317,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "response_encrypted_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response_encrypted_nameid.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertEqual(
@@ -275,7 +330,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual(
@@ -288,7 +347,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_nameid.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_nameid.xml.base64"
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         with self.assertRaisesRegex(
@@ -354,7 +415,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response_11 = OneLogin_Saml2_Response(settings, xml_5)
         with self.assertRaisesRegex(
-            Exception, "The SPNameQualifier value mistmatch the SP entityID value."
+            Exception,
+            "The SPNameQualifier value mistmatch the SP entityID value.",
         ):
             response_11.get_nameid_format()
 
@@ -363,7 +425,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "empty_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "empty_nameid.xml.base64",
+            )
         )
         response_12 = OneLogin_Saml2_Response(settings, xml_6)
         with self.assertRaisesRegex(Exception, "An empty NameID value found"):
@@ -422,13 +489,21 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertIsNone(response.get_nameid_nq())
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "response_encrypted_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response_encrypted_nameid.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertIsNone(response_2.get_nameid_nq())
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertIsNone(response_3.get_nameid_nq())
@@ -448,13 +523,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response_5 = OneLogin_Saml2_Response(settings, xml_5)
         self.assertEqual(
-            "https://test.example.com/saml/metadata", response_5.get_nameid_nq()
+            "https://test.example.com/saml/metadata",
+            response_5.get_nameid_nq(),
         )
 
         json_settings["strict"] = True
         settings = OneLogin_Saml2_Settings(json_settings)
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_nameid.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_nameid.xml.base64"
+            )
         )
         response_6 = OneLogin_Saml2_Response(settings, xml_6)
         with self.assertRaisesRegex(
@@ -476,19 +554,29 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertIsNone(response.get_nameid_spnq())
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "response_encrypted_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response_encrypted_nameid.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertEqual(
-            "http://stuff.com/endpoints/metadata.php", response_2.get_nameid_spnq()
+            "http://stuff.com/endpoints/metadata.php",
+            response_2.get_nameid_spnq(),
         )
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual(
-            "http://stuff.com/endpoints/metadata.php", response_3.get_nameid_spnq()
+            "http://stuff.com/endpoints/metadata.php",
+            response_3.get_nameid_spnq(),
         )
 
         xml_4 = self.file_contents(
@@ -496,7 +584,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         self.assertEqual(
-            "http://stuff.com/endpoints/metadata.php", response_4.get_nameid_spnq()
+            "http://stuff.com/endpoints/metadata.php",
+            response_4.get_nameid_spnq(),
         )
 
         xml_5 = self.file_contents(
@@ -512,7 +601,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         json_settings["strict"] = True
         settings = OneLogin_Saml2_Settings(json_settings)
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_nameid.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_nameid.xml.base64"
+            )
         )
         response_6 = OneLogin_Saml2_Response(settings, xml_6)
         with self.assertRaisesRegex(
@@ -539,7 +630,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertEqual(expected_nameid_data, nameid_data)
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "response_encrypted_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response_encrypted_nameid.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         expected_nameid_data_2 = {
@@ -551,7 +646,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertEqual(expected_nameid_data_2, nameid_data_2)
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         expected_nameid_data_3 = {
@@ -567,7 +666,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_nameid.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_nameid.xml.base64"
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         with self.assertRaisesRegex(
@@ -640,7 +741,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response_11 = OneLogin_Saml2_Response(settings, xml_5)
         with self.assertRaisesRegex(
-            Exception, "The SPNameQualifier value mistmatch the SP entityID value."
+            Exception,
+            "The SPNameQualifier value mistmatch the SP entityID value.",
         ):
             response_11.get_nameid_data()
 
@@ -654,7 +756,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "empty_nameid.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "empty_nameid.xml.base64",
+            )
         )
         response_12 = OneLogin_Saml2_Response(settings, xml_6)
         with self.assertRaisesRegex(Exception, "An empty NameID value found"):
@@ -703,7 +810,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response.check_status()
 
         xml_enc = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_enc = OneLogin_Saml2_Response(settings, xml_enc)
         response_enc.check_status()
@@ -718,7 +829,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         with self.assertRaisesRegex(
-            Exception, "The status code of the Response was not Success, was Responder"
+            Exception,
+            "The status code of the Response was not Success, was Responder",
         ):
             response_2.check_status()
 
@@ -743,7 +855,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_conditions.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "no_conditions.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertFalse(response.check_one_condition())
@@ -753,7 +870,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertFalse(response.is_valid(self.get_request_data()))
         self.assertEqual(
-            "The Assertion must include a Conditions element", response.get_error()
+            "The Assertion must include a Conditions element",
+            response.get_error(),
         )
 
         xml_2 = self.file_contents(
@@ -769,7 +887,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
             join(
-                self.data_path, "responses", "invalids", "no_authnstatement.xml.base64"
+                self.data_path,
+                "responses",
+                "invalids",
+                "no_authnstatement.xml.base64",
             )
         )
         response = OneLogin_Saml2_Response(settings, xml)
@@ -780,7 +901,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertFalse(response.is_valid(self.get_request_data()))
         self.assertEqual(
-            "The Assertion must include an AuthnStatement element", response.get_error()
+            "The Assertion must include an AuthnStatement element",
+            response.get_error(),
         )
 
         xml_2 = self.file_contents(
@@ -807,11 +929,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertEqual(["{audience}"], response_2.get_audiences())
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual(
-            ["http://stuff.com/endpoints/metadata.php"], response_3.get_audiences()
+            ["http://stuff.com/endpoints/metadata.php"],
+            response_3.get_audiences(),
         )
 
     def testQueryAssertions(self):
@@ -824,10 +951,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
             join(self.data_path, "responses", "adfs_response.xml.base64")
         )
         response = OneLogin_Saml2_Response(settings, xml)
-        self.assertEqual(["http://login.example.com/issuer"], response.get_issuers())
+        self.assertEqual(
+            ["http://login.example.com/issuer"], response.get_issuers()
+        )
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertEqual(["http://idp.example.com/"], response_2.get_issuers())
@@ -849,7 +982,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "double_signed_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "double_signed_response.xml.base64",
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         self.assertEqual(
@@ -874,7 +1011,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "signed_assertion_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_assertion_response.xml.base64",
+            )
         )
         response_6 = OneLogin_Saml2_Response(settings, xml_6)
         self.assertEqual(
@@ -883,7 +1024,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_7 = self.file_contents(
-            join(self.data_path, "responses", "signed_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_encrypted_assertion.xml.base64",
+            )
         )
         response_7 = OneLogin_Saml2_Response(settings, xml_7)
         self.assertEqual(["http://idp.example.com/"], response_7.get_issuers())
@@ -897,10 +1042,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
             join(self.data_path, "responses", "adfs_response.xml.base64")
         )
         response = OneLogin_Saml2_Response(settings, xml)
-        self.assertEqual(["http://login.example.com/issuer"], response.get_issuers())
+        self.assertEqual(
+            ["http://login.example.com/issuer"], response.get_issuers()
+        )
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertEqual(["http://idp.example.com/"], response_2.get_issuers())
@@ -923,7 +1074,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
 
         xml_4 = self.file_contents(
             join(
-                self.data_path, "responses", "invalids", "no_issuer_response.xml.base64"
+                self.data_path,
+                "responses",
+                "invalids",
+                "no_issuer_response.xml.base64",
             )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
@@ -961,7 +1115,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertEqual(
@@ -991,7 +1149,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
 
         # Encrypted Attributes are not supported
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "encrypted_attrs.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "encrypted_attrs.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual({}, response_3.get_attributes())
@@ -1009,10 +1172,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
 
         expected_attributes = {"username": ["demo"]}
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "response1_with_friendlyname.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response1_with_friendlyname.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
-        self.assertEqual(expected_attributes, response_2.get_friendlyname_attributes())
+        self.assertEqual(
+            expected_attributes, response_2.get_friendlyname_attributes()
+        )
 
         xml_3 = self.file_contents(
             join(self.data_path, "responses", "response2.xml.base64")
@@ -1021,7 +1190,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertEqual({}, response_3.get_friendlyname_attributes())
 
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "encrypted_attrs.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "encrypted_attrs.xml.base64",
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         self.assertEqual({}, response_4.get_friendlyname_attributes())
@@ -1091,7 +1265,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Test that the node text with comment attack (VU#475445) is not allowed
         """
         xml = self.file_contents(
-            join(self.data_path, "responses", "response_node_text_attack.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "response_node_text_attack.xml.base64",
+            )
         )
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         response = OneLogin_Saml2_Response(settings, xml)
@@ -1119,7 +1297,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertEqual(None, response_2.get_session_not_on_or_after())
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual(2696012228, response_3.get_session_not_on_or_after())
@@ -1139,7 +1321,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertIsNone(response.get_in_response_to())
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertEqual(
@@ -1212,7 +1398,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertTrue(response.validate_timestamps())
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertTrue(response_2.validate_timestamps())
@@ -1224,14 +1414,22 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertFalse(response_3.validate_timestamps())
 
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "invalids", "not_after_failed.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "not_after_failed.xml.base64",
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings, xml_4)
         self.assertFalse(response_4.validate_timestamps())
 
         xml_5 = self.file_contents(
             join(
-                self.data_path, "responses", "invalids", "not_before_failed.xml.base64"
+                self.data_path,
+                "responses",
+                "invalids",
+                "not_before_failed.xml.base64",
             )
         )
         response_5 = OneLogin_Saml2_Response(settings, xml_5)
@@ -1244,7 +1442,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_saml2.xml.base64")
+            join(
+                self.data_path, "responses", "invalids", "no_saml2.xml.base64"
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         with self.assertRaisesRegex(Exception, "Unsupported SAML version"):
@@ -1260,7 +1460,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
             join(self.data_path, "responses", "invalids", "no_id.xml.base64")
         )
         response = OneLogin_Saml2_Response(settings, xml)
-        with self.assertRaisesRegex(Exception, "Missing ID attribute on SAML Response"):
+        with self.assertRaisesRegex(
+            Exception, "Missing ID attribute on SAML Response"
+        ):
             response.is_valid(self.get_request_data(), raise_exceptions=True)
 
     def testIsInValidReference(self):
@@ -1275,7 +1477,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertFalse(response.is_valid(self.get_request_data()))
         self.assertEqual(
-            "Signature validation failed. SAML Response rejected", response.get_error()
+            "Signature validation failed. SAML Response rejected",
+            response.get_error(),
         )
 
         with self.assertRaisesRegex(
@@ -1301,7 +1504,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Response(settings, xml)
         with self.assertRaisesRegex(
-            Exception, "Could not validate timestamp: expired. Check system clock."
+            Exception,
+            "Could not validate timestamp: expired. Check system clock.",
         ):
             response_2.is_valid(self.get_request_data(), raise_exceptions=True)
 
@@ -1312,7 +1516,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_signature.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "no_signature.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         response.is_valid(self.get_request_data())
@@ -1324,7 +1533,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_2 = OneLogin_Saml2_Response(settings, xml)
         self.assertFalse(response_2.is_valid(self.get_request_data()))
         self.assertEqual(
-            "There is no AttributeStatement on the Response", response_2.get_error()
+            "There is no AttributeStatement on the Response",
+            response_2.get_error(),
         )
 
     def testIsValidOptionalStatement(self):
@@ -1352,7 +1562,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertFalse(response.is_valid(self.get_request_data()))
         self.assertEqual(
-            "There is no AttributeStatement on the Response", response.get_error()
+            "There is no AttributeStatement on the Response",
+            response.get_error(),
         )
 
         # change wantAttributeStatement to optional
@@ -1360,15 +1571,19 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(json_settings)
 
         # check settings
-        self.assertFalse(settings.get_security_data()["wantAttributeStatement"])
+        self.assertFalse(
+            settings.get_security_data()["wantAttributeStatement"]
+        )
 
         response = OneLogin_Saml2_Response(settings, xml)
         response.is_valid(self.get_request_data())
         self.assertNotEqual(
-            "There is no AttributeStatement on the Response", response.get_error()
+            "There is no AttributeStatement on the Response",
+            response.get_error(),
         )
         self.assertEqual(
-            "Signature validation failed. SAML Response rejected", response.get_error()
+            "Signature validation failed. SAML Response rejected",
+            response.get_error(),
         )
 
     def testIsInValidNoKey(self):
@@ -1414,7 +1629,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
-            join(self.data_path, "responses", "invalids", "encrypted_attrs.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "encrypted_attrs.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         response.is_valid(self.get_request_data())
@@ -1477,18 +1697,23 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_3 = OneLogin_Saml2_Response(settings, message_2)
         self.assertFalse(response_3.is_valid(self.get_request_data()))
         self.assertIn(
-            "The response has an empty Destination value", response_3.get_error()
+            "The response has an empty Destination value",
+            response_3.get_error(),
         )
 
         message_3 = self.file_contents(
             join(
-                self.data_path, "responses", "invalids", "empty_destination.xml.base64"
+                self.data_path,
+                "responses",
+                "invalids",
+                "empty_destination.xml.base64",
             )
         )
         response_4 = OneLogin_Saml2_Response(settings, message_3)
         self.assertFalse(response_4.is_valid(self.get_request_data()))
         self.assertEqual(
-            "The response has an empty Destination value", response_4.get_error()
+            "The response has an empty Destination value",
+            response_4.get_error(),
         )
 
         # No Destination
@@ -1519,12 +1744,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         # Test path capitalized
         settings.set_strict(True)
         response = OneLogin_Saml2_Response(settings, message)
-        self.assertFalse(response.is_valid(self.get_request_data_path_capitalized()))
+        self.assertFalse(
+            response.is_valid(self.get_request_data_path_capitalized())
+        )
         self.assertIn("The response was received at", response.get_error())
 
         # Test both domain and path capitalized
         response_2 = OneLogin_Saml2_Response(settings, message)
-        self.assertFalse(response_2.is_valid(self.get_request_data_both_capitalized()))
+        self.assertFalse(
+            response_2.is_valid(self.get_request_data_both_capitalized())
+        )
         self.assertIn("The response was received at", response_2.get_error())
 
     def testIsValidDestinationCapitalizationOfHost(self):
@@ -1539,11 +1768,15 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         # Test domain capitalized
         settings.set_strict(True)
         response = OneLogin_Saml2_Response(settings, message)
-        self.assertFalse(response.is_valid(self.get_request_data_domain_capitalized()))
+        self.assertFalse(
+            response.is_valid(self.get_request_data_domain_capitalized())
+        )
         self.assertNotIn("The response was received at", response.get_error())
 
         # Assert we got past the destination check, which appears later
-        self.assertIn("A valid SubjectConfirmation was not found", response.get_error())
+        self.assertIn(
+            "A valid SubjectConfirmation was not found", response.get_error()
+        )
 
     def testIsInValidAudience(self):
         """
@@ -1556,7 +1789,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         }
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         message = self.file_contents(
-            join(self.data_path, "responses", "invalids", "invalid_audience.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "invalid_audience.xml.base64",
+            )
         )
 
         response = OneLogin_Saml2_Response(settings, message)
@@ -1584,10 +1822,14 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         message = self.file_contents(
             join(self.data_path, "responses", "valid_response.xml.base64")
         )
-        two_factor_context = "urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken"
+        two_factor_context = (
+            "urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken"
+        )
         password_context = "urn:oasis:names:tc:SAML:2.0:ac:classes:Password"
         settings_dict = self.loadSettingsJSON()
-        settings_dict["security"]["requestedAuthnContext"] = [two_factor_context]
+        settings_dict["security"]["requestedAuthnContext"] = [
+            two_factor_context
+        ]
         settings_dict["security"]["failOnAuthnContextMismatch"] = True
         settings_dict["strict"] = True
         settings = OneLogin_Saml2_Settings(settings_dict)
@@ -1602,7 +1844,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
 
         # now drop in the expected AuthnContextClassRef and see that it passes
-        original_message = compat.to_string(OneLogin_Saml2_Utils.b64decode(message))
+        original_message = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(message)
+        )
         two_factor_message = original_message.replace(
             password_context, two_factor_context
         )
@@ -1625,7 +1869,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Case Invalid Response, Invalid Issuer
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         xml = self.file_contents(
             join(
@@ -1649,7 +1896,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
                 "invalid_issuer_message.xml.base64",
             )
         )
-        plain_message_2 = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_2))
+        plain_message_2 = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(xml_2)
+        )
         plain_message_2 = plain_message_2.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
@@ -1664,7 +1913,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_2 = OneLogin_Saml2_Response(settings, message_2)
         response_2.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_2.get_error()
+            "No Signature found. SAML Response rejected",
+            response_2.get_error(),
         )
 
         settings.set_strict(True)
@@ -1686,7 +1936,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Case Invalid Response, Invalid SessionIndex
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         xml = self.file_contents(
             join(
@@ -1723,7 +1976,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         test is to verify that the toolkit supports them
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
 
         xml = self.file_contents(
@@ -1750,7 +2006,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Case Invalid Response, Invalid SubjectConfirmation
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         xml = self.file_contents(
             join(
@@ -1774,7 +2033,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
                 "no_subjectconfirmation_data.xml.base64",
             )
         )
-        plain_message_2 = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_2))
+        plain_message_2 = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(xml_2)
+        )
         plain_message_2 = plain_message_2.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
@@ -1788,7 +2049,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
                 "invalid_subjectconfirmation_inresponse.xml.base64",
             )
         )
-        plain_message_3 = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_3))
+        plain_message_3 = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(xml_3)
+        )
         plain_message_3 = plain_message_3.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
@@ -1802,7 +2065,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
                 "invalid_subjectconfirmation_recipient.xml.base64",
             )
         )
-        plain_message_4 = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_4))
+        plain_message_4 = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(xml_4)
+        )
         plain_message_4 = plain_message_4.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
@@ -1816,7 +2081,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
                 "invalid_subjectconfirmation_noa.xml.base64",
             )
         )
-        plain_message_5 = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_5))
+        plain_message_5 = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(xml_5)
+        )
         plain_message_5 = plain_message_5.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
@@ -1830,7 +2097,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
                 "invalid_subjectconfirmation_nb.xml.base64",
             )
         )
-        plain_message_6 = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_6))
+        plain_message_6 = compat.to_string(
+            OneLogin_Saml2_Utils.b64decode(xml_6)
+        )
         plain_message_6 = plain_message_6.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
@@ -1845,67 +2114,78 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_2 = OneLogin_Saml2_Response(settings, message_2)
         response_2.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_2.get_error()
+            "No Signature found. SAML Response rejected",
+            response_2.get_error(),
         )
 
         response_3 = OneLogin_Saml2_Response(settings, message_3)
         response_3.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_3.get_error()
+            "No Signature found. SAML Response rejected",
+            response_3.get_error(),
         )
 
         response_4 = OneLogin_Saml2_Response(settings, message_4)
         response_4.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_4.get_error()
+            "No Signature found. SAML Response rejected",
+            response_4.get_error(),
         )
 
         response_5 = OneLogin_Saml2_Response(settings, message_5)
         response_5.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_5.get_error()
+            "No Signature found. SAML Response rejected",
+            response_5.get_error(),
         )
 
         response_6 = OneLogin_Saml2_Response(settings, message_6)
         response_6.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_6.get_error()
+            "No Signature found. SAML Response rejected",
+            response_6.get_error(),
         )
 
         settings.set_strict(True)
         response = OneLogin_Saml2_Response(settings, message)
         with self.assertRaisesRegex(
-            Exception, "A valid SubjectConfirmation was not found on this Response"
+            Exception,
+            "A valid SubjectConfirmation was not found on this Response",
         ):
             response.is_valid(request_data, raise_exceptions=True)
 
         response_2 = OneLogin_Saml2_Response(settings, message_2)
         with self.assertRaisesRegex(
-            Exception, "A valid SubjectConfirmation was not found on this Response"
+            Exception,
+            "A valid SubjectConfirmation was not found on this Response",
         ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
         response_3 = OneLogin_Saml2_Response(settings, message_3)
         with self.assertRaisesRegex(
-            Exception, "A valid SubjectConfirmation was not found on this Response"
+            Exception,
+            "A valid SubjectConfirmation was not found on this Response",
         ):
             response_3.is_valid(request_data, raise_exceptions=True)
 
         response_4 = OneLogin_Saml2_Response(settings, message_4)
         with self.assertRaisesRegex(
-            Exception, "A valid SubjectConfirmation was not found on this Response"
+            Exception,
+            "A valid SubjectConfirmation was not found on this Response",
         ):
             response_4.is_valid(request_data, raise_exceptions=True)
 
         response_5 = OneLogin_Saml2_Response(settings, message_5)
         with self.assertRaisesRegex(
-            Exception, "A valid SubjectConfirmation was not found on this Response"
+            Exception,
+            "A valid SubjectConfirmation was not found on this Response",
         ):
             response_5.is_valid(request_data, raise_exceptions=True)
 
         response_6 = OneLogin_Saml2_Response(settings, message_6)
         with self.assertRaisesRegex(
-            Exception, "A valid SubjectConfirmation was not found on this Response"
+            Exception,
+            "A valid SubjectConfirmation was not found on this Response",
         ):
             response_6.is_valid(request_data, raise_exceptions=True)
 
@@ -1915,7 +2195,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Case Invalid Response, Invalid requestID
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         xml = self.file_contents(
             join(self.data_path, "responses", "unsigned_response.xml.base64")
@@ -1935,7 +2218,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response = OneLogin_Saml2_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "The InResponseTo of the Response"):
+        with self.assertRaisesRegex(
+            Exception, "The InResponseTo of the Response"
+        ):
             response.is_valid(request_data, request_id, raise_exceptions=True)
 
         valid_request_id = "_57bcbf70-7b1f-012e-c821-782bcb13bb38"
@@ -1950,7 +2235,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Case Invalid Response, Invalid signing issues
         """
         settings_info = self.loadSettingsJSON()
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         xml = self.file_contents(
             join(self.data_path, "responses", "unsigned_response.xml.base64")
@@ -1974,7 +2262,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_2 = OneLogin_Saml2_Response(settings_2, message)
         response_2.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_2.get_error()
+            "No Signature found. SAML Response rejected",
+            response_2.get_error(),
         )
 
         settings_info["strict"] = True
@@ -1983,7 +2272,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_3 = OneLogin_Saml2_Response(settings_3, message)
         response_3.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_3.get_error()
+            "No Signature found. SAML Response rejected",
+            response_3.get_error(),
         )
 
         settings_info["security"]["wantAssertionsSigned"] = True
@@ -2003,7 +2293,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_5 = OneLogin_Saml2_Response(settings_5, message)
         response_5.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_5.get_error()
+            "No Signature found. SAML Response rejected",
+            response_5.get_error(),
         )
 
         settings_info["security"]["wantMessagesSigned"] = True
@@ -2011,7 +2302,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_6 = OneLogin_Saml2_Response(settings_6, message)
         response_6.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_6.get_error()
+            "No Signature found. SAML Response rejected",
+            response_6.get_error(),
         )
 
         settings_info["strict"] = True
@@ -2020,14 +2312,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_7 = OneLogin_Saml2_Response(settings_7, message)
         response_7.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_7.get_error()
+            "No Signature found. SAML Response rejected",
+            response_7.get_error(),
         )
 
         settings_info["security"]["wantMessagesSigned"] = True
         settings_8 = OneLogin_Saml2_Settings(settings_info)
         response_8 = OneLogin_Saml2_Response(settings_8, message)
         with self.assertRaisesRegex(
-            Exception, "The Message of the Response is not signed and the SP require it"
+            Exception,
+            "The Message of the Response is not signed and the SP require it",
         ):
             response_8.is_valid(request_data, raise_exceptions=True)
 
@@ -2037,7 +2331,10 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Case Invalid Response, Invalid encryptation issues
         """
         settings_info = self.loadSettingsJSON()
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         xml = self.file_contents(
             join(self.data_path, "responses", "unsigned_response.xml.base64")
@@ -2062,7 +2359,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_2 = OneLogin_Saml2_Response(settings, message)
         response_2.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_2.get_error()
+            "No Signature found. SAML Response rejected",
+            response_2.get_error(),
         )
 
         settings_info["security"]["wantAssertionsEncrypted"] = True
@@ -2082,7 +2380,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_4 = OneLogin_Saml2_Response(settings, message)
         response_4.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_4.get_error()
+            "No Signature found. SAML Response rejected",
+            response_4.get_error(),
         )
 
         settings_info["strict"] = True
@@ -2163,7 +2462,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
 
         xml = self.file_contents(
-            join(self.data_path, "responses", "valid_unsigned_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_unsigned_response.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         response.is_valid(self.get_request_data())
@@ -2196,7 +2499,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertTrue(response_2.is_valid(self.get_request_data()))
 
         settings_info_3 = self.loadSettingsJSON("settings10.json")
-        idp_cert = OneLogin_Saml2_Utils.format_cert(settings_info_3["idp"]["x509cert"])
+        idp_cert = OneLogin_Saml2_Utils.format_cert(
+            settings_info_3["idp"]["x509cert"]
+        )
         settings_info_3["idp"][
             "certFingerprint"
         ] = OneLogin_Saml2_Utils.calculate_x509_fingerprint(idp_cert)
@@ -2244,7 +2549,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertTrue(response.is_valid(self.get_request_data()))
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "signed_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_encrypted_assertion.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertTrue(response_2.is_valid(self.get_request_data()))
@@ -2259,7 +2568,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertTrue(response_3.is_valid(self.get_request_data()))
 
-        settings_2 = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings2.json"))
+        settings_2 = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings2.json")
+        )
         xml_4 = self.file_contents(
             join(
                 self.data_path,
@@ -2271,7 +2582,11 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         self.assertTrue(response_4.is_valid(self.get_request_data()))
 
         xml_5 = self.file_contents(
-            join(self.data_path, "responses", "signed_encrypted_assertion2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_encrypted_assertion2.xml.base64",
+            )
         )
         response_5 = OneLogin_Saml2_Response(settings_2, xml_5)
         self.assertTrue(response_5.is_valid(self.get_request_data()))
@@ -2288,20 +2603,30 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         xml_7 = self.file_contents(
-            join(self.data_path, "responses", "valid_encrypted_assertion.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "valid_encrypted_assertion.xml.base64",
+            )
         )
         # In order to avoid the destination problem
         plain_message = compat.to_string(OneLogin_Saml2_Utils.b64decode(xml_7))
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         plain_message = plain_message.replace(
             "http://stuff.com/endpoints/endpoints/acs.php", current_url
         )
-        message = compat.to_string(OneLogin_Saml2_Utils.b64encode(plain_message))
+        message = compat.to_string(
+            OneLogin_Saml2_Utils.b64encode(plain_message)
+        )
         response_7 = OneLogin_Saml2_Response(settings, message)
         response_7.is_valid(request_data)
         self.assertEqual(
-            "No Signature found. SAML Response rejected", response_7.get_error()
+            "No Signature found. SAML Response rejected",
+            response_7.get_error(),
         )
 
     def testIsValidSign(self):
@@ -2316,44 +2641,72 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
 
         # expired cert
         xml = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertTrue(response.is_valid(self.get_request_data()))
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "signed_assertion_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_assertion_response.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertTrue(response_2.is_valid(self.get_request_data()))
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "double_signed_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "double_signed_response.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertTrue(response_3.is_valid(self.get_request_data()))
 
-        settings_2 = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings2.json"))
+        settings_2 = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings2.json")
+        )
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response2.xml.base64",
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings_2, xml_4)
         self.assertTrue(response_4.is_valid(self.get_request_data()))
 
         xml_5 = self.file_contents(
-            join(self.data_path, "responses", "signed_assertion_response2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_assertion_response2.xml.base64",
+            )
         )
         response_5 = OneLogin_Saml2_Response(settings_2, xml_5)
         self.assertTrue(response_5.is_valid(self.get_request_data()))
 
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "double_signed_response2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "double_signed_response2.xml.base64",
+            )
         )
         response_6 = OneLogin_Saml2_Response(settings_2, xml_6)
         self.assertTrue(response_6.is_valid(self.get_request_data()))
 
         dom = parseString(b64decode(xml_4))
-        dom.firstChild.firstChild.firstChild.nodeValue = "https://example.com/other-idp"
+        dom.firstChild.firstChild.firstChild.nodeValue = (
+            "https://example.com/other-idp"
+        )
         xml_7 = OneLogin_Saml2_Utils.b64encode(dom.toxml())
         response_7 = OneLogin_Saml2_Response(settings, xml_7)
         # Modified message
@@ -2385,48 +2738,78 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         Strict mode will always fail due destination problem, if we manipulate
         it the sign will fail.
         """
-        settings = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings6.json"))
+        settings = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings6.json")
+        )
 
         # expired cert
         xml = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertTrue(response.is_valid(self.get_request_data()))
 
         xml_2 = self.file_contents(
-            join(self.data_path, "responses", "signed_assertion_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_assertion_response.xml.base64",
+            )
         )
         response_2 = OneLogin_Saml2_Response(settings, xml_2)
         self.assertTrue(response_2.is_valid(self.get_request_data()))
 
         xml_3 = self.file_contents(
-            join(self.data_path, "responses", "double_signed_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "double_signed_response.xml.base64",
+            )
         )
         response_3 = OneLogin_Saml2_Response(settings, xml_3)
         self.assertTrue(response_3.is_valid(self.get_request_data()))
 
-        settings_2 = OneLogin_Saml2_Settings(self.loadSettingsJSON("settings2.json"))
+        settings_2 = OneLogin_Saml2_Settings(
+            self.loadSettingsJSON("settings2.json")
+        )
         xml_4 = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response2.xml.base64",
+            )
         )
         response_4 = OneLogin_Saml2_Response(settings_2, xml_4)
         self.assertTrue(response_4.is_valid(self.get_request_data()))
 
         xml_5 = self.file_contents(
-            join(self.data_path, "responses", "signed_assertion_response2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_assertion_response2.xml.base64",
+            )
         )
         response_5 = OneLogin_Saml2_Response(settings_2, xml_5)
         self.assertTrue(response_5.is_valid(self.get_request_data()))
 
         xml_6 = self.file_contents(
-            join(self.data_path, "responses", "double_signed_response2.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "double_signed_response2.xml.base64",
+            )
         )
         response_6 = OneLogin_Saml2_Response(settings_2, xml_6)
         self.assertTrue(response_6.is_valid(self.get_request_data()))
 
         dom = parseString(b64decode(xml_4))
-        dom.firstChild.firstChild.firstChild.nodeValue = "https://example.com/other-idp"
+        dom.firstChild.firstChild.firstChild.nodeValue = (
+            "https://example.com/other-idp"
+        )
         xml_7 = OneLogin_Saml2_Utils.b64encode(dom.toxml())
         response_7 = OneLogin_Saml2_Response(settings, xml_7)
         # Modified message
@@ -2459,7 +2842,9 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(settings_info)
         xml = self.file_contents(
             join(
-                self.data_path, "responses", "response_without_reference_uri.xml.base64"
+                self.data_path,
+                "responses",
+                "response_without_reference_uri.xml.base64",
             )
         )
         response = OneLogin_Saml2_Response(settings, xml)
@@ -2533,7 +2918,12 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         settings.set_strict(True)
         xml = self.file_contents(
-            join(self.data_path, "responses", "invalids", "no_conditions.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "invalids",
+                "no_conditions.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
 
@@ -2557,7 +2947,8 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         )
         response = OneLogin_Saml2_Response(settings, xml)
         with self.assertRaisesRegex(
-            Exception, "The status code of the Response was not Success, was Responder"
+            Exception,
+            "The status code of the Response was not Success, was Responder",
         ):
             response.is_valid(self.get_request_data(), raise_exceptions=True)
 
@@ -2567,10 +2958,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
-        self.assertEqual(response.get_id(), "pfxc3d2b542-0f7e-8767-8e87-5b0dc6913375")
+        self.assertEqual(
+            response.get_id(), "pfxc3d2b542-0f7e-8767-8e87-5b0dc6913375"
+        )
 
     def testGetAssertionId(self):
         """
@@ -2578,11 +2975,16 @@ class OneLogin_Saml2_Response_Test(unittest.TestCase):
         """
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         xml = self.file_contents(
-            join(self.data_path, "responses", "signed_message_response.xml.base64")
+            join(
+                self.data_path,
+                "responses",
+                "signed_message_response.xml.base64",
+            )
         )
         response = OneLogin_Saml2_Response(settings, xml)
         self.assertEqual(
-            response.get_assertion_id(), "_cccd6024116641fe48e0ae2c51220d02755f96c98d"
+            response.get_assertion_id(),
+            "_cccd6024116641fe48e0ae2c51220d02755f96c98d",
         )
 
     def testGetAssertionNotOnOrAfter(self):

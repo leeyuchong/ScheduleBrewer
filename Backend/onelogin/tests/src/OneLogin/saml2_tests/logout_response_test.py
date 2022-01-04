@@ -22,23 +22,25 @@ except ImportError:
 
 class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
     data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
+    settings_path = join(
+        dirname(dirname(dirname(dirname(__file__)))), "settings"
+    )
 
     # assertRegexpMatches deprecated on python3
     def assertRegex(self, text, regexp, msg=None):
         if hasattr(unittest.TestCase, "assertRegex"):
-            return super(OneLogin_Saml2_Logout_Response_Test, self).assertRegex(
-                text, regexp, msg
-            )
+            return super(
+                OneLogin_Saml2_Logout_Response_Test, self
+            ).assertRegex(text, regexp, msg)
         else:
             return self.assertRegexpMatches(text, regexp, msg)
 
     # assertRaisesRegexp deprecated on python3
     def assertRaisesRegex(self, exception, regexp, msg=None):
         if hasattr(unittest.TestCase, "assertRaisesRegex"):
-            return super(OneLogin_Saml2_Logout_Response_Test, self).assertRaisesRegex(
-                exception, regexp, msg=msg
-            )
+            return super(
+                OneLogin_Saml2_Logout_Response_Test, self
+            ).assertRaisesRegex(exception, regexp, msg=msg)
         else:
             return self.assertRaisesRegexp(exception, regexp)
 
@@ -98,7 +100,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         url_parts = urlparse(logout_url)
         exploded = parse_qs(url_parts.query)
         inflated = compat.to_string(
-            OneLogin_Saml2_Utils.decode_base64_and_inflate(exploded["SAMLResponse"][0])
+            OneLogin_Saml2_Utils.decode_base64_and_inflate(
+                exploded["SAMLResponse"][0]
+            )
         )
         self.assertRegex(inflated, "^<samlp:LogoutResponse")
 
@@ -118,7 +122,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         status = response.get_status()
         self.assertEqual(status, OneLogin_Saml2_Constants.STATUS_SUCCESS)
 
-        dom = parseString(OneLogin_Saml2_Utils.decode_base64_and_inflate(message))
+        dom = parseString(
+            OneLogin_Saml2_Utils.decode_base64_and_inflate(message)
+        )
         status_code_node = dom.getElementsByTagName("samlp:StatusCode")[0]
         status_code_node.parentNode.removeChild(status_code_node)
         xml = dom.toxml()
@@ -143,7 +149,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         issuer = response.get_issuer()
         self.assertEqual("http://idp.example.com/", issuer)
 
-        dom = parseString(OneLogin_Saml2_Utils.decode_base64_and_inflate(message))
+        dom = parseString(
+            OneLogin_Saml2_Utils.decode_base64_and_inflate(message)
+        )
         issuer_node = dom.getElementsByTagName("saml:Issuer")[0]
         issuer_node.parentNode.removeChild(issuer_node)
         xml = dom.toxml()
@@ -174,7 +182,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         Tests the is_valid method of the OneLogin_Saml2_LogoutResponse
         Case Invalid XML
         """
-        message = OneLogin_Saml2_Utils.deflate_and_base64_encode("<xml>invalid</xml>")
+        message = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+            "<xml>invalid</xml>"
+        )
         request_data = {
             "http_host": "example.com",
             "script_name": "index.html",
@@ -232,7 +242,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         with self.assertRaisesRegex(
             Exception, "The InResponseTo of the Logout Response:"
         ):
-            response_2.is_valid(request_data, request_id, raise_exceptions=True)
+            response_2.is_valid(
+                request_data, request_id, raise_exceptions=True
+            )
 
     def testIsInValidIssuer(self):
         """
@@ -271,7 +283,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Logout_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "Invalid issuer in the Logout Response"):
+        with self.assertRaisesRegex(
+            Exception, "Invalid issuer in the Logout Response"
+        ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
     def testIsInValidDestination(self):
@@ -299,11 +313,15 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Logout_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "The LogoutResponse was received at"):
+        with self.assertRaisesRegex(
+            Exception, "The LogoutResponse was received at"
+        ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
         # Empty destination
-        dom = parseString(OneLogin_Saml2_Utils.decode_base64_and_inflate(message))
+        dom = parseString(
+            OneLogin_Saml2_Utils.decode_base64_and_inflate(message)
+        )
         dom.firstChild.setAttribute("Destination", "")
         xml = dom.toxml()
         message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(xml)
@@ -340,7 +358,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Logout_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "The LogoutResponse was received at"):
+        with self.assertRaisesRegex(
+            Exception, "The LogoutResponse was received at"
+        ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
         plain_message = compat.to_string(
@@ -350,7 +370,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         plain_message = plain_message.replace(
             "http://stuff.com/endpoints/endpoints/sls.php", current_url
         )
-        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
+        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+            plain_message
+        )
 
         response_3 = OneLogin_Saml2_Logout_Response(settings, message_3)
         self.assertTrue(response_3.is_valid(request_data))
@@ -378,18 +400,24 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Logout_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "The LogoutResponse was received at"):
+        with self.assertRaisesRegex(
+            Exception, "The LogoutResponse was received at"
+        ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
         plain_message = compat.to_string(
             OneLogin_Saml2_Utils.decode_base64_and_inflate(message)
         )
 
-        current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data).lower()
+        current_url = OneLogin_Saml2_Utils.get_self_url_no_query(
+            request_data
+        ).lower()
         plain_message = plain_message.replace(
             "http://stuff.com/endpoints/endpoints/sls.php", current_url
         )
-        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
+        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+            plain_message
+        )
 
         response_3 = OneLogin_Saml2_Logout_Response(settings, message_3)
         self.assertTrue(response_3.is_valid(request_data))
@@ -417,17 +445,23 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Logout_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "The LogoutResponse was received at"):
+        with self.assertRaisesRegex(
+            Exception, "The LogoutResponse was received at"
+        ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
         plain_message = compat.to_string(
             OneLogin_Saml2_Utils.decode_base64_and_inflate(message)
         )
-        current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data).lower()
+        current_url = OneLogin_Saml2_Utils.get_self_url_no_query(
+            request_data
+        ).lower()
         plain_message = plain_message.replace(
             "http://stuff.com/endpoints/endpoints/sls.php", current_url
         )
-        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
+        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+            plain_message
+        )
 
         response_3 = OneLogin_Saml2_Logout_Response(settings, message_3)
         self.assertFalse(response_3.is_valid(request_data))
@@ -455,7 +489,9 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
 
         settings.set_strict(True)
         response_2 = OneLogin_Saml2_Logout_Response(settings, message)
-        with self.assertRaisesRegex(Exception, "The LogoutResponse was received at"):
+        with self.assertRaisesRegex(
+            Exception, "The LogoutResponse was received at"
+        ):
             response_2.is_valid(request_data, raise_exceptions=True)
 
         plain_message = compat.to_string(
@@ -465,13 +501,17 @@ class OneLogin_Saml2_Logout_Response_Test(unittest.TestCase):
         plain_message = plain_message.replace(
             "http://stuff.com/endpoints/endpoints/sls.php", current_url
         )
-        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(plain_message)
+        message_3 = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+            plain_message
+        )
 
         response_3 = OneLogin_Saml2_Logout_Response(settings, message_3)
         self.assertTrue(response_3.is_valid(request_data))
 
     def testIsValidRaisesExceptionWhenRaisesArgumentIsTrue(self):
-        message = OneLogin_Saml2_Utils.deflate_and_base64_encode("<xml>invalid</xml>")
+        message = OneLogin_Saml2_Utils.deflate_and_base64_encode(
+            "<xml>invalid</xml>"
+        )
         request_data = {
             "http_host": "example.com",
             "script_name": "index.html",

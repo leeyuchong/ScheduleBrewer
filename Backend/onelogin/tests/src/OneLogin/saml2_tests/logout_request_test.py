@@ -21,7 +21,9 @@ except ImportError:
 
 class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
     data_path = join(dirname(dirname(dirname(dirname(__file__)))), "data")
-    settings_path = join(dirname(dirname(dirname(dirname(__file__)))), "settings")
+    settings_path = join(
+        dirname(dirname(dirname(dirname(__file__)))), "settings"
+    )
 
     # assertRegexpMatches deprecated on python3
     def assertRegex(self, text, regexp, msg=None):
@@ -35,9 +37,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
     # assertRaisesRegexp deprecated on python3
     def assertRaisesRegex(self, exception, regexp, msg=None):
         if hasattr(unittest.TestCase, "assertRaisesRegex"):
-            return super(OneLogin_Saml2_Logout_Request_Test, self).assertRaisesRegex(
-                exception, regexp, msg=msg
-            )
+            return super(
+                OneLogin_Saml2_Logout_Request_Test, self
+            ).assertRaisesRegex(exception, regexp, msg=msg)
         else:
             return self.assertRaisesRegexp(exception, regexp)
 
@@ -117,11 +119,15 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         name_id_format = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
         settings_info["sp"]["NameIDFormat"] = name_id_format
         settings = OneLogin_Saml2_Settings(settings_info)
-        logout_request = OneLogin_Saml2_Logout_Request(settings, name_id=name_id)
+        logout_request = OneLogin_Saml2_Logout_Request(
+            settings, name_id=name_id
+        )
         logout_request_xml = OneLogin_Saml2_Utils.decode_base64_and_inflate(
             logout_request.get_request()
         )
-        name_id_data = OneLogin_Saml2_Logout_Request.get_nameid_data(logout_request_xml)
+        name_id_data = OneLogin_Saml2_Logout_Request.get_nameid_data(
+            logout_request_xml
+        )
         expected_name_id_data = {"Value": name_id, "Format": name_id_format}
         self.assertEqual(expected_name_id_data, name_id_data)
 
@@ -132,14 +138,20 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         """
         settings_info = self.loadSettingsJSON()
         name_id = "ONELOGIN_1e442c129e1f822c8096086a1103c5ee2c7cae1c"
-        name_id_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        name_id_format = (
+            "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        )
         settings_info["sp"]["NameIDFormat"] = name_id_format
         settings = OneLogin_Saml2_Settings(settings_info)
-        logout_request = OneLogin_Saml2_Logout_Request(settings, name_id=name_id)
+        logout_request = OneLogin_Saml2_Logout_Request(
+            settings, name_id=name_id
+        )
         logout_request_xml = OneLogin_Saml2_Utils.decode_base64_and_inflate(
             logout_request.get_request()
         )
-        name_id_data = OneLogin_Saml2_Logout_Request.get_nameid_data(logout_request_xml)
+        name_id_data = OneLogin_Saml2_Logout_Request.get_nameid_data(
+            logout_request_xml
+        )
         expected_name_id_data = {"Value": name_id}
         self.assertEqual(expected_name_id_data, name_id_data)
 
@@ -179,11 +191,15 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
         id1 = OneLogin_Saml2_Logout_Request.get_id(logout_request)
-        self.assertEqual("ONELOGIN_21584ccdfaca36a145ae990442dcd96bfe60151e", id1)
+        self.assertEqual(
+            "ONELOGIN_21584ccdfaca36a145ae990442dcd96bfe60151e", id1
+        )
 
         dom = parseString(logout_request)
         id2 = OneLogin_Saml2_Logout_Request.get_id(dom.toxml())
-        self.assertEqual("ONELOGIN_21584ccdfaca36a145ae990442dcd96bfe60151e", id2)
+        self.assertEqual(
+            "ONELOGIN_21584ccdfaca36a145ae990442dcd96bfe60151e", id2
+        )
 
     def testGetIDFromDeflatedSAMLLogoutRequest(self):
         """
@@ -191,14 +207,18 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         """
         deflated_logout_request = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_deflated.xml.base64"
+                self.data_path,
+                "logout_requests",
+                "logout_request_deflated.xml.base64",
             )
         )
         logout_request = OneLogin_Saml2_Utils.decode_base64_and_inflate(
             deflated_logout_request
         )
         id1 = OneLogin_Saml2_Logout_Request.get_id(logout_request)
-        self.assertEqual("ONELOGIN_21584ccdfaca36a145ae990442dcd96bfe60151e", id1)
+        self.assertEqual(
+            "ONELOGIN_21584ccdfaca36a145ae990442dcd96bfe60151e", id1
+        )
 
     def testGetNameIdData(self):
         """
@@ -217,12 +237,16 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         self.assertEqual(expected_name_id_data, name_id_data)
 
         dom = parseString(request)
-        name_id_data_2 = OneLogin_Saml2_Logout_Request.get_nameid_data(dom.toxml())
+        name_id_data_2 = OneLogin_Saml2_Logout_Request.get_nameid_data(
+            dom.toxml()
+        )
         self.assertEqual(expected_name_id_data, name_id_data_2)
 
         request_2 = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_encrypted_nameid.xml"
+                self.data_path,
+                "logout_requests",
+                "logout_request_encrypted_nameid.xml",
             )
         )
         with self.assertRaisesRegex(
@@ -232,7 +256,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
 
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         key = settings.get_sp_key()
-        name_id_data_4 = OneLogin_Saml2_Logout_Request.get_nameid_data(request_2, key)
+        name_id_data_4 = OneLogin_Saml2_Logout_Request.get_nameid_data(
+            request_2, key
+        )
         expected_name_id_data = {
             "Value": "ONELOGIN_9c86c4542ab9d6fce07f2f7fd335287b9b3cdf69",
             "Format": "urn:oasis:names:tc:SAML:2.0:nameid-format:emailAddress",
@@ -250,7 +276,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
             OneLogin_Saml2_Logout_Request.get_nameid(dom_2.toxml(), key)
 
         inv_request = self.file_contents(
-            join(self.data_path, "logout_requests", "invalids", "no_nameId.xml")
+            join(
+                self.data_path, "logout_requests", "invalids", "no_nameId.xml"
+            )
         )
         with self.assertRaisesRegex(
             Exception, "NameID not found in the Logout Request"
@@ -312,11 +340,15 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
         name_id = OneLogin_Saml2_Logout_Request.get_nameid(request)
-        self.assertEqual(name_id, "ONELOGIN_1e442c129e1f822c8096086a1103c5ee2c7cae1c")
+        self.assertEqual(
+            name_id, "ONELOGIN_1e442c129e1f822c8096086a1103c5ee2c7cae1c"
+        )
 
         request_2 = self.file_contents(
             join(
-                self.data_path, "logout_requests", "logout_request_encrypted_nameid.xml"
+                self.data_path,
+                "logout_requests",
+                "logout_request_encrypted_nameid.xml",
             )
         )
         with self.assertRaisesRegex(
@@ -327,7 +359,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
         key = settings.get_sp_key()
         name_id_3 = OneLogin_Saml2_Logout_Request.get_nameid(request_2, key)
-        self.assertEqual("ONELOGIN_9c86c4542ab9d6fce07f2f7fd335287b9b3cdf69", name_id_3)
+        self.assertEqual(
+            "ONELOGIN_9c86c4542ab9d6fce07f2f7fd335287b9b3cdf69", name_id_3
+        )
 
     def testGetIssuer(self):
         """
@@ -357,7 +391,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
 
-        session_indexes = OneLogin_Saml2_Logout_Request.get_session_indexes(request)
+        session_indexes = OneLogin_Saml2_Logout_Request.get_session_indexes(
+            request
+        )
         self.assertEqual(len(session_indexes), 0)
 
         dom = parseString(request)
@@ -373,7 +409,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
                 "logout_request_with_sessionindex.xml",
             )
         )
-        session_indexes_3 = OneLogin_Saml2_Logout_Request.get_session_indexes(request_2)
+        session_indexes_3 = OneLogin_Saml2_Logout_Request.get_session_indexes(
+            request_2
+        )
         self.assertEqual(
             ["_ac72a76526cb6ca19f8438e73879a0e6c8ae5131"], session_indexes_3
         )
@@ -404,9 +442,17 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         Case Invalid Issuer
         """
         request = self.file_contents(
-            join(self.data_path, "logout_requests", "invalids", "invalid_issuer.xml")
+            join(
+                self.data_path,
+                "logout_requests",
+                "invalids",
+                "invalid_issuer.xml",
+            )
         )
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         request = request.replace(
             "http://stuff.com/endpoints/endpoints/sls.php", current_url
@@ -421,7 +467,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         logout_request2 = OneLogin_Saml2_Logout_Request(
             settings, OneLogin_Saml2_Utils.b64encode(request)
         )
-        with self.assertRaisesRegex(Exception, "Invalid issuer in the Logout Request"):
+        with self.assertRaisesRegex(
+            Exception, "Invalid issuer in the Logout Request"
+        ):
             logout_request2.is_valid(request_data, raise_exceptions=True)
 
     def testIsInvalidDestination(self):
@@ -429,7 +477,10 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         Tests the is_valid method of the OneLogin_Saml2_LogoutRequest
         Case Invalid Destination
         """
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         request = self.file_contents(
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
@@ -443,7 +494,9 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         logout_request2 = OneLogin_Saml2_Logout_Request(
             settings, OneLogin_Saml2_Utils.b64encode(request)
         )
-        with self.assertRaisesRegex(Exception, "The LogoutRequest was received at"):
+        with self.assertRaisesRegex(
+            Exception, "The LogoutRequest was received at"
+        ):
             logout_request2.is_valid(request_data, raise_exceptions=True)
 
         dom = parseString(request)
@@ -464,9 +517,17 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         Tests the is_valid method of the OneLogin_Saml2_LogoutRequest
         Case Invalid NotOnOrAfter
         """
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         request = self.file_contents(
-            join(self.data_path, "logout_requests", "invalids", "not_after_failed.xml")
+            join(
+                self.data_path,
+                "logout_requests",
+                "invalids",
+                "not_after_failed.xml",
+            )
         )
         current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
         request = request.replace(
@@ -484,7 +545,8 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
             settings, OneLogin_Saml2_Utils.b64encode(request)
         )
         with self.assertRaisesRegex(
-            Exception, "Could not validate timestamp: expired. Check system clock."
+            Exception,
+            "Could not validate timestamp: expired. Check system clock.",
         ):
             logout_request2.is_valid(request_data, raise_exceptions=True)
 
@@ -492,7 +554,10 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         """
         Tests the is_valid method of the OneLogin_Saml2_LogoutRequest
         """
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         request = self.file_contents(
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
@@ -535,7 +600,10 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         """
         Tests the is_valid method of the OneLogin_Saml2_LogoutRequest
         """
-        request_data = {"http_host": "exaMPLe.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "exaMPLe.com",
+            "script_name": "index.html",
+        }
         request = self.file_contents(
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
@@ -578,7 +646,10 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         """
         Tests the is_valid method of the OneLogin_Saml2_LogoutRequest
         """
-        request_data = {"http_host": "example.com", "script_name": "INdex.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "INdex.html",
+        }
         request = self.file_contents(
             join(self.data_path, "logout_requests", "logout_request.xml")
         )
@@ -621,9 +692,16 @@ class OneLogin_Saml2_Logout_Request_Test(unittest.TestCase):
         """
         Tests the is_valid method of the OneLogin_Saml2_LogoutRequest
         """
-        request_data = {"http_host": "example.com", "script_name": "index.html"}
+        request_data = {
+            "http_host": "example.com",
+            "script_name": "index.html",
+        }
         request = self.file_contents(
-            join(self.data_path, "logout_requests", "logout_request_with_encoding.xml")
+            join(
+                self.data_path,
+                "logout_requests",
+                "logout_request_with_encoding.xml",
+            )
         )
         settings = OneLogin_Saml2_Settings(self.loadSettingsJSON())
 

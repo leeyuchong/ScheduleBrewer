@@ -136,7 +136,9 @@ class OneLogin_Saml2_IdPMetadataParser(object):
         entity_desc_path = "//md:EntityDescriptor"
         if entity_id:
             entity_desc_path += "[@entityID='%s']" % entity_id
-        entity_descriptor_nodes = OneLogin_Saml2_XML.query(dom, entity_desc_path)
+        entity_descriptor_nodes = OneLogin_Saml2_XML.query(
+            dom, entity_desc_path
+        )
 
         if len(entity_descriptor_nodes) > 0:
             entity_descriptor_node = entity_descriptor_nodes[0]
@@ -162,7 +164,8 @@ class OneLogin_Saml2_IdPMetadataParser(object):
 
                 sso_nodes = OneLogin_Saml2_XML.query(
                     idp_descriptor_node,
-                    "./md:SingleSignOnService[@Binding='%s']" % required_sso_binding,
+                    "./md:SingleSignOnService[@Binding='%s']"
+                    % required_sso_binding,
                 )
 
                 if len(sso_nodes) > 0:
@@ -170,7 +173,8 @@ class OneLogin_Saml2_IdPMetadataParser(object):
 
                 slo_nodes = OneLogin_Saml2_XML.query(
                     idp_descriptor_node,
-                    "./md:SingleLogoutService[@Binding='%s']" % required_slo_binding,
+                    "./md:SingleLogoutService[@Binding='%s']"
+                    % required_slo_binding,
                 )
 
                 if len(slo_nodes) > 0:
@@ -192,7 +196,9 @@ class OneLogin_Saml2_IdPMetadataParser(object):
                         for cert_node in signing_nodes:
                             certs["signing"].append(
                                 "".join(
-                                    OneLogin_Saml2_XML.element_text(cert_node).split()
+                                    OneLogin_Saml2_XML.element_text(
+                                        cert_node
+                                    ).split()
                                 )
                             )
                     if len(encryption_nodes) > 0:
@@ -200,7 +206,9 @@ class OneLogin_Saml2_IdPMetadataParser(object):
                         for cert_node in encryption_nodes:
                             certs["encryption"].append(
                                 "".join(
-                                    OneLogin_Saml2_XML.element_text(cert_node).split()
+                                    OneLogin_Saml2_XML.element_text(
+                                        cert_node
+                                    ).split()
                                 )
                             )
 
@@ -212,16 +220,22 @@ class OneLogin_Saml2_IdPMetadataParser(object):
                 if idp_sso_url is not None:
                     data["idp"]["singleSignOnService"] = {}
                     data["idp"]["singleSignOnService"]["url"] = idp_sso_url
-                    data["idp"]["singleSignOnService"]["binding"] = required_sso_binding
+                    data["idp"]["singleSignOnService"][
+                        "binding"
+                    ] = required_sso_binding
 
                 if idp_slo_url is not None:
                     data["idp"]["singleLogoutService"] = {}
                     data["idp"]["singleLogoutService"]["url"] = idp_slo_url
-                    data["idp"]["singleLogoutService"]["binding"] = required_slo_binding
+                    data["idp"]["singleLogoutService"][
+                        "binding"
+                    ] = required_slo_binding
 
                 if want_authn_requests_signed is not None:
                     data["security"] = {}
-                    data["security"]["authnRequestsSigned"] = want_authn_requests_signed
+                    data["security"][
+                        "authnRequestsSigned"
+                    ] = want_authn_requests_signed
 
                 if idp_name_id_format:
                     data["sp"] = {}
@@ -232,7 +246,10 @@ class OneLogin_Saml2_IdPMetadataParser(object):
                         len(certs) == 1
                         and (
                             ("signing" in certs and len(certs["signing"]) == 1)
-                            or ("encryption" in certs and len(certs["encryption"]) == 1)
+                            or (
+                                "encryption" in certs
+                                and len(certs["encryption"]) == 1
+                            )
                         )
                     ) or (
                         ("signing" in certs and len(certs["signing"]) == 1)
@@ -271,9 +288,9 @@ class OneLogin_Saml2_IdPMetadataParser(object):
 
         # previously I will take care of cert stuff
         if "idp" in new_metadata_settings and "idp" in result_settings:
-            if new_metadata_settings["idp"].get("x509cert", None) and result_settings[
-                "idp"
-            ].get("x509certMulti", None):
+            if new_metadata_settings["idp"].get(
+                "x509cert", None
+            ) and result_settings["idp"].get("x509certMulti", None):
                 del result_settings["idp"]["x509certMulti"]
             if new_metadata_settings["idp"].get(
                 "x509certMulti", None

@@ -87,7 +87,9 @@ class OneLogin_Saml2_Settings(object):
 
     metadata_class = OneLogin_Saml2_Metadata
 
-    def __init__(self, settings=None, custom_base_path=None, sp_validation_only=False):
+    def __init__(
+        self, settings=None, custom_base_path=None, sp_validation_only=False
+    ):
         """
         Initializes the settings:
         - Sets the paths of the different folders
@@ -296,7 +298,9 @@ class OneLogin_Saml2_Settings(object):
         self.__security.setdefault("nameIdEncrypted", False)
 
         # Metadata format
-        self.__security.setdefault("metadataValidUntil", None)  # None means use default
+        self.__security.setdefault(
+            "metadataValidUntil", None
+        )  # None means use default
         self.__security.setdefault(
             "metadataCacheDuration", None
         )  # None means use default
@@ -324,7 +328,9 @@ class OneLogin_Saml2_Settings(object):
         )
 
         # Digest Algorithm
-        self.__security.setdefault("digestAlgorithm", OneLogin_Saml2_Constants.SHA1)
+        self.__security.setdefault(
+            "digestAlgorithm", OneLogin_Saml2_Constants.SHA1
+        )
 
         # AttributeStatement required by default
         self.__security.setdefault("wantAttributeStatement", True)
@@ -380,7 +386,9 @@ class OneLogin_Saml2_Settings(object):
             if not settings.get("idp"):
                 errors.append("idp_not_found")
             else:
-                allow_single_domain_urls = self._get_allow_single_label_domain(settings)
+                allow_single_domain_urls = self._get_allow_single_label_domain(
+                    settings
+                )
                 idp = settings["idp"]
                 if not idp.get("entityId"):
                     errors.append("idp_entityId_not_found")
@@ -393,7 +401,9 @@ class OneLogin_Saml2_Settings(object):
                     errors.append("idp_sso_url_invalid")
 
                 slo_url = idp.get("singleLogoutService", {}).get("url")
-                if slo_url and not validate_url(slo_url, allow_single_domain_urls):
+                if slo_url and not validate_url(
+                    slo_url, allow_single_domain_urls
+                ):
                     errors.append("idp_slo_url_invalid")
 
                 if "security" in settings:
@@ -413,14 +423,20 @@ class OneLogin_Saml2_Settings(object):
                         and idp["x509certMulti"]["encryption"]
                     )
 
-                    want_assert_sign = bool(security.get("wantAssertionsSigned"))
+                    want_assert_sign = bool(
+                        security.get("wantAssertionsSigned")
+                    )
                     want_mes_signed = bool(security.get("wantMessagesSigned"))
                     nameid_enc = bool(security.get("nameIdEncrypted"))
 
                     if (want_assert_sign or want_mes_signed) and not (
-                        exists_x509 or exists_fingerprint or exists_multix509sign
+                        exists_x509
+                        or exists_fingerprint
+                        or exists_multix509sign
                     ):
-                        errors.append("idp_cert_or_fingerprint_not_found_and_required")
+                        errors.append(
+                            "idp_cert_or_fingerprint_not_found_and_required"
+                        )
                     if nameid_enc and not (exists_x509 or exists_multix509enc):
                         errors.append("idp_cert_not_found_and_required")
         return errors
@@ -442,7 +458,9 @@ class OneLogin_Saml2_Settings(object):
             if not settings.get("sp"):
                 errors.append("sp_not_found")
             else:
-                allow_single_domain_urls = self._get_allow_single_label_domain(settings)
+                allow_single_domain_urls = self._get_allow_single_label_domain(
+                    settings
+                )
                 # check_sp_certs uses self.__sp so I add it
                 old_sp = self.__sp
                 self.__sp = settings["sp"]
@@ -456,7 +474,8 @@ class OneLogin_Saml2_Settings(object):
                 if not sp.get("assertionConsumerService", {}).get("url"):
                     errors.append("sp_acs_not_found")
                 elif not validate_url(
-                    sp["assertionConsumerService"]["url"], allow_single_domain_urls
+                    sp["assertionConsumerService"]["url"],
+                    allow_single_domain_urls,
                 ):
                     errors.append("sp_acs_url_invalid")
 
@@ -491,7 +510,10 @@ class OneLogin_Saml2_Settings(object):
                                 errors.append(
                                     "sp_attributeConsumingService_requestedAttributes_name_not_found"
                                 )
-                            if "name" in req_attrib and not req_attrib["name"].strip():
+                            if (
+                                "name" in req_attrib
+                                and not req_attrib["name"].strip()
+                            ):
                                 errors.append(
                                     "sp_attributeConsumingService_requestedAttributes_name_invalid"
                                 )
@@ -513,7 +535,8 @@ class OneLogin_Saml2_Settings(object):
                     if (
                         "serviceDescription" in attributeConsumingService
                         and not isinstance(
-                            attributeConsumingService["serviceDescription"], basestring
+                            attributeConsumingService["serviceDescription"],
+                            basestring,
                         )
                     ):
                         errors.append(
@@ -521,7 +544,9 @@ class OneLogin_Saml2_Settings(object):
                         )
 
                 slo_url = sp.get("singleLogoutService", {}).get("url")
-                if slo_url and not validate_url(slo_url, allow_single_domain_urls):
+                if slo_url and not validate_url(
+                    slo_url, allow_single_domain_urls
+                ):
                     errors.append("sp_sls_url_invalid")
 
                 if "signMetadata" in security and isinstance(
@@ -566,7 +591,8 @@ class OneLogin_Saml2_Settings(object):
                 for c_type in settings["contactPerson"]:
                     contact = settings["contactPerson"][c_type]
                     if (
-                        "givenName" not in contact or len(contact["givenName"]) == 0
+                        "givenName" not in contact
+                        or len(contact["givenName"]) == 0
                     ) or (
                         "emailAddress" not in contact
                         or len(contact["emailAddress"]) == 0
@@ -578,12 +604,18 @@ class OneLogin_Saml2_Settings(object):
                 for org in settings["organization"]:
                     organization = settings["organization"][org]
                     if (
-                        ("name" not in organization or len(organization["name"]) == 0)
+                        (
+                            "name" not in organization
+                            or len(organization["name"]) == 0
+                        )
                         or (
                             "displayname" not in organization
                             or len(organization["displayname"]) == 0
                         )
-                        or ("url" not in organization or len(organization["url"]) == 0)
+                        or (
+                            "url" not in organization
+                            or len(organization["url"]) == 0
+                        )
                     ):
                         errors.append("organization_not_enought_data")
                         break
@@ -802,7 +834,9 @@ class OneLogin_Saml2_Settings(object):
                         OneLogin_Saml2_Error.SETTINGS_INVALID_SYNTAX,
                     )
                 key_file_name = self.__security["signMetadata"]["keyFileName"]
-                cert_file_name = self.__security["signMetadata"]["certFileName"]
+                cert_file_name = self.__security["signMetadata"][
+                    "certFileName"
+                ]
                 key_metadata_file = self.__paths["cert"] + key_file_name
                 cert_metadata_file = self.__paths["cert"] + cert_file_name
 
@@ -862,7 +896,10 @@ class OneLogin_Saml2_Settings(object):
         if isinstance(root, str):
             errors.append(root)
         else:
-            if root.tag != "{%s}EntityDescriptor" % OneLogin_Saml2_Constants.NS_MD:
+            if (
+                root.tag
+                != "{%s}EntityDescriptor" % OneLogin_Saml2_Constants.NS_MD
+            ):
                 errors.append("noEntityDescriptor_xml")
             else:
                 if (
@@ -875,9 +912,9 @@ class OneLogin_Saml2_Settings(object):
                 ) != 1:
                     errors.append("onlySPSSODescriptor_allowed_xml")
                 else:
-                    valid_until, cache_duration = root.get("validUntil"), root.get(
-                        "cacheDuration"
-                    )
+                    valid_until, cache_duration = root.get(
+                        "validUntil"
+                    ), root.get("cacheDuration")
 
                     if valid_until:
                         valid_until = OneLogin_Saml2_Utils.parse_SAML_to_time(
@@ -886,7 +923,9 @@ class OneLogin_Saml2_Settings(object):
                     expire_time = OneLogin_Saml2_Utils.get_expire_time(
                         cache_duration, valid_until
                     )
-                    if expire_time is not None and int(time()) > int(expire_time):
+                    if expire_time is not None and int(time()) > int(
+                        expire_time
+                    ):
                         errors.append("expired_xml")
 
         # TODO: Validate Sign
@@ -915,7 +954,9 @@ class OneLogin_Saml2_Settings(object):
                     )
 
             if "encryption" in self.__idp["x509certMulti"]:
-                for idx in range(len(self.__idp["x509certMulti"]["encryption"])):
+                for idx in range(
+                    len(self.__idp["x509certMulti"]["encryption"])
+                ):
                     self.__idp["x509certMulti"]["encryption"][
                         idx
                     ] = OneLogin_Saml2_Utils.format_cert(
@@ -926,7 +967,9 @@ class OneLogin_Saml2_Settings(object):
         """
         Formats the SP cert.
         """
-        self.__sp["x509cert"] = OneLogin_Saml2_Utils.format_cert(self.__sp["x509cert"])
+        self.__sp["x509cert"] = OneLogin_Saml2_Utils.format_cert(
+            self.__sp["x509cert"]
+        )
 
     def format_sp_cert_new(self):
         """

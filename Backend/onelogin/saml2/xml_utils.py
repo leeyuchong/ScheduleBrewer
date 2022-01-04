@@ -134,14 +134,18 @@ class OneLogin_Saml2_XML(object):
             source = context
 
         if tagid is None:
-            return source.xpath(query, namespaces=OneLogin_Saml2_Constants.NSMAP)
+            return source.xpath(
+                query, namespaces=OneLogin_Saml2_Constants.NSMAP
+            )
         else:
             return source.xpath(
                 query, tagid=tagid, namespaces=OneLogin_Saml2_Constants.NSMAP
             )
 
     @staticmethod
-    def cleanup_namespaces(tree_or_element, top_nsmap=None, keep_ns_prefixes=None):
+    def cleanup_namespaces(
+        tree_or_element, top_nsmap=None, keep_ns_prefixes=None
+    ):
         """
         Keeps the xmlns:xs namespace intact when etree.cleanup_namespaces is invoked.
         :param tree_or_element: An XML tree or element

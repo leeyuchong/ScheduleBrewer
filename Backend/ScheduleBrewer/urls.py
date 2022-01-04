@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, re_path
 
 from CourseBrowser import views
@@ -34,5 +35,4 @@ urlpatterns = [
     # re_path(r'^metadata/$', views.metadata, name='metadata')
 ]
 
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns += staticfiles_urlpatterns()

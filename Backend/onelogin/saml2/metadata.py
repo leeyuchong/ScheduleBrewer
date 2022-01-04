@@ -83,7 +83,9 @@ class OneLogin_Saml2_Metadata(object):
         if cache_duration is None:
             cache_duration = cls.TIME_CACHED
         if not isinstance(cache_duration, compat.str_type):
-            cache_duration_str = "PT%sS" % cache_duration  # Period of Time x Seconds
+            cache_duration_str = (
+                "PT%sS" % cache_duration
+            )  # Period of Time x Seconds
         else:
             cache_duration_str = cache_duration
 
@@ -145,7 +147,9 @@ class OneLogin_Saml2_Metadata(object):
             str_contacts = "\n".join(contacts_info)
 
         str_attribute_consuming_service = ""
-        if "attributeConsumingService" in sp and len(sp["attributeConsumingService"]):
+        if "attributeConsumingService" in sp and len(
+            sp["attributeConsumingService"]
+        ):
             attr_cs_desc_str = ""
             if "serviceDescription" in sp["attributeConsumingService"]:
                 attr_cs_desc_str = (
@@ -155,21 +159,32 @@ class OneLogin_Saml2_Metadata(object):
                 )
 
             requested_attribute_data = []
-            for req_attribs in sp["attributeConsumingService"]["requestedAttributes"]:
+            for req_attribs in sp["attributeConsumingService"][
+                "requestedAttributes"
+            ]:
                 req_attr_nameformat_str = (
                     req_attr_friendlyname_str
                 ) = req_attr_isrequired_str = ""
                 req_attr_aux_str = " />"
 
-                if "nameFormat" in req_attribs.keys() and req_attribs["nameFormat"]:
+                if (
+                    "nameFormat" in req_attribs.keys()
+                    and req_attribs["nameFormat"]
+                ):
                     req_attr_nameformat_str = (
                         ' NameFormat="%s"' % req_attribs["nameFormat"]
                     )
-                if "friendlyName" in req_attribs.keys() and req_attribs["friendlyName"]:
+                if (
+                    "friendlyName" in req_attribs.keys()
+                    and req_attribs["friendlyName"]
+                ):
                     req_attr_friendlyname_str = (
                         ' FriendlyName="%s"' % req_attribs["friendlyName"]
                     )
-                if "isRequired" in req_attribs.keys() and req_attribs["isRequired"]:
+                if (
+                    "isRequired" in req_attribs.keys()
+                    and req_attribs["isRequired"]
+                ):
                     req_attr_isrequired_str = (
                         ' isRequired="%s"' % "true"
                         if req_attribs["isRequired"]
@@ -180,7 +195,9 @@ class OneLogin_Saml2_Metadata(object):
                     and req_attribs["attributeValue"]
                 ):
                     if isinstance(req_attribs["attributeValue"], basestring):
-                        req_attribs["attributeValue"] = [req_attribs["attributeValue"]]
+                        req_attribs["attributeValue"] = [
+                            req_attribs["attributeValue"]
+                        ]
 
                     req_attr_aux_str = ">"
                     for attrValue in req_attribs["attributeValue"]:
@@ -212,7 +229,9 @@ class OneLogin_Saml2_Metadata(object):
             }
 
         metadata = OneLogin_Saml2_Templates.MD_ENTITY_DESCRIPTOR % {
-            "valid": ('validUntil="%s"' % valid_until_str) if valid_until_str else "",
+            "valid": ('validUntil="%s"' % valid_until_str)
+            if valid_until_str
+            else "",
             "cache": ('cacheDuration="%s"' % cache_duration_str)
             if cache_duration_str
             else "",
@@ -284,7 +303,9 @@ class OneLogin_Saml2_Metadata(object):
         key_descriptor.set("use", ("encryption", "signing")[signing])
 
     @classmethod
-    def add_x509_key_descriptors(cls, metadata, cert=None, add_encryption=True):
+    def add_x509_key_descriptors(
+        cls, metadata, cert=None, add_encryption=True
+    ):
         """
         Adds the x509 descriptors (sign/encryption) to the metadata
         The same cert will be used for sign/encrypt
@@ -308,11 +329,14 @@ class OneLogin_Saml2_Metadata(object):
         except Exception as e:
             raise Exception("Error parsing metadata. " + str(e))
 
-        assert root.tag == "{%s}EntityDescriptor" % OneLogin_Saml2_Constants.NS_MD
+        assert (
+            root.tag == "{%s}EntityDescriptor" % OneLogin_Saml2_Constants.NS_MD
+        )
         try:
             sp_sso_descriptor = next(
                 root.iterfind(
-                    ".//md:SPSSODescriptor", namespaces=OneLogin_Saml2_Constants.NSMAP
+                    ".//md:SPSSODescriptor",
+                    namespaces=OneLogin_Saml2_Constants.NSMAP,
                 )
             )
         except StopIteration:

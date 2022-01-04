@@ -22,14 +22,18 @@ class OneLogin_Saml2_Constants(object):
     ALLOWED_CLOCK_DRIFT = 300
 
     # NameID Formats
-    NAMEID_EMAIL_ADDRESS = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+    NAMEID_EMAIL_ADDRESS = (
+        "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+    )
     NAMEID_X509_SUBJECT_NAME = (
         "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName"
     )
     NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME = (
         "urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName"
     )
-    NAMEID_UNSPECIFIED = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+    NAMEID_UNSPECIFIED = (
+        "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+    )
     NAMEID_KERBEROS = "urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos"
     NAMEID_ENTITY = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
     NAMEID_TRANSIENT = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
@@ -74,10 +78,16 @@ class OneLogin_Saml2_Constants(object):
 
     # Bindings
     BINDING_HTTP_POST = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    BINDING_HTTP_REDIRECT = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-    BINDING_HTTP_ARTIFACT = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+    BINDING_HTTP_REDIRECT = (
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+    )
+    BINDING_HTTP_ARTIFACT = (
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+    )
     BINDING_SOAP = "urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-    BINDING_DEFLATE = "urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE"
+    BINDING_DEFLATE = (
+        "urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE"
+    )
 
     # Auth Context Class
     AC_UNSPECIFIED = "urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified"
@@ -98,7 +108,9 @@ class OneLogin_Saml2_Constants(object):
     STATUS_SUCCESS = "urn:oasis:names:tc:SAML:2.0:status:Success"
     STATUS_REQUESTER = "urn:oasis:names:tc:SAML:2.0:status:Requester"
     STATUS_RESPONDER = "urn:oasis:names:tc:SAML:2.0:status:Responder"
-    STATUS_VERSION_MISMATCH = "urn:oasis:names:tc:SAML:2.0:status:VersionMismatch"
+    STATUS_VERSION_MISMATCH = (
+        "urn:oasis:names:tc:SAML:2.0:status:VersionMismatch"
+    )
     STATUS_NO_PASSIVE = "urn:oasis:names:tc:SAML:2.0:status:NoPassive"
     STATUS_PARTIAL_LOGOUT = "urn:oasis:names:tc:SAML:2.0:status:PartialLogout"
     STATUS_PROXY_COUNT_EXCEEDED = (

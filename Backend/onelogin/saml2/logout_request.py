@@ -111,7 +111,8 @@ class OneLogin_Saml2_Logout_Request(object):
             # NameID Format UNSPECIFIED omitted
             if (
                 name_id_format
-                and name_id_format == OneLogin_Saml2_Constants.NAMEID_UNSPECIFIED
+                and name_id_format
+                == OneLogin_Saml2_Constants.NAMEID_UNSPECIFIED
             ):
                 name_id_format = None
 
@@ -121,7 +122,8 @@ class OneLogin_Saml2_Logout_Request(object):
 
             if session_index:
                 session_index_str = (
-                    "<samlp:SessionIndex>%s</samlp:SessionIndex>" % session_index
+                    "<samlp:SessionIndex>%s</samlp:SessionIndex>"
+                    % session_index
                 )
             else:
                 session_index_str = ""
@@ -205,13 +207,18 @@ class OneLogin_Saml2_Logout_Request(object):
                 )
 
             encrypted_data_nodes = OneLogin_Saml2_XML.query(
-                elem, "/samlp:LogoutRequest/saml:EncryptedID/xenc:EncryptedData"
+                elem,
+                "/samlp:LogoutRequest/saml:EncryptedID/xenc:EncryptedData",
             )
             if len(encrypted_data_nodes) == 1:
                 encrypted_data = encrypted_data_nodes[0]
-                name_id = OneLogin_Saml2_Utils.decrypt_element(encrypted_data, key)
+                name_id = OneLogin_Saml2_Utils.decrypt_element(
+                    encrypted_data, key
+                )
         else:
-            entries = OneLogin_Saml2_XML.query(elem, "/samlp:LogoutRequest/saml:NameID")
+            entries = OneLogin_Saml2_XML.query(
+                elem, "/samlp:LogoutRequest/saml:NameID"
+            )
             if len(entries) == 1:
                 name_id = entries[0]
 
@@ -294,7 +301,9 @@ class OneLogin_Saml2_Logout_Request(object):
             elem, "/samlp:LogoutRequest/samlp:SessionIndex"
         )
         for session_index_node in session_index_nodes:
-            session_indexes.append(OneLogin_Saml2_XML.element_text(session_index_node))
+            session_indexes.append(
+                OneLogin_Saml2_XML.element_text(session_index_node)
+            )
         return session_indexes
 
     def is_valid(self, request_data, raise_exceptions=False):
@@ -334,7 +343,9 @@ class OneLogin_Saml2_Logout_Request(object):
 
                 security = self.__settings.get_security_data()
 
-                current_url = OneLogin_Saml2_Utils.get_self_url_no_query(request_data)
+                current_url = OneLogin_Saml2_Utils.get_self_url_no_query(
+                    request_data
+                )
 
                 # Check NotOnOrAfter
                 if root.get("NotOnOrAfter", None):
@@ -352,7 +363,9 @@ class OneLogin_Saml2_Logout_Request(object):
                 if destination:
                     if not OneLogin_Saml2_Utils.normalize_url(
                         url=destination
-                    ).startswith(OneLogin_Saml2_Utils.normalize_url(url=current_url)):
+                    ).startswith(
+                        OneLogin_Saml2_Utils.normalize_url(url=current_url)
+                    ):
                         raise OneLogin_Saml2_ValidationError(
                             "The LogoutRequest was received at "
                             "%(currentURL)s instead of %(destination)s"
