@@ -35,7 +35,7 @@ function SearchBar(props) {
   }));
 
   const courseCodes = JSON.parse(
-    document.getElementById("course_codes").textContent
+    document.getElementById("dept_codes").textContent
   );
 
   const classes = useStyles();

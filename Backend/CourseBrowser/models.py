@@ -19,6 +19,7 @@ class CourseInfo(models.Model):
     fr = models.IntegerField()
     la = models.IntegerField()
     qa = models.IntegerField()
+    prereq = models.BooleanField()
     format = models.CharField(db_column="Format", max_length=3)
     xlist = models.CharField(max_length=20)
     d1 = models.CharField(max_length=5)

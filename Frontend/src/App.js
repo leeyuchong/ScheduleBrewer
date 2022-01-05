@@ -21,6 +21,10 @@ function App() {
     setCurrentPage(newValue);
   }
   const toggleTheme = () => {
+    // If currently dark, set the color to light
+    document
+      .querySelector('meta[name="theme-color"]')
+      .setAttribute("content", darkMode ? "#951829" : "#641a2b");
     setDarkMode(!darkMode);
   };
   const toggleSearchVisibility = () => {

@@ -21,6 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "fr",
             "la",
             "qa",
+            "prereq",
             "format",
             "xlist",
             "d1",

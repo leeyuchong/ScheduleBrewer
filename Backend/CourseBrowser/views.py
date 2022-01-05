@@ -9,7 +9,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from dotenv import load_dotenv
-from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -29,24 +28,25 @@ logger = logging.getLogger(__file__)
 load_dotenv()
 
 
-def get_subject_codes():
+def get_dept_codes():
     courses = CourseInfo.objects.all()
-    course_codes = list(
-        sorted(set([x.courseID.split("-")[0] for x in courses]))
-    )
-    return course_codes
+    dept_codes = list(sorted(set([x.courseID.split("-")[0] for x in courses])))
+    if "NONE" in dept_codes:
+        dept_codes.remove("NONE")
+    return dept_codes
 
 
 def index(request):
     context = {
-        "course_codes": cache.get_or_set("course_codes", get_subject_codes)
+        "dept_codes": cache.get_or_set("dept_codes", get_dept_codes),
+        "site_title": getenv("SITE_TITLE", default="Schedule Brewer"),
     }
     return render(request, "CourseBrowser/index.html", context)
 
 
 @api_view(["GET"])
 def search(request):
-    courseCodes = cache.get("course_codes")
+    courseCodes = cache.get("dept_codes")
     queriedCourses = CourseInfo.objects.filter(offered__exact=True)
     # <QueryDict: {'searchTerms': ['CMPU 102']}>
     for key, value in request.GET.items():
@@ -136,106 +136,64 @@ def search(request):
             )
         elif key == "units":
             queriedCourses = queriedCourses.filter(units__exact=value)
+        elif key == "ex-ind-cel":
+            queriedCourses = queriedCourses.exclude(
+                Q(courseID__contains=290)
+                | Q(courseID__contains=399)
+                | Q(courseID__contains=298)
+            )
+        elif key == "time":
+            time = int(value)
+            queriedCourses = queriedCourses.filter(
+                (Q(starttime1__gte=time) & Q(starttime1__lte=time + 100))
+                | Q(starttime2__gte=time) & Q(starttime2__lte=time + 100)
+            )
+        elif key == "curr":
+            if (
+            "samlUserdata" in request.session
+            and len(request.session["samlUserdata"]) > 0
+        ):
+            username = request.session["samlUserdata"]["UserName"][0]
+            queriedCourses = CourseInfo.objects.filter(
+                usercourses__userID__exact=username
+            ).values(
+                "courseID",
+                "title",
+                "units",
+                "format",
+                "d1",
+                "time1",
+                "starttime1",
+                "endtime1",
+                "duration1",
+                "d2",
+                "time2",
+                "starttime2",
+                "endtime2",
+                "duration2",
+                "instructor",
+                "description",
+                "offered",
+            )
+            available_times = [(800, 2200)]
+            for course in queriedCourses:
+                # starttime and endtime are in the free region -> split the free region
+                # e.g. course: 9-1015, avail: [(800,2200)] -> [(800, 900), [1015, 2200]]
+
+                # startime is free but endtime is not -> make the 2nd avail start time later
+                # e.g. course: 1015-1200, avail: [(800,900), (1100-2200)] -> [(800,900), (1200-2200)]
+
+                # starttime is not free but endtime is free -> make the 1st avail end earlier
+                # e.g. course: 845-1015, avail: [(800,900), (1100,2200)] -> [(800,845), (1100, 2200)]
+
+                # startime and endtime are not free -> do nothing
+                
     queriedCourses = queriedCourses.order_by("courseID")
     paginator = PageNumberPagination()
     context = paginator.paginate_queryset(queriedCourses, request)
     serializer = CourseSerializer(context, many=True)
     return paginator.get_paginated_response(serializer.data)
 
-
-# class CourseViewSet(viewsets.ModelViewSet):
-#     courseCodes = cache.get("course_codes")
-#     queryset = CourseInfo.objects.filter(offered__exact=True)
-#     # <QueryDict: {'searchTerms': ['CMPU 102']}>
-#     for key, value in request.GET.items():
-#         # Search term from the search box
-#         if key == "searchTerms":
-#             terms = request.GET[key].upper().split()
-#             for term in terms:
-#                 if term in courseCodes:
-#                     queryset = queryset.filter(
-#                         courseID__startswith=term
-#                     )
-#                 elif term == "FR":
-#                     queryset = queryset.filter(fr__exact=1)
-#                 elif term == "NR" or term == "NRO":
-#                     queryset = queryset.filter(gm__exact="NR")
-#                 elif term == "SU":
-#                     queryset = queryset.filter(gm__exact="SU")
-#                 elif term == "YL":
-#                     queryset = queryset.filter(yl__exact=1)
-#                 elif term == "QA":
-#                     queryset = queryset.filter(qa__exact=1)
-#                 elif term == "LA":
-#                     queryset = queryset.filter(la__exact=1)
-#                 elif term == "SP":
-#                     queryset = queryset.filter(sp__exact=1)
-#                 elif term == "CLS":
-#                     queryset = queryset.filter(format__exact="CLS")
-#                 elif term == "INT":
-#                     queryset = queryset.filter(format__exact="INT")
-#                 elif term == "OTH":
-#                     queryset = queryset.filter(format__exact="OTH")
-#                 elif term == "MON" or term == "MONDAY":
-#                     queryset = queryset.filter(
-#                         Q(d1__contains="M") | Q(d2__contains="M")
-#                     )
-#                 elif term == "TUE" or term == "TUESDAY":
-#                     queryset = queryset.filter(
-#                         Q(d1__contains="T") | Q(d2__contains="T")
-#                     )
-#                 elif term == "WED" or term == "WEDNESDAY":
-#                     queryset = queryset.filter(
-#                         Q(d1__contains="W") | Q(d2__contains="W")
-#                     )
-#                 elif term == "THUR" or term == "THURS" or term == "THURSDAY":
-#                     queryset = queryset.filter(
-#                         Q(d1__contains="R") | Q(d2__contains="R")
-#                     )
-#                 elif term == "FRI" or term == "FRIDAY":
-#                     queryset = queryset.filter(
-#                         Q(d1__contains="F") | Q(d2__contains="F")
-#                     )
-#                 elif term == "0.5" or term == "1.0" or term == "1.5":
-#                     queryset = queryset.filter(units__exact=term)
-#                 else:
-#                     if len(term) > 0 and term[0] == "0":
-#                         term = term[1:]
-#                     queryset = queryset.filter(
-#                         Q(title__icontains=term)
-#                         | Q(loc__icontains=term)
-#                         | Q(instructor__icontains=term)
-#                         | Q(starttime1__contains=term)
-#                         | Q(starttime2__contains=term)
-#                         | Q(description__icontains=term)
-#                         | Q(courseID__icontains=term)
-#                     )
-#         # Department select box
-#         elif key == "department":
-#             queryset = queryset.filter(courseID__startswith=value)
-#         # Filters:
-#         elif key == "writingSem":
-#             queryset = queryset.filter(fr__exact=1)
-#         elif key == "gradeOption":
-#             queryset = queryset.filter(gm__exact=value)
-#         elif key == "yearLong":
-#             queryset = queryset.filter(yl__exact=1)
-#         elif key == "quant":
-#             queryset = queryset.filter(qa__exact=1)
-#         elif key == "lang":
-#             queryset = queryset.filter(la__exact=1)
-#         elif key == "specialPerm":
-#             queryset = queryset.filter(sp__exact=1)
-#         elif key == "courseFormat":
-#             queryset = queryset.filter(format__exact=value)
-#         elif key == "day":
-#             queryset = queryset.filter(
-#                 Q(d1__contains=value) | Q(d2__contains=value)
-#             )
-#         elif key == "units":
-#             queryset = queryset.filter(units__exact=value)
-#     queryset = queryset.order_by("courseID")
-#     serializer_class = CourseSerializer
 
 class SavedCourses(APIView):
     attributes = False
@@ -244,17 +202,16 @@ class SavedCourses(APIView):
     # Get the username
     def getAttributes(self, request):
         # If user is logged in
+        if (
+            "samlUserdata" in request.session
+            and len(request.session["samlUserdata"]) > 0
+        ):
+            self.attributes = request.session["samlUserdata"].items()
+            self.username = request.session["samlUserdata"]["UserName"][0]
         # For development, check if base url is using local host
-        if "127.0.0.1" in getenv("BASE_URL"):
+        elif "127.0.0.1" in getenv("BASE_URL"):
             self.attributes = True
             self.username = "test"
-        else:
-            if "samlUserdata" in request.session:
-                if len(request.session["samlUserdata"]) > 0:
-                    self.attributes = request.session["samlUserdata"].items()
-                    self.username = request.session["samlUserdata"][
-                        "UserName"
-                    ][0]
 
     # Get saved courses
     def get(self, request, format=None):
