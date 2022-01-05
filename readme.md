@@ -118,7 +118,8 @@ The `.env` file, and `/node_modules` and `/saml` folders are necessary but are n
 1. Delete all courses in the UserCourses table
 2. Delete all courses in the CourseInfo table
 3. Change the semester label:
-   - The label is at line 88 in the file `/ScheduleBrewer/CourseBrowser/src/components/Navbar/NavbarComponent.js`
+   - In the project root, type the command `vi .env`
+   - Change the SITE_TITLE to the appropriate value
 4. Recompile the files (Look at the section Usage - Compile the Frontend Files)
 5. Restart the NGINX server (see section below)
 6. Import the new courses
