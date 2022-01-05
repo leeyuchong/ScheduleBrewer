@@ -330,7 +330,7 @@ def prepare_django_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     result = {
         "https": "on",
-        "http_host": "schedulebrewer.ml",
+        "http_host": "schedulebrewer.vassar.edu",
         "script_name": request.META["PATH_INFO"],
         "server_port": "443",
         "get_data": request.GET.copy(),
@@ -354,7 +354,7 @@ def saml_index(request):
 
     if "sso" in req["get_data"]:
         return HttpResponseRedirect(
-            auth.login(return_to="https://schedulebrewer.ml")
+            auth.login(return_to="https://schedulebrewer.vassar.edu")
         )
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
@@ -384,7 +384,7 @@ def saml_index(request):
                 nq=name_id_nq,
                 name_id_format=name_id_format,
                 spnq=name_id_spnq,
-                return_to="https://schedulebrewer.ml",
+                return_to="https://schedulebrewer.vassar.edu",
             )
         )
         # If LogoutRequest ID need to be stored in order to later validate it, do instead

@@ -1,20 +1,20 @@
 {
   "status": "done",
   "assets": {
-    "CourseBrowser-2d036789640afad67fa7.js": {
-      "name": "CourseBrowser-2d036789640afad67fa7.js",
-      "path": "/home/ubuntu/ScheduleBrewer/ScheduleBrewer/Frontend/static/course_browser_js/CourseBrowser-2d036789640afad67fa7.js",
-      "publicPath": "./static/course_browser_js/CourseBrowser-2d036789640afad67fa7.js"
+    "CourseBrowser-db1e4fd262112b1e8b69.js": {
+      "name": "CourseBrowser-db1e4fd262112b1e8b69.js",
+      "path": "/home/ubuntu/ScheduleBrewer/ScheduleBrewer/Frontend/static/course_browser_js/CourseBrowser-db1e4fd262112b1e8b69.js",
+      "publicPath": "./static/course_browser_js/CourseBrowser-db1e4fd262112b1e8b69.js"
     },
-    "CourseBrowser-2d036789640afad67fa7.js.LICENSE.txt": {
-      "name": "CourseBrowser-2d036789640afad67fa7.js.LICENSE.txt",
-      "path": "/home/ubuntu/ScheduleBrewer/ScheduleBrewer/Frontend/static/course_browser_js/CourseBrowser-2d036789640afad67fa7.js.LICENSE.txt",
-      "publicPath": "./static/course_browser_js/CourseBrowser-2d036789640afad67fa7.js.LICENSE.txt"
+    "CourseBrowser-db1e4fd262112b1e8b69.js.LICENSE.txt": {
+      "name": "CourseBrowser-db1e4fd262112b1e8b69.js.LICENSE.txt",
+      "path": "/home/ubuntu/ScheduleBrewer/ScheduleBrewer/Frontend/static/course_browser_js/CourseBrowser-db1e4fd262112b1e8b69.js.LICENSE.txt",
+      "publicPath": "./static/course_browser_js/CourseBrowser-db1e4fd262112b1e8b69.js.LICENSE.txt"
     }
   },
   "chunks": {
     "CourseBrowser": [
-      "CourseBrowser-2d036789640afad67fa7.js"
+      "CourseBrowser-db1e4fd262112b1e8b69.js"
     ]
   },
   "publicPath": "./static/course_browser_js/"

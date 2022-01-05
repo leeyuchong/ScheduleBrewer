@@ -8,6 +8,8 @@ ALLOWED_HOSTS = [
     "54.83.17.12",
     "schedulebrewer.ml",
     "www.schedulebrewer.ml",
+    "www.schedulebrewer.vassar.edu",
+    "schedulebrewer.vassar.edu"
 ]
 
 # CORS_ALLOW_CREDENTIALS = True
