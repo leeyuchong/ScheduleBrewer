@@ -19,12 +19,12 @@ const SavedCourseProvider = (props) => {
   const [savedCourses, setSavedCourses] = useState({});
   useEffect(() => {
     if (true) {
-      fetch(`${process.env.HOSTNAME}/getCSRF/`, {
+      fetch(`/getCSRF/`, {
         method: "GET",
         credentials: "include",
       })
         .then(
-          fetch(`${process.env.HOSTNAME}/api/get-saved-courses`, {
+          fetch(`/api/get-saved-courses`, {
             credentials: "include",
             method: "GET",
             // mode: 'cors',

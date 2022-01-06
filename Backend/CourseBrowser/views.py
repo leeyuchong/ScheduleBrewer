@@ -452,7 +452,7 @@ def saml_index(request):
     paint_logout = False
 
     if "sso" in req["get_data"]:
-        return HttpResponseRedirect(auth.login(return_to=HOSTNAME))
+        return HttpResponseRedirect(auth.login(return_to=f"https://{HOSTNAME}"))
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
@@ -481,7 +481,7 @@ def saml_index(request):
                 nq=name_id_nq,
                 name_id_format=name_id_format,
                 spnq=name_id_spnq,
-                return_to=HOSTNAME,
+                return_to=f"https://{HOSTNAME}",
             )
         )
         # If LogoutRequest ID need to be stored in order to later validate it, do instead

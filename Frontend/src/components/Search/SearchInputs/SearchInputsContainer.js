@@ -24,7 +24,7 @@ function SearchInputsContainer(props) {
   const [formValues, setFormValues] = useState(defaultValues);
 
   useEffect(() => {
-    let url = `${process.env.HOSTNAME}/api/search/?`;
+    let url = `/api/search/?`;
     let searchParams = new URLSearchParams();
     for (const [key, value] of Object.entries(formValues)) {
       if (value) {

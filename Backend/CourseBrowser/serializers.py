@@ -68,8 +68,3 @@ class SavedCoursesSerializer(serializers.ModelSerializer):
             "description",
             "offered",
         )
-
-
-# class PaginatedCourseSerializer(pagination.PaginationSerializer):
-#     class Meta:
-#         object_serializer_class=CourseSerializer

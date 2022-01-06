@@ -41,7 +41,7 @@ function SearchResultsContainer(props) {
       });
   }, [props.searchURL]);
   useEffect(() => {
-    fetch(`${process.env.HOSTNAME}/getCSRF/`, {
+    fetch(`/getCSRF/`, {
       method: "GET",
       credentials: "include",
     }).then((response) => {
