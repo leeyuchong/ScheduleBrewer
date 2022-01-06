@@ -21,7 +21,7 @@ from CourseBrowser import views
 
 urlpatterns = [
     path("", views.index),
-    path("admin/", admin.site.urls),
+    # path("admin/", admin.site.urls),
     path("api/search/", views.search),
     path("api/get-saved-courses", views.SavedCourses.as_view()),
     path("api/save-course", views.SavedCourses.as_view()),

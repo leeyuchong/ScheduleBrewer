@@ -37,11 +37,14 @@ def get_dept_codes():
 
 
 def index(request):
-    context = {
-        "dept_codes": cache.get_or_set("dept_codes", get_dept_codes),
-        "site_title": getenv("SITE_TITLE", default="Schedule Brewer"),
-    }
-    return render(request, "CourseBrowser/index.html", context)
+    if request.get_host() in ("schedulebrewer.vassar.edu", "127.0.0.1:8000"):
+        context = {
+            "dept_codes": cache.get_or_set("dept_codes", get_dept_codes),
+            "site_title": getenv("SITE_TITLE", default="Schedule Brewer"),
+        }
+        return render(request, "CourseBrowser/index.html", context)
+    else:
+        return render(request, "CourseBrowser/redirect.html")
 
 
 @api_view(["GET"])
