@@ -159,9 +159,9 @@ def search(request):
                 | (Q(starttime2__gte=time) & Q(starttime2__lte=time + 100))
             )
         elif param.key == "courseLength":
-            queriedCourses = queriedCourses(courselength=param.value)
+            queriedCourses = queriedCourses.filter(courselength=param.value)
         elif param.key == "division":
-            queriedCourses = queriedCourses(division=param.value)
+            queriedCourses = queriedCourses.filter(division=param.value)
         elif param.key == "fitCurr":
             if (
                 "samlUserdata" in request.session
@@ -452,7 +452,9 @@ def saml_index(request):
     paint_logout = False
 
     if "sso" in req["get_data"]:
-        return HttpResponseRedirect(auth.login(return_to=f"https://{HOSTNAME}"))
+        return HttpResponseRedirect(
+            auth.login(return_to=f"https://{HOSTNAME}")
+        )
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
