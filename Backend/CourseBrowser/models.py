@@ -35,6 +35,9 @@ class CourseInfo(models.Model):
     loc = models.CharField(max_length=10)
     instructor = models.CharField(max_length=30)
     description = models.TextField()
+    division = models.CharField(max_length=2)
+    courselength = models.PositiveSmallIntegerField(null=True)
+    notes = models.CharField(max_length=200)
 
     class Meta:
         managed = False

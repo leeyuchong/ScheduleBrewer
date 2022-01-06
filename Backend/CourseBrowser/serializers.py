@@ -40,6 +40,9 @@ class CourseSerializer(serializers.ModelSerializer):
             "limits",
             "requests",
             "offered",
+            "division",
+            "courselength",
+            "notes",
         )
 
 

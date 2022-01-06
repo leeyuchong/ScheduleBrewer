@@ -162,7 +162,7 @@ def search(request):
             queriedCourses = queriedCourses(courselength=param.value)
         elif param.key == "division":
             queriedCourses = queriedCourses(division=param.value)
-        elif param.key == "curr":
+        elif param.key == "fitCurr":
             if (
                 "samlUserdata" in request.session
                 and len(request.session["samlUserdata"]) > 0
