@@ -37,7 +37,9 @@ def get_dept_codes():
 
 
 def index(request):
-    if request.get_host() in ("schedulebrewer.vassar.edu", "127.0.0.1:8000"):
+    if request.get_host() in (
+        "schedulebrewer.vassar.edu"
+    ):  # , "127.0.0.1:8000"):
         context = {
             "dept_codes": cache.get_or_set("dept_codes", get_dept_codes),
             "site_title": getenv("SITE_TITLE", default="Schedule Brewer"),
