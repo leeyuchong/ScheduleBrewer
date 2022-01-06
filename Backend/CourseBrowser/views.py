@@ -1,6 +1,7 @@
 import logging
 from os import getenv
 
+from collections import namedtuple
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q, query
@@ -24,8 +25,22 @@ from .serializers import CourseSerializer, SavedCoursesSerializer
 
 logger = logging.getLogger(__file__)
 
-# For development
 load_dotenv()
+HOSTNAME = getenv("HOSTNAME")
+
+
+SearchParameters = namedtuple("SearchParameters", ("key", "value"))
+
+
+def concatenateQObjs(qs: list, operator: str) -> Q:
+    retval = Q()
+    if operator == "&":
+        for q in qs:
+            retval &= q
+    else:
+        for q in qs:
+            retval |= q
+    return retval
 
 
 def get_dept_codes():
@@ -37,74 +52,64 @@ def get_dept_codes():
 
 
 def index(request):
-    if request.get_host() in (
-        "schedulebrewer.vassar.edu"
-    ):  # , "127.0.0.1:8000"):
-        context = {
-            "dept_codes": cache.get_or_set("dept_codes", get_dept_codes),
-            "site_title": getenv("SITE_TITLE", default="Schedule Brewer"),
-        }
+    context = {"host": HOSTNAME}
+    if request.get_host() == HOSTNAME:
+        context["dept_codes"] = cache.get_or_set("dept_codes", get_dept_codes)
+        context["site_title"] = getenv("SITE_TITLE", default="Schedule Brewer")
         return render(request, "CourseBrowser/index.html", context)
     else:
-        return render(request, "CourseBrowser/redirect.html")
+        return render(request, "CourseBrowser/redirect.html", context)
 
 
 @api_view(["GET"])
 def search(request):
     courseCodes = cache.get("dept_codes")
-    queriedCourses = CourseInfo.objects.filter(offered__exact=True)
-    # <QueryDict: {'searchTerms': ['CMPU 102']}>
-    for key, value in request.GET.items():
-        # Search term from the search box
-        if key == "searchTerms":
-            terms = request.GET[key].upper().split()
+    queriedCourses = CourseInfo.objects.filter(offered=True)
+    searchParams = [
+        SearchParameters(key, value) for key, value in request.GET.items()
+    ]
+    while searchParams:
+        param = searchParams.pop()
+        if param.key == "searchTerms":
+            terms = param.value.upper().split()
             for term in terms:
                 if term in courseCodes:
-                    queriedCourses = queriedCourses.filter(
-                        courseID__startswith=term
-                    )
+                    searchParams.append(SearchParameters("department", term))
                 elif term == "FR":
-                    queriedCourses = queriedCourses.filter(fr__exact=1)
+                    searchParams.append(SearchParameters("writingSem", True))
                 elif term == "NR" or term == "NRO":
-                    queriedCourses = queriedCourses.filter(gm__exact="NR")
+                    searchParams.append(SearchParameters("gradeOption", "NR"))
                 elif term == "SU":
-                    queriedCourses = queriedCourses.filter(gm__exact="SU")
+                    searchParams.append(SearchParameters("gradeOption", "SU"))
                 elif term == "YL":
-                    queriedCourses = queriedCourses.filter(yl__exact=1)
+                    searchParams.append(SearchParameters("yearLong", True))
                 elif term == "QA":
-                    queriedCourses = queriedCourses.filter(qa__exact=1)
+                    searchParams.append(SearchParameters("quant", True))
                 elif term == "LA":
-                    queriedCourses = queriedCourses.filter(la__exact=1)
+                    searchParams.append(SearchParameters("lang", True))
                 elif term == "SP":
-                    queriedCourses = queriedCourses.filter(sp__exact=1)
-                elif term == "CLS":
-                    queriedCourses = queriedCourses.filter(format__exact="CLS")
-                elif term == "INT":
-                    queriedCourses = queriedCourses.filter(format__exact="INT")
-                elif term == "OTH":
-                    queriedCourses = queriedCourses.filter(format__exact="OTH")
-                elif term == "MON" or term == "MONDAY":
-                    queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="M") | Q(d2__contains="M")
-                    )
-                elif term == "TUE" or term == "TUESDAY":
-                    queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="T") | Q(d2__contains="T")
-                    )
-                elif term == "WED" or term == "WEDNESDAY":
-                    queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="W") | Q(d2__contains="W")
-                    )
-                elif term == "THUR" or term == "THURS" or term == "THURSDAY":
-                    queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="R") | Q(d2__contains="R")
-                    )
-                elif term == "FRI" or term == "FRIDAY":
-                    queriedCourses = queriedCourses.filter(
-                        Q(d1__contains="F") | Q(d2__contains="F")
+                    searchParams.append(SearchParameters("specialPerm", True))
+                elif term in ("CLS", "INT", "OTH"):
+                    searchParams.append(SearchParameters("courseFormat", term))
+                elif term in (
+                    "MON",
+                    "MONDAY",
+                    "TUE",
+                    "TUESDAY",
+                    "WED",
+                    "WEDNESDAY",
+                    "THUR",
+                    "THURSDAY",
+                    "FRI",
+                    "FRIDAY",
+                ):
+                    searchParams.append(
+                        SearchParameters(
+                            "day", term[0] if "THUR" not in term else "R"
+                        )
                     )
                 elif term == "0.5" or term == "1.0" or term == "1.5":
-                    queriedCourses = queriedCourses.filter(units__exact=term)
+                    searchParams.append(SearchParameters("units", term))
                 else:
                     if len(term) > 0 and term[0] == "0":
                         term = term[1:]
@@ -117,281 +122,215 @@ def search(request):
                         | Q(description__icontains=term)
                         | Q(courseID__icontains=term)
                     )
-        # Department select box
-        elif key == "department":
-            queriedCourses = queriedCourses.filter(courseID__startswith=value)
-        # Filters:
-        elif key == "writingSem":
-            queriedCourses = queriedCourses.filter(fr__exact=1)
-        elif key == "gradeOption":
-            queriedCourses = queriedCourses.filter(gm__exact=value)
-        elif key == "yearLong":
-            queriedCourses = queriedCourses.filter(yl__exact=1)
-        elif key == "quant":
-            queriedCourses = queriedCourses.filter(qa__exact=1)
-        elif key == "lang":
-            queriedCourses = queriedCourses.filter(la__exact=1)
-        elif key == "specialPerm":
-            queriedCourses = queriedCourses.filter(sp__exact=1)
-        elif key == "courseFormat":
-            queriedCourses = queriedCourses.filter(format__exact=value)
-        elif key == "day":
+        elif param.key == "department":
             queriedCourses = queriedCourses.filter(
-                Q(d1__contains=value) | Q(d2__contains=value)
+                courseID__startswith=param.value
             )
-        elif key == "units":
-            queriedCourses = queriedCourses.filter(units__exact=value)
-        elif key == "exIndCEL":
+        elif param.key == "writingSem":
+            queriedCourses = queriedCourses.filter(fr=1)
+        elif param.key == "gradeOption":
+            queriedCourses = queriedCourses.filter(gm=param.value)
+        elif param.key == "yearLong":
+            queriedCourses = queriedCourses.filter(yl=1)
+        elif param.key == "quant":
+            queriedCourses = queriedCourses.filter(qa=1)
+        elif param.key == "lang":
+            queriedCourses = queriedCourses.filter(la=1)
+        elif param.key == "specialPerm":
+            queriedCourses = queriedCourses.filter(sp=1)
+        elif param.key == "courseFormat":
+            queriedCourses = queriedCourses.filter(format=param.value)
+        elif param.key == "day":
+            queriedCourses = queriedCourses.filter(
+                Q(d1__contains=param.value) | Q(d2__contains=param.value)
+            )
+        elif param.key == "units":
+            queriedCourses = queriedCourses.filter(units=param.value)
+        elif param.key == "exIndCEL":
             queriedCourses = queriedCourses.exclude(
                 Q(courseID__contains=290)
                 | Q(courseID__contains=399)
                 | Q(courseID__contains=298)
             )
-        elif key == "time":
-            time = int(value)
+        elif param.key == "time":
+            time = int(param.value)
             queriedCourses = queriedCourses.filter(
                 (Q(starttime1__gte=time) & Q(starttime1__lte=time + 100))
-                | Q(starttime2__gte=time) & Q(starttime2__lte=time + 100)
+                | (Q(starttime2__gte=time) & Q(starttime2__lte=time + 100))
             )
-        elif key == "curr":
-            # if (
-            #     "samlUserdata" in request.session
-            #     and len(request.session["samlUserdata"]) > 0
-            # ):
-            powerset_of_days = (
-                "M",
-                "T",
-                "W",
-                "R",
-                "F",
-                "M,T",
-                "M,W",
-                "M,R",
-                "M,F",
-                "T,W",
-                "T,R",
-                "T,F",
-                "W,R",
-                "W,F",
-                "R,F",
-                "M,T,W",
-                "M,T,R",
-                "M,T,F",
-                "M,W,R",
-                "M,W,F",
-                "M,R,F",
-                "T,W,R",
-                "T,W,F",
-                "T,R,F",
-                "W,R,F",
-                "M,T,W,R",
-                "M,T,W,F",
-                "M,T,R,F",
-                "M,W,R,F",
-                "T,W,R,F",
-                "M,T,W,R,F",
-            )
-
-            username = "test"  # request.session["samlUserdata"]["UserName"][0]
-            current_courses = CourseInfo.objects.filter(
-                usercourses__userID__exact=username
-            )  # ).values(
-            #     "courseID",
-            #     "title",
-            #     "units",
-            #     "format",
-            #     "d1",
-            #     "time1",
-            #     "starttime1",
-            #     "endtime1",
-            #     "duration1",
-            #     "d2",
-            #     "time2",
-            #     "starttime2",
-            #     "endtime2",
-            #     "duration2",
-            #     "instructor",
-            #     "description",
-            #     "offered",
-            # )
-            # available_times = [(800, 2200)]
-            unavailable_times_combined = set(
-                (
-                    getattr(course, f"starttime{i}"),
-                    getattr(course, f"endtime{i}"),
-                    getattr(course, f"d{i}"),
+        elif param.key == "courseLength":
+            queriedCourses = queriedCourses(courselength=param.value)
+        elif param.key == "division":
+            queriedCourses = queriedCourses(division=param.value)
+        elif param.key == "curr":
+            if (
+                "samlUserdata" in request.session
+                and len(request.session["samlUserdata"]) > 0
+            ) or "127.0.0.1" in HOSTNAME:
+                username = (
+                    request.session["samlUserdata"]["UserName"][0]
+                    if "127.0.0.1" not in HOSTNAME
+                    else "test"
                 )
-                for i in range(1, 3)
-                for course in current_courses
-            )
-            unavailable_times_by_day = {
-                "M": [],
-                "T": [],
-                "W": [],
-                "R": [],
-                "F": [],
-            }
-            available_times_by_day = dict()
-            for course in unavailable_times_combined:
-                if course[2]:
-                    for d in course[2]:
-                        unavailable_times_by_day[d].append(
-                            (course[0], course[1])
-                        )
-            for day, intervals in unavailable_times_by_day.items():
-                merged = []
-                intervals.sort(key=lambda x: x[0], reverse=True)
-                while intervals:
-                    pair = intervals.pop()
-                    if merged and merged[-1][1] >= pair[0]:
-                        merged[-1][1] = max(pair[1], merged[-1][1])
-                    else:
-                        merged.append(pair)
-                    if len(intervals) == 0:
-                        merged.append((2359, 2359))
-                avail_start_time = 600
-                avail_blocks = []
-                print(merged)
-                for block in merged:
-                    avail_blocks.append((avail_start_time, block[0]))
-                    avail_start_time = block[1]
-                if len(avail_blocks) == 0:
-                    avail_blocks.append((600, 2359))
-                # avail_blocks.append((avail_blocks[-1][1], 2359))
-                available_times_by_day[day] = avail_blocks
-
-            # m_fit_avail = [CourseInfo.objects.filter(offered)]
-            # MW D1
-            # mon = Q()
-            # for block in available_times_by_day["M"]:
-            #     mon |= Q(starttime1__range=block)
-            # wed = Q()
-            # for block in available_times_by_day["W"]:
-            #     mon |= Q(starttime1__range=block)
-            # mw_fit_avail = (
-            #     CourseInfo.objects.filter(
-            #         Q(offered__exact=True) & Q(d1__exact="MW")
-            #     )
-            #     .filter(mon)
-            #     .filter(wed)
-            # )
-            # # MW D2
-
-            # mw_avail_d2Null = mw_fit_avail.filter(d2__isnull=True)
-            # mw_avail_d2NotNull = mw_fit_avail.filter(d2__isnull=False)
-            # mw_avail_d2 =
-
-            querysets_that_fit_avail = {
-                "d1_d2IsNull": [],
-                "d1_d2NotNull": [],
-                "d2": [],
-            }
-            for i in range(1, 3):
-                for day_set in powerset_of_days:
-                    # day_set_query_init = CourseInfo.objects.filter(
-                    #     offered__exact=True
-                    # ).filter(**{f"d{i}__exact": day_set})
-                    qs = []
-                    for day in day_set.split(","):
-                        q = Q(offered__exact=True) & Q(
-                            **{f"d{i}__exact": day_set}
-                        )
-                        # day_set_query = CourseInfo.objects.none().union(
-                        #     *[
-                        #         day_set_query_init.filter(
-                        #             **{f"starttime{i}__range": block}
-                        #         )
-                        #         # & Q(**{f"endtime{i}__lt": block[1]})
-                        #         for block in available_times_by_day[day]
-                        #     ]
-                        # )
-                        for block in available_times_by_day[day]:
-                            q |= Q(**{f"starttime{i}__gt": block[0]}) & Q(
-                                **{f"endtime{i}__lt": block[1]}
+                current_courses = CourseInfo.objects.filter(
+                    usercourses__userID=username
+                ).values(
+                    "d1",
+                    "starttime1",
+                    "endtime1",
+                    "d2",
+                    "starttime2",
+                    "endtime2",
+                )
+                # Get user's available times
+                # available_times are in range of [(800, 2359)]
+                unavailable_times_combined = set(
+                    (
+                        course[f"starttime{i}"],
+                        course[f"endtime{i}"],
+                        course[f"d{i}"],
+                    )
+                    for i in range(1, 3)
+                    for course in current_courses
+                )
+                unavailable_times_by_day = {
+                    "M": [],
+                    "T": [],
+                    "W": [],
+                    "R": [],
+                    "F": [],
+                }
+                available_times_by_day = dict()
+                for course in unavailable_times_combined:
+                    if course[2]:
+                        for d in course[2]:
+                            unavailable_times_by_day[d].append(
+                                (course[0], course[1])
                             )
-                            # day_set_query = day_set_query_init.filter(
-                            #     (
-                            #         Q(**{f"starttime{i}__range": block})
-                            #         & Q(**{f"endtime{i}__lt": block[1]})
-                            #     )
-                            # )
-                        qs.append(q)
-                    for index in range(len(qs)):
+                # merge overlapping intervals
+                for day, intervals in unavailable_times_by_day.items():
+                    merged = []
+                    intervals.sort(key=lambda x: x[0], reverse=True)
+                    while intervals:
+                        interval = intervals.pop()
+                        if merged and merged[-1][1] >= interval[0]:
+                            merged[-1][1] = max(interval[1], merged[-1][1])
+                        else:
+                            merged.append(interval)
+                        if len(intervals) == 0:
+                            merged.append((2359, 2359))
+                    avail_start_time = 600
+                    avail_blocks = []
+                    for block in merged:
+                        avail_blocks.append((avail_start_time, block[0]))
+                        avail_start_time = block[1]
+                    if len(avail_blocks) == 0:
+                        avail_blocks.append((600, 2359))
+                    available_times_by_day[day] = avail_blocks
+
+                powerset_of_days = (
+                    "M",
+                    "T",
+                    "W",
+                    "R",
+                    "F",
+                    "MT",
+                    "MW",
+                    "MR",
+                    "MF",
+                    "TW",
+                    "TR",
+                    "TF",
+                    "WR",
+                    "WF",
+                    "RF",
+                    "MTW",
+                    "MTR",
+                    "MTF",
+                    "MWR",
+                    "MWF",
+                    "MRF",
+                    "TWR",
+                    "TWF",
+                    "TRF",
+                    "WRF",
+                    "MTWR",
+                    "MTWF",
+                    "MTRF",
+                    "MWRF",
+                    "TWRF",
+                    "MTWRF",
+                )
+                querysets_that_fit_avail = {
+                    "d1_d2IsNull": [],
+                    "d1_d2NotNull": [],
+                    "d2": [],
+                }
+                for i in (1, 2):
+                    for day_set in powerset_of_days:
+                        qs = [
+                            (
+                                Q(offered=True)
+                                & Q(**{f"d{i}": day_set})
+                                & concatenateQObjs(
+                                    (
+                                        (
+                                            Q(
+                                                **{
+                                                    f"starttime{i}__gt": block[
+                                                        0
+                                                    ]
+                                                }
+                                            )
+                                            & Q(
+                                                **{f"endtime{i}__lt": block[1]}
+                                            )
+                                        )
+                                        for block in available_times_by_day[
+                                            day
+                                        ]
+                                    ),
+                                    "|",
+                                )
+                            )
+                            for day in day_set
+                        ]
                         if i == 1:
                             querysets_that_fit_avail["d1_d2NotNull"].append(
-                                qs[index] & Q(d2__isnull=False)
+                                concatenateQObjs(qs, "&") & Q(d2__isnull=False)
                             )
                             querysets_that_fit_avail["d1_d2IsNull"].append(
-                                qs[index] & Q(d2__isnull=True)
+                                concatenateQObjs(qs, "&") & Q(d2__isnull=True)
                             )
                         else:
-                            querysets_that_fit_avail["d2"].append(qs[index])
+                            querysets_that_fit_avail["d2"].append(
+                                concatenateQObjs(qs, "&")
+                            )
 
-            # for day_avail, avails in available_times_by_day.items():
-            #     day_query = CourseInfo.objects.filter(
-            #         offered__exact=True
-            #     ).filter(
-            #         (Q(d1__contains=day_avail) | Q(d2__contains=day_avail))
-            #     )
-            #     for b in avails:
-            #         day_query = day_query.filter(
-            #             (Q(starttime1__gt=b[0]) & Q(endtime1__lt=b[1]))
-            #             | (
-            #                 Q(starttime2__isnull=False)
-            #                 & Q(starttime2__gt=b[0])
-            #                 & Q(endtime2__lt=b[1])
-            #             )
-            #         )
-            #     querysets_that_fit_avail.append(day_query)
-            avail_d1_d2NotNull = Q()
-            for qset in querysets_that_fit_avail["d1_d2NotNull"]:
-                avail_d1_d2NotNull &= qset
-            course_codes_fit_avail_d1_d2NotNull = set(
-                qsx.courseID
-                for qsx in CourseInfo.objects.filter(avail_d1_d2NotNull)
-            )
-            avail_d1_d2IsNull = Q()
-            for qset in querysets_that_fit_avail["d1_d2IsNull"]:
-                avail_d1_d2IsNull &= qset
-            course_codes_fit_avail_d1_d2IsNull = set(
-                qssdd.courseID
-                for qssdd in CourseInfo.objects.filter(avail_d1_d2IsNull)
-            )
-            avail = Q()
-            for qset in querysets_that_fit_avail["d2"]:
-                avail &= qset
-            course_codes_fit_avail_d2 = set(
-                q.courseID for q in CourseInfo.objects.filter(avail)
-            )
-            course_codes_fit_avail_all = (
-                course_codes_fit_avail_d1_d2NotNull.intersection(
-                    course_codes_fit_avail_d2
+                avail_d1_d2NotNull = concatenateQObjs(
+                    querysets_that_fit_avail["d1_d2NotNull"], "|"
                 )
-            ).union(course_codes_fit_avail_d1_d2IsNull)
-            queriedCourses = queriedCourses.filter(
-                courseID__in=course_codes_fit_avail_all
-            )
-            # print(querysets_that_fit_avail[1])
-            print(available_times_by_day)
-            print(course_codes_fit_avail_all)
-            # for course in queriedCourses:
-            #     for i in range(1,3):
-            #         starttime = getattr(course, f"starttime{i}")
-            #         endtime = getattr(course, f"endtime{i}")
-            #         day = getattr(course, f"d{i}")
-            #         for index, free_block in enumerate(available_times):
-            #             # starttime and endtime are in the free region -> split the free region
-            #             # e.g. course: 9-1015, avail: [(800,2200)] -> [(800, 900), [1015, 2200]]
-            #             if starttime > free_block[0] and endtime < free_block[1]:
-
-            #             # startime is free but endtime is not -> make the 2nd avail start time later
-            #             # e.g. course: 1015-1200, avail: [(800,900), (1100-2200)] -> [(800,900), (1200-2200)]
-            #             if
-
-            #         # starttime is not free but endtime is free -> make the 1st avail end earlier
-            #         # e.g. course: 845-1015, avail: [(800,900), (1100,2200)] -> [(800,845), (1100, 2200)]
-
-            #         # startime and endtime are not free -> do nothing
+                course_codes_fit_avail_d1_d2NotNull = set(
+                    q.courseID
+                    for q in CourseInfo.objects.filter(avail_d1_d2NotNull)
+                )
+                avail_d1_d2IsNull = concatenateQObjs(
+                    querysets_that_fit_avail["d1_d2IsNull"], "|"
+                )
+                avail_d2 = concatenateQObjs(
+                    querysets_that_fit_avail["d2"], "|"
+                )
+                course_codes_fit_avail_d2 = set(
+                    q.courseID for q in CourseInfo.objects.filter(avail_d2)
+                )
+                course_codes_fit_avail_all = (
+                    course_codes_fit_avail_d1_d2NotNull.intersection(
+                        course_codes_fit_avail_d2
+                    )
+                )
+                queriedCourses = queriedCourses.filter(
+                    courseID__in=course_codes_fit_avail_all
+                ).union(CourseInfo.objects.filter(avail_d1_d2IsNull))
 
     queriedCourses = queriedCourses.order_by("courseID")
     paginator = PageNumberPagination()
@@ -414,7 +353,7 @@ class SavedCourses(APIView):
             self.attributes = request.session["samlUserdata"].items()
             self.username = request.session["samlUserdata"]["UserName"][0]
         # For development, check if base url is using local host
-        elif "127.0.0.1" in getenv("BASE_URL"):
+        elif "127.0.0.1" in HOSTNAME:
             self.attributes = True
             self.username = "test"
 
@@ -423,7 +362,7 @@ class SavedCourses(APIView):
         self.getAttributes(request)
         if self.attributes:
             queriedCourses = CourseInfo.objects.filter(
-                usercourses__userID__exact=self.username
+                usercourses__userID=self.username
             ).values(
                 "courseID",
                 "title",
@@ -455,9 +394,7 @@ class SavedCourses(APIView):
         self.getAttributes(request)
         if self.attributes:
             selectedCourse = request.POST
-            course = CourseInfo.objects.get(
-                courseID__exact=selectedCourse["course"]
-            )
+            course = CourseInfo.objects.get(courseID=selectedCourse["course"])
             UserCourses.objects.create(userID=self.username, courseID=course)
             return HttpResponse("Success")
         else:
@@ -467,9 +404,9 @@ class SavedCourses(APIView):
     def delete(self, request, pk, format=None):
         self.getAttributes(request)
         if self.attributes:
-            course = UserCourses.objects.filter(
-                userID__exact=self.username
-            ).filter(courseID__exact=pk)
+            course = UserCourses.objects.filter(userID=self.username).filter(
+                courseID=pk
+            )
             course.delete()
             return HttpResponse("Success")
         else:
@@ -492,7 +429,7 @@ def prepare_django_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     result = {
         "https": "on",
-        "http_host": "schedulebrewer.vassar.edu",
+        "http_host": HOSTNAME,
         "script_name": request.META["PATH_INFO"],
         "server_port": "443",
         "get_data": request.GET.copy(),
@@ -515,9 +452,7 @@ def saml_index(request):
     paint_logout = False
 
     if "sso" in req["get_data"]:
-        return HttpResponseRedirect(
-            auth.login(return_to="https://schedulebrewer.vassar.edu")
-        )
+        return HttpResponseRedirect(auth.login(return_to=HOSTNAME))
         # If AuthNRequest ID need to be stored in order to later validate it, do instead
         # sso_built_url = auth.login()
         # request.session['AuthNRequestID'] = auth.get_last_request_id()
@@ -546,7 +481,7 @@ def saml_index(request):
                 nq=name_id_nq,
                 name_id_format=name_id_format,
                 spnq=name_id_spnq,
-                return_to="https://schedulebrewer.vassar.edu",
+                return_to=HOSTNAME,
             )
         )
         # If LogoutRequest ID need to be stored in order to later validate it, do instead

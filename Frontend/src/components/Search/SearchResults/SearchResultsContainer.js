@@ -41,7 +41,7 @@ function SearchResultsContainer(props) {
       });
   }, [props.searchURL]);
   useEffect(() => {
-    fetch(`${process.env.BASE_URL}/getCSRF/`, {
+    fetch(`${process.env.HOSTNAME}/getCSRF/`, {
       method: "GET",
       credentials: "include",
     }).then((response) => {
@@ -55,7 +55,7 @@ function SearchResultsContainer(props) {
       .then((data) => {
         setResults(data.results);
       });
-      window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
     <div>
@@ -82,16 +82,16 @@ function SearchResultsContainer(props) {
               page={currPage}
             />
           </Box>
-          <Box display="flex" justifyContent="center" mt={1}> 
-            {results.length == 0 ?
+          <Box display="flex" justifyContent="center" mt={1}>
+            {results.length == 0 ? (
               <Typography className={classes.heading}>
                 <em>There are no matches for your search</em>
               </Typography>
-            :
+            ) : (
               <Typography className={classes.heading}>
                 <em>Good luck choosing your classes!</em>
               </Typography>
-            }
+            )}
           </Box>
         </div>
       )}

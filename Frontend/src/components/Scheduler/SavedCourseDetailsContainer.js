@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 function SavedCourseDetailsContainer() {
   const [savedCourses, setSavedCourses] = useContext(SavedCourseContext);
   const deleteCourse = (courseID) => {
-    const url = `${process.env.BASE_URL}/api/delete-course/${courseID}/`;
+    const url = `${process.env.HOSTNAME}/api/delete-course/${courseID}/`;
     fetch(url, {
       credentials: "include",
       method: "DELETE",

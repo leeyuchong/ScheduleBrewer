@@ -65,7 +65,7 @@ function Navbar(props) {
   };
 
   const authLink = (event) => {
-    window.location.href = `${process.env.BASE_URL}/saml/?${
+    window.location.href = `${process.env.HOSTNAME}/saml/?${
       Cookies.get("sessionid") === undefined ? "sso" : "slo"
     }`;
   };

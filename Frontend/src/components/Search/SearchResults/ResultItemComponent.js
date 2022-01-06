@@ -40,7 +40,7 @@ function ResultItemComponent(props) {
   const DOMPurify = createDOMPurify(window);
   const saveCourse = (courseID) => {
     if (Cookies.get("sessionid") !== undefined) {
-      const url = `${process.env.BASE_URL}/api/save-course`;
+      const url = `${process.env.HOSTNAME}/api/save-course`;
       let selectedCourse = new FormData();
       selectedCourse.set("course", courseID);
       fetch(url, {
@@ -78,7 +78,7 @@ function ResultItemComponent(props) {
   };
 
   const deleteCourse = (courseID) => {
-    const url = `${process.env.BASE_URL}/api/delete-course/${courseID}/`;
+    const url = `${process.env.HOSTNAME}/api/delete-course/${courseID}/`;
     fetch(url, {
       credentials: "include",
       method: "DELETE",

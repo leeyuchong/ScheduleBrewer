@@ -3,13 +3,13 @@ from ScheduleBrewer.settings.base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
+ALLOWED_HOSTS += [
     "ec2-54-83-17-12.compute-1.amazonaws.com",
     "54.83.17.12",
     "schedulebrewer.ml",
     "www.schedulebrewer.ml",
     "www.schedulebrewer.vassar.edu",
-    "schedulebrewer.vassar.edu"
+    "schedulebrewer.vassar.edu",
 ]
 
 # CORS_ALLOW_CREDENTIALS = True

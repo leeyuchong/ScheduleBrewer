@@ -18,7 +18,7 @@ import Typography from "@material-ui/core/Typography";
 
 function SearchSection() {
   const [searchURL, setSearchURL] = useState(
-    `${process.env.BASE_URL}/api/search/?`
+    `${process.env.HOSTNAME}/api/search/?`
   );
   const [open, setOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(true);
@@ -29,7 +29,7 @@ function SearchSection() {
     setOpen(false);
   };
   const authLink = (event) => {
-    window.location.href = `${process.env.BASE_URL}/saml/?sso`;
+    window.location.href = `${process.env.HOSTNAME}/saml/?sso`;
   };
   const redirectToPreregSite = (event) => {
     window.location.href = "https://aisapps.vassar.edu/prereg/";
