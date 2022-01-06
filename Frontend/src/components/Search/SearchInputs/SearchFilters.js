@@ -46,11 +46,17 @@ function SearchFilters(props) {
       ["R", "Thur"],
       ["F", "Fri"],
     ],
+    courseLength: [
+      [2,"1st 6wk"],
+      [3,"2nd 6wk"],
+      [1,"Semester Long"]
+    ],
     writingSem: [[true, "Writing Sem"]],
     yearLong: [[true, "Year Long"]],
     quant: [[true, "Quantitative"]],
     lang: [[true, "Language"]],
     specialPerm: [[true, "Special Permission"]],
+    exIndCEL: [[true, "Exclude Ind Study and CEL"]]
   };
 
   const handleChipClick = (fieldName, value) => {
@@ -71,7 +77,9 @@ function SearchFilters(props) {
         props.formValues.specialPerm ||
         props.formValues.courseFormat !== "" ||
         props.formValues.units !== "" ||
-        props.formValues.day !== ""
+        props.formValues.day !== "" ||
+        props.formValues.courseLength !== "" ||
+        props.formValues.exIndCEL
     );
   }, [props.formValues]);
 

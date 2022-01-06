@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
 
 function SearchResultsContainer(props) {
   // PROPS:
@@ -54,6 +55,7 @@ function SearchResultsContainer(props) {
       .then((data) => {
         setResults(data.results);
       });
+      window.scrollTo({top: 0, behavior: 'smooth'});
   };
   return (
     <div>
@@ -79,6 +81,17 @@ function SearchResultsContainer(props) {
               onChange={onPageChange}
               page={currPage}
             />
+          </Box>
+          <Box display="flex" justifyContent="center" mt={1}> 
+            {results.length == 0 ?
+              <Typography className={classes.heading}>
+                <em>There are no matches for your search</em>
+              </Typography>
+            :
+              <Typography className={classes.heading}>
+                <em>Good luck choosing your classes!</em>
+              </Typography>
+            }
           </Box>
         </div>
       )}

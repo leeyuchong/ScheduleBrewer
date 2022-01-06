@@ -136,7 +136,7 @@ def search(request):
             )
         elif key == "units":
             queriedCourses = queriedCourses.filter(units__exact=value)
-        elif key == "ex-ind-cel":
+        elif key == "exIndCEL":
             queriedCourses = queriedCourses.exclude(
                 Q(courseID__contains=290)
                 | Q(courseID__contains=399)

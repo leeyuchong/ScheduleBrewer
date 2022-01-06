@@ -168,6 +168,9 @@ function ResultItemComponent(props) {
                 {props.course.qa === 1 ? (
                   <BadgeRect content="Quantitative" badgeStyle="badgeYellow" />
                 ) : null}
+                {props.course.prereq ? (
+                  <BadgeRect content="Prereq" badgeStyle="badgeGreen" />
+                ) : null}
                 {props.course.xlist !== null ? (
                   <BadgeRect
                     content={props.course.xlist}

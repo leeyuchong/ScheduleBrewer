@@ -93,7 +93,7 @@ function SearchSection() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={authLink} color="primary">
+          <Button onClick={authLink} variant="contained" color="primary">
             Login
           </Button>
         </DialogActions>
