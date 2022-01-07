@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core";
+import {
+  makeStyles,
+  // MenuItem,
+  // Select,
+  // InputLabel,
+  // FormControl,
+  // FormHelperText,
+} from "@material-ui/core";
 import ChipGroup from "./ChipGroup";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Accordion from "@material-ui/core/Accordion";
@@ -22,6 +29,36 @@ function SearchFilters(props) {
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
     },
+    // roundedSelect: {
+    //   borderRadius: "16px",
+    //   height: "32px",
+    //   position: "absolute",
+    //   verticalAlign: "top",
+    //   alignItems: "center",
+    //   justifyContent: "center",
+    //   boxSizing: "border-box",
+    //   "&:focus": {
+    //     background: "red",
+    //   },
+    //   // select: {
+    //   //   "&:focus": {
+    //   //     background: "red",
+    //   //   },
+    //   // },
+    // },
+    // fuck: {
+    //   background: "none",
+    //   "&:focus": {
+    //     background: "red",
+    //   },
+    // },
+    // roundedSelectText: {
+    //   fontSize: "0.8125rem",
+    //   marginTop: "-10px",
+    //   "&.shrink": {
+    //     marginTop: "0px",
+    //   },
+    // },
   }));
   const classes = useStyles();
   const fields = {
@@ -47,16 +84,17 @@ function SearchFilters(props) {
       ["F", "Fri"],
     ],
     courseLength: [
-      [2,"1st 6wk"],
-      [3,"2nd 6wk"],
-      [1,"Semester Long"]
+      [2, "1st 6wk"],
+      [3, "2nd 6wk"],
+      [1, "Semester Long"],
     ],
     writingSem: [[true, "Writing Sem"]],
     yearLong: [[true, "Year Long"]],
     quant: [[true, "Quantitative"]],
     lang: [[true, "Language"]],
     specialPerm: [[true, "Special Permission"]],
-    exIndCEL: [[true, "Exclude Ind Study and CEL"]]
+    exIndCEL: [[true, "Exclude Ind Study and CEL"]],
+    fitCurr: [[true, "Fits my current schedule"]],
   };
 
   const handleChipClick = (fieldName, value) => {
@@ -168,6 +206,42 @@ function SearchFilters(props) {
                 return <div></div>;
               }
             })}
+            {/* <Box mx={1} my={0.4}>
+              <FormControl variant="outlined" className={classes.roundedSelect}>
+                <InputLabel
+                  id="demo-simple-select-outlined-label"
+                  // className={classes.roundedSelectText}
+                  classes={{
+                    root: classes.roundedSelectText,
+                    shrink: "shrink",
+                  }}
+                >
+                  Division
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value=""
+                  // onChange={handleChange}
+                  label="Division"
+                  // className={classes.roundedSelect}
+                  InputProps={{
+                    classes: { ".MuiInputBase-root": classes.roundedSelect },
+                  }}
+                  classes={{
+                    root: classes.fuck,
+                    focus: "focus",
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+            </Box> */}
           </Box>
         </AccordionDetails>
       </Accordion>

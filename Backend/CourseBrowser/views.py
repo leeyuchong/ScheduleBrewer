@@ -153,10 +153,16 @@ def search(request):
                 | Q(courseID__contains=298)
             )
         elif param.key == "time":
-            time = int(param.value)
+            startTime = int(param.value)
             queriedCourses = queriedCourses.filter(
-                (Q(starttime1__gte=time) & Q(starttime1__lte=time + 100))
-                | (Q(starttime2__gte=time) & Q(starttime2__lte=time + 100))
+                (
+                    Q(starttime1__gte=startTime)
+                    & Q(starttime1__lte=startTime + 100)
+                )
+                | (
+                    Q(starttime2__gte=startTime)
+                    & Q(starttime2__lte=startTime + 100)
+                )
             )
         elif param.key == "courseLength":
             queriedCourses = queriedCourses.filter(courselength=param.value)
