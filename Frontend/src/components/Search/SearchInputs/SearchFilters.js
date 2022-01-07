@@ -6,6 +6,9 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Box from "@material-ui/core/Box";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
@@ -119,6 +122,33 @@ function SearchFilters(props) {
                   if (props.formValues[fieldName] != "") {
                     return (
                       <Box key={value} mx={0.1}>
+                        { props.formValues[fieldName] == "time" ?
+                        (<Chip
+                          {...<FormControl
+                              variant="outlined"
+                              color="secondary"
+                              className={classes.componentBackground}
+                            >
+                              <InputLabel id="department-label">Dept</InputLabel>
+                              <Select
+                                native
+                                labelId="Department"
+                                name="department"
+                                id="department"
+                                value={deptField}
+                                onChange={handleInputChange}
+                                label="Department"
+                              >
+                                <option aria-label="Any" value="" />
+                                {courseCodes.map((code) => (
+                                  <option key={code} value={code}>
+                                    {code}
+                                  </option>
+                                ))}
+                              </Select>
+                            </FormControl>}
+                        />
+                        ) : (
                         <Chip
                           label={getLabel(
                             fieldName,
@@ -142,6 +172,7 @@ function SearchFilters(props) {
                             );
                           }}
                         />
+                        )}
                       </Box>
                     );
                   } else {
