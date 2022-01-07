@@ -19,6 +19,7 @@ function SearchInputsContainer(props) {
     units: "",
     day: "",
     courseLength: "",
+    division: "",
     exIndCEL: "",
   };
   const [formValues, setFormValues] = useState(defaultValues);

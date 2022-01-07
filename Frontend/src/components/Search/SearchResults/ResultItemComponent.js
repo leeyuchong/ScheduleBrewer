@@ -151,6 +151,10 @@ function ResultItemComponent(props) {
                   badgeStyle="badgeLightBlue"
                 />
                 <BadgeRect
+                  content={props.course.division}
+                  badgeStyle="badgeGrey"
+                />
+                <BadgeRect
                   content={`${props.course.units} ${
                     props.course.units === 1 ? "unit " : "units "
                   }`}
