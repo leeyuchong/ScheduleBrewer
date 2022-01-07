@@ -111,12 +111,13 @@ function SearchFilters(props) {
   const handleChipClick = (fieldName, value) => {
     if (fieldName === "fitCurr" && Cookies.get("sessionid") === undefined) {
       props.openLoginDialog("fitCurr");
+    } else {
+      let newValue = props.formValues[fieldName] === "" ? value : "";
+      props.setFormValues({
+        ...props.formValues,
+        [fieldName]: newValue,
+      });
     }
-    let newValue = props.formValues[fieldName] === "" ? value : "";
-    props.setFormValues({
-      ...props.formValues,
-      [fieldName]: newValue,
-    });
   };
 
   useEffect(() => {
