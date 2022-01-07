@@ -4,7 +4,7 @@ from os import getenv
 from collections import namedtuple
 from django.conf import settings
 from django.core.cache import cache
-from django.db.models import Q, query
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -169,6 +169,9 @@ def search(request):
         elif param.key == "division":
             queriedCourses = queriedCourses.filter(division=param.value)
         elif param.key == "fitCurr":
+            if len(searchParams) > 0:
+                searchParams.insert(0, SearchParameters("fitCurr", True))
+                continue
             if (
                 "samlUserdata" in request.session
                 and len(request.session["samlUserdata"]) > 0
