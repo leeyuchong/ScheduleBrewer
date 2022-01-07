@@ -96,7 +96,7 @@ function SearchFilters(props) {
       ["FL", "Lang & Lit"],
       ["SS", "Social"],
       ["NS", "Natural"],
-      ["IS", "Multi"]
+      ["IS", "Multi"],
     ],
     writingSem: [[true, "Writing Sem"]],
     yearLong: [[true, "Year Long"]],
@@ -128,7 +128,8 @@ function SearchFilters(props) {
         props.formValues.day !== "" ||
         props.formValues.courseLength !== "" ||
         props.formValues.division !== "" ||
-        props.formValues.exIndCEL
+        props.formValues.exIndCEL ||
+        props.formValues.fitCurr
     );
   }, [props.formValues]);
 
@@ -160,56 +161,60 @@ function SearchFilters(props) {
                   if (props.formValues[fieldName] != "") {
                     return (
                       <Box key={value} mx={0.1}>
-                        { props.formValues[fieldName] == "time" ?
-                        (<Chip
-                          {...<FormControl
-                              variant="outlined"
-                              color="secondary"
-                              className={classes.componentBackground}
-                            >
-                              <InputLabel id="department-label">Dept</InputLabel>
-                              <Select
-                                native
-                                labelId="Department"
-                                name="department"
-                                id="department"
-                                value={deptField}
-                                onChange={handleInputChange}
-                                label="Department"
+                        {props.formValues[fieldName] == "time" ? (
+                          <Chip
+                            {...(
+                              <FormControl
+                                variant="outlined"
+                                color="secondary"
+                                className={classes.componentBackground}
                               >
-                                <option aria-label="Any" value="" />
-                                {courseCodes.map((code) => (
-                                  <option key={code} value={code}>
-                                    {code}
-                                  </option>
-                                ))}
-                              </Select>
-                            </FormControl>}
-                        />
+                                <InputLabel id="department-label">
+                                  Dept
+                                </InputLabel>
+                                <Select
+                                  native
+                                  labelId="Department"
+                                  name="department"
+                                  id="department"
+                                  value={deptField}
+                                  onChange={handleInputChange}
+                                  label="Department"
+                                >
+                                  <option aria-label="Any" value="" />
+                                  {courseCodes.map((code) => (
+                                    <option key={code} value={code}>
+                                      {code}
+                                    </option>
+                                  ))}
+                                </Select>
+                              </FormControl>
+                            )}
+                          />
                         ) : (
-                        <Chip
-                          label={getLabel(
-                            fieldName,
-                            props.formValues[fieldName]
-                          )}
-                          clickable
-                          variant="default"
-                          id={value}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            handleChipClick(
+                          <Chip
+                            label={getLabel(
                               fieldName,
                               props.formValues[fieldName]
-                            );
-                          }}
-                          onDelete={(event) => {
-                            event.stopPropagation();
-                            handleChipClick(
-                              fieldName,
-                              props.formValues[fieldName]
-                            );
-                          }}
-                        />
+                            )}
+                            clickable
+                            variant="default"
+                            id={value}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleChipClick(
+                                fieldName,
+                                props.formValues[fieldName]
+                              );
+                            }}
+                            onDelete={(event) => {
+                              event.stopPropagation();
+                              handleChipClick(
+                                fieldName,
+                                props.formValues[fieldName]
+                              );
+                            }}
+                          />
                         )}
                       </Box>
                     );

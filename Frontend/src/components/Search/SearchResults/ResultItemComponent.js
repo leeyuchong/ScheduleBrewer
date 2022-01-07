@@ -152,7 +152,7 @@ function ResultItemComponent(props) {
                 />
                 <BadgeRect
                   content={props.course.division}
-                  badgeStyle="badgeGrey"
+                  badgeStyle="badgeBeige"
                 />
                 <BadgeRect
                   content={`${props.course.units} ${

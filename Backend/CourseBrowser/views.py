@@ -188,6 +188,8 @@ def search(request):
                     "starttime2",
                     "endtime2",
                 )
+                if len(current_courses) == 0:
+                    continue
                 # Get user's available times
                 # available_times are in range of [(800, 2359)]
                 unavailable_times_combined = set(

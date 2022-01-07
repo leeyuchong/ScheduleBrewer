@@ -52,6 +52,16 @@ code {
   background-color: #fdffb6;
 }
 
+.otherYellow {
+  color: #212529;
+  background-color: #fce25c;
+}
+
+.badgeBeige {
+  color: #212529;
+  background-color: #ffe6bc;
+}
+
 .badgeGreen {
   color: #212529;
   background-color: #caffbf;
@@ -70,6 +80,11 @@ code {
 .badgeBlue {
   color: #212529;
   background-color: #a0c4ff;
+}
+
+.badgeNavy {
+  color: #fff;
+  background-color: #305f72;
 }
 
 .badgePurple {
