@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  makeStyles,
-  // MenuItem,
-  // Select,
-  // InputLabel,
-  // FormControl,
-  // FormHelperText,
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import ChipGroup from "./ChipGroup";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Box from "@material-ui/core/Box";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
@@ -33,36 +23,6 @@ function SearchFilters(props) {
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
     },
-    // roundedSelect: {
-    //   borderRadius: "16px",
-    //   height: "32px",
-    //   position: "absolute",
-    //   verticalAlign: "top",
-    //   alignItems: "center",
-    //   justifyContent: "center",
-    //   boxSizing: "border-box",
-    //   "&:focus": {
-    //     background: "red",
-    //   },
-    //   // select: {
-    //   //   "&:focus": {
-    //   //     background: "red",
-    //   //   },
-    //   // },
-    // },
-    // fuck: {
-    //   background: "none",
-    //   "&:focus": {
-    //     background: "red",
-    //   },
-    // },
-    // roundedSelectText: {
-    //   fontSize: "0.8125rem",
-    //   marginTop: "-10px",
-    //   "&.shrink": {
-    //     marginTop: "0px",
-    //   },
-    // },
   }));
   const classes = useStyles();
   const fields = {
@@ -224,42 +184,6 @@ function SearchFilters(props) {
                 return <div></div>;
               }
             })}
-            {/* <Box mx={1} my={0.4}>
-              <FormControl variant="outlined" className={classes.roundedSelect}>
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  // className={classes.roundedSelectText}
-                  classes={{
-                    root: classes.roundedSelectText,
-                    shrink: "shrink",
-                  }}
-                >
-                  Division
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value=""
-                  // onChange={handleChange}
-                  label="Division"
-                  // className={classes.roundedSelect}
-                  InputProps={{
-                    classes: { ".MuiInputBase-root": classes.roundedSelect },
-                  }}
-                  classes={{
-                    root: classes.fuck,
-                    focus: "focus",
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </Box> */}
           </Box>
         </AccordionDetails>
       </Accordion>
