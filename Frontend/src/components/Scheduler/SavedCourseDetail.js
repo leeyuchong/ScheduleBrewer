@@ -107,10 +107,6 @@ function SavedCourseDetail(props) {
             >
               <Button
                 variant="outlined"
-                // classes={{
-                //     root: threshold >= 128 ? classes.blackButton : classes.whiteButton,
-                //     label: classes.detailButton
-                // }}
                 className={
                   threshold >= 128 ? classes.blackButton : classes.whiteButton
                 }
@@ -119,7 +115,6 @@ function SavedCourseDetail(props) {
                   props.deleteCourse(props.course.courseID);
                 }}
                 align="right"
-                // style={{textDecorationLine: 'none'}}
               >
                 Delete
               </Button>
@@ -128,6 +123,11 @@ function SavedCourseDetail(props) {
         </AccordionSummary>
         <AccordionDetails>
           <Typography align="left">
+            {props.course.notes === "  " ||
+            props.course.notes === null ||
+            props.course.notes === "" ? (
+              null
+            ) : <div>{props.course.notes}</div>}
             <div
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(props.course.description),

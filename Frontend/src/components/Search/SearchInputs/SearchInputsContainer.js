@@ -39,7 +39,11 @@ function SearchInputsContainer(props) {
   return (
     <div>
       <SearchBar formValues={formValues} setFormValues={setFormValues} />
-      <SearchFilters formValues={formValues} setFormValues={setFormValues} />
+      <SearchFilters
+        formValues={formValues}
+        setFormValues={setFormValues}
+        openLoginDialog={props.openLoginDialog}
+      />
     </div>
   );
 }

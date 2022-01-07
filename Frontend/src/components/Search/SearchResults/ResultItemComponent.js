@@ -73,7 +73,7 @@ function ResultItemComponent(props) {
           console.log("Error, failed to save course: ", error);
         });
     } else {
-      props.openLoginDialog();
+      props.openLoginDialog("save");
     }
   };
 
@@ -246,12 +246,14 @@ function ResultItemComponent(props) {
               | <b> Course Limits = {props.course.limits} </b>
             </span>
           ) : null}
-          {props.course.notes !== null ? (
+          {props.course.notes === "  " ||
+          props.course.notes === null ||
+          props.course.notes === "" ? null : (
             <span>
               <br />
               {props.course.notes}
             </span>
-          ) : null}
+          )}
           <br />
           <div
             dangerouslySetInnerHTML={{

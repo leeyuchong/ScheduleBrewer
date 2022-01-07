@@ -92,12 +92,16 @@ function EventBlock(props) {
                   {`${savedCourses[props.course.courseID].instructor} | ${
                     savedCourses[props.course.courseID].format
                   }`}
-                </Typography>
-                <br></br>
-                <Typography variant="caption">
+                  <br></br>
                   {`${convertTo12HrTime(
                     props.course.startTime
                   )} - ${convertTo12HrTime(props.course.endTime)}`}
+                  <br></br>
+                  {savedCourses[props.course.courseID].courselength > 1
+                    ? savedCourses[props.course.courseID].courselength == 2
+                      ? "1st 6-week course"
+                      : "2nd 6-week course"
+                    : null}
                 </Typography>
               </React.Fragment>
             }

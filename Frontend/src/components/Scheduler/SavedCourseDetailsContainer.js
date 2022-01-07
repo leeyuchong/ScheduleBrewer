@@ -54,6 +54,7 @@ function SavedCourseDetailsContainer() {
     <Box my={1}>
       <Box
         component={Typography}
+        mb={0.5}
         display={
           classroomUnits > 0 || intUnits > 0 || otherUnits > 0
             ? "block"

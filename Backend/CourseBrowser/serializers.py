@@ -67,4 +67,6 @@ class SavedCoursesSerializer(serializers.ModelSerializer):
             "instructor",
             "description",
             "offered",
+            "courselength",
+            "notes",
         )

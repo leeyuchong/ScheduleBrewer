@@ -190,6 +190,7 @@ def search(request):
                     "d2",
                     "starttime2",
                     "endtime2",
+                    "courselength",
                 )
                 if len(current_courses) == 0:
                     continue
@@ -200,148 +201,206 @@ def search(request):
                         course[f"starttime{i}"],
                         course[f"endtime{i}"],
                         course[f"d{i}"],
+                        course["courselength"],
                     )
-                    for i in range(1, 3)
+                    for i in (1, 2)
                     for course in current_courses
                 )
-                unavailable_times_by_day = {
-                    "M": [],
-                    "T": [],
-                    "W": [],
-                    "R": [],
-                    "F": [],
-                }
-                available_times_by_day = dict()
-                for course in unavailable_times_combined:
-                    if course[2]:
-                        for d in course[2]:
-                            unavailable_times_by_day[d].append(
-                                (course[0], course[1])
-                            )
-                # merge overlapping intervals
-                for day, intervals in unavailable_times_by_day.items():
-                    merged = []
-                    intervals.sort(key=lambda x: x[0], reverse=True)
-                    while intervals:
-                        interval = intervals.pop()
-                        if merged and merged[-1][1] >= interval[0]:
-                            merged[-1][1] = max(interval[1], merged[-1][1])
-                        else:
-                            merged.append(interval)
-                        if len(intervals) == 0:
-                            merged.append((2359, 2359))
-                    avail_start_time = 600
-                    avail_blocks = []
-                    for block in merged:
-                        avail_blocks.append((avail_start_time, block[0]))
-                        avail_start_time = block[1]
-                    if len(avail_blocks) == 0:
-                        avail_blocks.append((600, 2359))
-                    available_times_by_day[day] = avail_blocks
-
-                powerset_of_days = (
-                    "M",
-                    "T",
-                    "W",
-                    "R",
-                    "F",
-                    "MT",
-                    "MW",
-                    "MR",
-                    "MF",
-                    "TW",
-                    "TR",
-                    "TF",
-                    "WR",
-                    "WF",
-                    "RF",
-                    "MTW",
-                    "MTR",
-                    "MTF",
-                    "MWR",
-                    "MWF",
-                    "MRF",
-                    "TWR",
-                    "TWF",
-                    "TRF",
-                    "WRF",
-                    "MTWR",
-                    "MTWF",
-                    "MTRF",
-                    "MWRF",
-                    "TWRF",
-                    "MTWRF",
+                print(unavailable_times_combined)
+                courselength_present = set(
+                    course["courselength"] for course in current_courses
                 )
-                querysets_that_fit_avail = {
-                    "d1_d2IsNull": [],
-                    "d1_d2NotNull": [],
-                    "d2": [],
-                }
-                for i in (1, 2):
-                    for day_set in powerset_of_days:
-                        qs = [
-                            (
-                                Q(offered=True)
-                                & Q(**{f"d{i}": day_set})
-                                & concatenateQObjs(
+                checks = [None, None, None]
+                matching_course_codes = set()
+                # schedule to check, courselengths to check for
+                if courselength_present == {1}:
+                    checks[0] = ((1,), (1, 2, 3))
+                    checks[1] = None
+                    checks[2] = None
+                elif courselength_present == {1, 2}:
+                    checks[0] = ((1, 2), (1, 2))
+                    checks[1] = ((1,), (3,))
+                    checks[2] = None
+                elif courselength_present == {1, 3}:
+                    checks[0] = ((1, 3), (1, 3))
+                    checks[1] = ((1,), (2,))
+                    checks[2] = None
+                elif courselength_present == {1, 2, 3}:
+                    checks[0] = ((1, 2, 3), (1, 2, 3))
+                    checks[1] = ((1, 3), (3,))
+                    checks[2] = ((1, 2), (2,))
+                for check in checks:
+                    if check:
+                        unavailable_times_by_day = {
+                            "M": [],
+                            "T": [],
+                            "W": [],
+                            "R": [],
+                            "F": [],
+                        }
+                        available_times_by_day = dict()
+                        for course in unavailable_times_combined:
+                            if course[2] and (course[3] in check[0]):
+                                for d in course[2]:
+                                    unavailable_times_by_day[d].append(
+                                        [course[0], course[1]]
+                                    )
+                        # merge overlapping intervals
+                        for (
+                            day,
+                            intervals,
+                        ) in unavailable_times_by_day.items():
+                            merged = []
+                            intervals.sort(key=lambda x: x[0], reverse=True)
+                            while intervals:
+                                interval = intervals.pop()
+                                if merged and merged[-1][1] >= interval[0]:
+                                    merged[-1][1] = max(
+                                        interval[1], merged[-1][1]
+                                    )
+                                else:
+                                    merged.append(interval)
+                                if len(intervals) == 0:
+                                    merged.append((2359, 2359))
+                            avail_start_time = 600
+                            avail_blocks = []
+                            for block in merged:
+                                avail_blocks.append(
+                                    (avail_start_time, block[0])
+                                )
+                                avail_start_time = block[1]
+                            if len(avail_blocks) == 0:
+                                avail_blocks.append((600, 2359))
+                            available_times_by_day[day] = avail_blocks
+
+                        powerset_of_days = (
+                            "M",
+                            "T",
+                            "W",
+                            "R",
+                            "F",
+                            "MT",
+                            "MW",
+                            "MR",
+                            "MF",
+                            "TW",
+                            "TR",
+                            "TF",
+                            "WR",
+                            "WF",
+                            "RF",
+                            "MTW",
+                            "MTR",
+                            "MTF",
+                            "MWR",
+                            "MWF",
+                            "MRF",
+                            "TWR",
+                            "TWF",
+                            "TRF",
+                            "WRF",
+                            "MTWR",
+                            "MTWF",
+                            "MTRF",
+                            "MWRF",
+                            "TWRF",
+                            "MTWRF",
+                        )
+                        querysets_that_fit_avail = {
+                            "d1_d2IsNull": [],
+                            "d1_d2NotNull": [],
+                            "d2": [],
+                        }
+                        for i in (1, 2):
+                            for day_set in powerset_of_days:
+                                qs = [
                                     (
-                                        (
-                                            Q(
-                                                **{
-                                                    f"starttime{i}__gt": block[
-                                                        0
-                                                    ]
-                                                }
-                                            )
-                                            & Q(
-                                                **{f"endtime{i}__lt": block[1]}
-                                            )
+                                        Q(offered=True)
+                                        & Q(**{f"d{i}": day_set})
+                                        & concatenateQObjs(
+                                            (
+                                                (
+                                                    Q(
+                                                        **{
+                                                            f"starttime{i}__gt": block[
+                                                                0
+                                                            ]
+                                                        }
+                                                    )
+                                                    & Q(
+                                                        **{
+                                                            f"endtime{i}__lt": block[
+                                                                1
+                                                            ]
+                                                        }
+                                                    )
+                                                    & Q(
+                                                        courselength__in=check[
+                                                            1
+                                                        ]
+                                                    )
+                                                )
+                                                for block in available_times_by_day[
+                                                    day
+                                                ]
+                                            ),
+                                            "|",
                                         )
-                                        for block in available_times_by_day[
-                                            day
-                                        ]
-                                    ),
+                                    )
+                                    for day in day_set
+                                ]
+                                if i == 1:
+                                    querysets_that_fit_avail[
+                                        "d1_d2NotNull"
+                                    ].append(
+                                        concatenateQObjs(qs, "&")
+                                        & Q(d2__isnull=False)
+                                    )
+                                    querysets_that_fit_avail[
+                                        "d1_d2IsNull"
+                                    ].append(
+                                        concatenateQObjs(qs, "&")
+                                        & Q(d2__isnull=True)
+                                    )
+                                else:
+                                    querysets_that_fit_avail["d2"].append(
+                                        concatenateQObjs(qs, "&")
+                                    )
+
+                        course_codes_fit_avail_d1_d2NotNull = set(
+                            q.courseID
+                            for q in CourseInfo.objects.filter(
+                                concatenateQObjs(
+                                    querysets_that_fit_avail["d1_d2NotNull"],
                                     "|",
                                 )
                             )
-                            for day in day_set
-                        ]
-                        if i == 1:
-                            querysets_that_fit_avail["d1_d2NotNull"].append(
-                                concatenateQObjs(qs, "&") & Q(d2__isnull=False)
+                        )
+                        course_codes_fit_avail_d1_d2IsNull = set(
+                            q.courseID
+                            for q in CourseInfo.objects.filter(
+                                concatenateQObjs(
+                                    querysets_that_fit_avail["d1_d2IsNull"],
+                                    "|",
+                                )
                             )
-                            querysets_that_fit_avail["d1_d2IsNull"].append(
-                                concatenateQObjs(qs, "&") & Q(d2__isnull=True)
+                        )
+                        course_codes_fit_avail_d2 = set(
+                            q.courseID
+                            for q in CourseInfo.objects.filter(
+                                concatenateQObjs(
+                                    querysets_that_fit_avail["d2"], "|"
+                                )
                             )
-                        else:
-                            querysets_that_fit_avail["d2"].append(
-                                concatenateQObjs(qs, "&")
-                            )
-
-                avail_d1_d2NotNull = concatenateQObjs(
-                    querysets_that_fit_avail["d1_d2NotNull"], "|"
-                )
-                course_codes_fit_avail_d1_d2NotNull = set(
-                    q.courseID
-                    for q in CourseInfo.objects.filter(avail_d1_d2NotNull)
-                )
-                avail_d1_d2IsNull = concatenateQObjs(
-                    querysets_that_fit_avail["d1_d2IsNull"], "|"
-                )
-                avail_d2 = concatenateQObjs(
-                    querysets_that_fit_avail["d2"], "|"
-                )
-                course_codes_fit_avail_d2 = set(
-                    q.courseID for q in CourseInfo.objects.filter(avail_d2)
-                )
-                course_codes_fit_avail_all = (
-                    course_codes_fit_avail_d1_d2NotNull.intersection(
-                        course_codes_fit_avail_d2
-                    )
-                )
+                        )
+                        matching_course_codes = matching_course_codes.union(
+                            course_codes_fit_avail_d1_d2NotNull.intersection(
+                                course_codes_fit_avail_d2
+                            ).union(course_codes_fit_avail_d1_d2IsNull)
+                        )
                 queriedCourses = queriedCourses.filter(
-                    courseID__in=course_codes_fit_avail_all
-                ).union(CourseInfo.objects.filter(avail_d1_d2IsNull))
+                    courseID__in=matching_course_codes
+                )
 
     queriedCourses = queriedCourses.order_by("courseID")
     paginator = PageNumberPagination()
@@ -392,6 +451,8 @@ class SavedCourses(APIView):
                 "instructor",
                 "description",
                 "offered",
+                "courselength",
+                "notes",
             )
             serializer = SavedCoursesSerializer(
                 queriedCourses, context={"request": request}, many=True

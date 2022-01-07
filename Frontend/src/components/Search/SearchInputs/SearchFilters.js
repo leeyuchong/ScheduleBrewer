@@ -19,6 +19,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import Cookies from "js-cookie";
 
 function SearchFilters(props) {
   // PROPS:
@@ -108,6 +109,9 @@ function SearchFilters(props) {
   };
 
   const handleChipClick = (fieldName, value) => {
+    if (fieldName === "fitCurr" && Cookies.get("sessionid") === undefined) {
+      props.openLoginDialog("fitCurr");
+    }
     let newValue = props.formValues[fieldName] === "" ? value : "";
     props.setFormValues({
       ...props.formValues,
@@ -161,61 +165,29 @@ function SearchFilters(props) {
                   if (props.formValues[fieldName] != "") {
                     return (
                       <Box key={value} mx={0.1}>
-                        {props.formValues[fieldName] == "time" ? (
-                          <Chip
-                            {...(
-                              <FormControl
-                                variant="outlined"
-                                color="secondary"
-                                className={classes.componentBackground}
-                              >
-                                <InputLabel id="department-label">
-                                  Dept
-                                </InputLabel>
-                                <Select
-                                  native
-                                  labelId="Department"
-                                  name="department"
-                                  id="department"
-                                  value={deptField}
-                                  onChange={handleInputChange}
-                                  label="Department"
-                                >
-                                  <option aria-label="Any" value="" />
-                                  {courseCodes.map((code) => (
-                                    <option key={code} value={code}>
-                                      {code}
-                                    </option>
-                                  ))}
-                                </Select>
-                              </FormControl>
-                            )}
-                          />
-                        ) : (
-                          <Chip
-                            label={getLabel(
+                        <Chip
+                          label={getLabel(
+                            fieldName,
+                            props.formValues[fieldName]
+                          )}
+                          clickable
+                          variant="default"
+                          id={value}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleChipClick(
                               fieldName,
                               props.formValues[fieldName]
-                            )}
-                            clickable
-                            variant="default"
-                            id={value}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleChipClick(
-                                fieldName,
-                                props.formValues[fieldName]
-                              );
-                            }}
-                            onDelete={(event) => {
-                              event.stopPropagation();
-                              handleChipClick(
-                                fieldName,
-                                props.formValues[fieldName]
-                              );
-                            }}
-                          />
-                        )}
+                            );
+                          }}
+                          onDelete={(event) => {
+                            event.stopPropagation();
+                            handleChipClick(
+                              fieldName,
+                              props.formValues[fieldName]
+                            );
+                          }}
+                        />
                       </Box>
                     );
                   } else {
@@ -241,6 +213,7 @@ function SearchFilters(props) {
                         field={fieldName}
                         options={options}
                         handleClick={handleChipClick}
+                        key={`detail-${fieldName}-${options}`}
                       />
                     </Box>
                     <Divider orientation="vertical" flexItem />

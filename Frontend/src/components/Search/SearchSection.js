@@ -17,12 +17,16 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 function SearchSection() {
-  const [searchURL, setSearchURL] = useState(
-    `/api/search/?`
-  );
+  const [searchURL, setSearchURL] = useState(`/api/search/?`);
   const [open, setOpen] = useState(false);
+  const [dialogText, setDialogText] = useState("");
   const [openAlert, setOpenAlert] = useState(true);
-  const handleClickOpen = () => {
+  const handleClickOpen = (context) => {
+    if (context === "fitCurr") {
+      setDialogText("Login to filter courses using your schedule");
+    } else {
+      setDialogText("Login to save a course to your schedule");
+    }
     setOpen(true);
   };
   const handleClose = () => {
@@ -37,7 +41,10 @@ function SearchSection() {
   return (
     <div>
       <Box>
-        <SearchInputsContainer setSearchURL={setSearchURL} />
+        <SearchInputsContainer
+          setSearchURL={setSearchURL}
+          openLoginDialog={handleClickOpen}
+        />
         <Box component={Collapse} my={1} in={openAlert}>
           <Alert
             severity="warning"
@@ -86,10 +93,10 @@ function SearchSection() {
         aria-labelledby="Login required"
         aria-describedby="Log in to save a course"
       >
-        <DialogTitle id="login-dialog-title">{"Login Required"}</DialogTitle>
+        <DialogTitle id="login-dialog-title">Login Required</DialogTitle>
         <DialogContent>
           <DialogContentText id="login-dialog-description">
-            Login to save a course to your schedule
+            {dialogText}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
