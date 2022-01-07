@@ -173,7 +173,7 @@ function ResultItemComponent(props) {
                   <BadgeRect content="Quantitative" badgeStyle="badgeYellow" />
                 ) : null}
                 {props.course.prereq ? (
-                  <BadgeRect content="Prereq" badgeStyle="badgeGreen" />
+                  <BadgeRect content="Prereq" badgeStyle="badgeTeal" />
                 ) : null}
                 {props.course.xlist !== null ? (
                   <BadgeRect
@@ -244,6 +244,12 @@ function ResultItemComponent(props) {
             <span>
               {" "}
               | <b> Course Limits = {props.course.limits} </b>
+            </span>
+          ) : null}
+          {props.course.notes !== null ? (
+            <span>
+              <br />
+              {props.course.notes}
             </span>
           ) : null}
           <br />

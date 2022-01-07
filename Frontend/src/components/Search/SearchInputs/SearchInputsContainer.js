@@ -21,6 +21,7 @@ function SearchInputsContainer(props) {
     courseLength: "",
     division: "",
     exIndCEL: "",
+    fitCurr: "",
   };
   const [formValues, setFormValues] = useState(defaultValues);
 

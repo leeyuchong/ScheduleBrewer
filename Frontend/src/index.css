@@ -37,6 +37,11 @@ code {
   align-items: center;
 }
 
+.badgeOtherRed {
+  color: #212529;
+  background-color: #d39ea6;
+}
+
 .badgeOrange {
   color: #212529;
   background-color: #ffd6a5;
@@ -50,8 +55,11 @@ code {
 .badgeGreen {
   color: #212529;
   background-color: #caffbf;
-  /* display: inline-flex;
-  align-items: center; */
+}
+
+.badgeTeal {
+  color: #212529;
+  background-color: #98f5e1;
 }
 
 .badgeLightBlue {
