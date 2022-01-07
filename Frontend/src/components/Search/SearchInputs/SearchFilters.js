@@ -88,6 +88,13 @@ function SearchFilters(props) {
       [3, "2nd 6wk"],
       [1, "Semester Long"],
     ],
+    division: [
+      ["AR", "Arts"],
+      ["FL", "Lang & Lit"],
+      ["SS", "Social"],
+      ["NS", "Natural"],
+      ["IS", "Multi"]
+    ],
     writingSem: [[true, "Writing Sem"]],
     yearLong: [[true, "Year Long"]],
     quant: [[true, "Quantitative"]],
@@ -117,6 +124,7 @@ function SearchFilters(props) {
         props.formValues.units !== "" ||
         props.formValues.day !== "" ||
         props.formValues.courseLength !== "" ||
+        props.formValues.division !== "" ||
         props.formValues.exIndCEL
     );
   }, [props.formValues]);
